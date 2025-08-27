@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void {
         Schema::create('patients', function (Blueprint $table) {
-            $table->id('patient_id_int');
+            $table->id('patient_id');
             $table->string('name');
             $table->string('address');
             $table->string('phone');
@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('email');
             $table->string('gender');
             $table->string('image')->nullable();
-            $table->unsignedBigInteger('user_id_int');
-            $table->foreign('user_id_int')->references('user_id_int')->on('medi_users')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('user_id')->on('medi_users')->onDelete('cascade');
             $table->timestamps();
         });
     }

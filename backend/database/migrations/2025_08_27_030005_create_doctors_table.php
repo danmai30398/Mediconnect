@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void {
         Schema::create('doctors', function (Blueprint $table) {
-            $table->id('doctor_id_int');
+            $table->id('doctor_id');
             $table->string('name');
             $table->string('qualification');
             $table->integer('experience');
@@ -20,10 +20,10 @@ return new class extends Migration
             $table->string('specialization');
             $table->string('gender');
             $table->date('dob');
-            $table->unsignedBigInteger('city_id_int');
-            $table->unsignedBigInteger('user_id_int');
-            $table->foreign('city_id_int')->references('city_id_int')->on('cities');
-            $table->foreign('user_id_int')->references('user_id_int')->on('medi_users')->onDelete('cascade');
+            $table->unsignedBigInteger('city_id');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('city_id')->references('city_id')->on('cities');
+            $table->foreign('user_id')->references('user_id')->on('medi_users')->onDelete('cascade');
             $table->timestamps();
         });
     }

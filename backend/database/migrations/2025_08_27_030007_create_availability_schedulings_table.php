@@ -13,10 +13,10 @@ return new class extends Migration
     {
          Schema::create('availability_schedulings', function (Blueprint $table) {
             $table->id('availability_id');
-            $table->unsignedBigInteger('doctor_id_int');
+            $table->unsignedBigInteger('doctor_id');
             $table->date('available_date');
             $table->time('available_time');
-            $table->foreign('doctor_id_int')->references('doctor_id_int')->on('doctors')->onDelete('cascade');
+            $table->foreign('doctor_id')->references('doctor_id')->on('doctors')->onDelete('cascade');
             $table->timestamps();
         });
     }

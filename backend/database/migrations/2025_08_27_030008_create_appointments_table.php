@@ -14,7 +14,7 @@ return new class extends Migration
          Schema::create('appointments', function (Blueprint $table) {
             $table->id('appointment_id_int');
             $table->unsignedBigInteger('patient_id_int');
-            $table->unsignedBigInteger('availability_id')->unique();
+            $table->unsignedBigInteger('availability_id');
             $table->string('status');
             $table->foreign('patient_id_int')->references('patient_id_int')->on('patients')->onDelete('cascade');
             $table->foreign('availability_id')->references('availability_id')->on('availability_schedulings')->onDelete('cascade');

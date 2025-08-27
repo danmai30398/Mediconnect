@@ -10,28 +10,25 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void {
-        Schema::create('doctors', function (Blueprint $table) {
-            $table->id('doctor_id_int');
+        Schema::create('patients', function (Blueprint $table) {
+            $table->id('patient_id_int');
             $table->string('name');
-            $table->string('qualification');
-            $table->integer('experience');
+            $table->string('address');
             $table->string('phone');
-            $table->string('email');
-            $table->string('specialization');
-            $table->string('gender');
             $table->date('dob');
-            $table->unsignedBigInteger('city_id_int');
+            $table->string('email');
+            $table->string('gender');
+            $table->string('image')->nullable();
             $table->unsignedBigInteger('user_id_int');
-            $table->foreign('city_id_int')->references('city_id_int')->on('cities');
-            $table->foreign('user_id_int')->references('user_id_int')->on('users')->onDelete('cascade');
+            $table->foreign('user_id_int')->references('user_id_int')->on('medi_users')->onDelete('cascade');
             $table->timestamps();
         });
     }
-    
+
     /**
      * Reverse the migrations.
      */
     public function down(): void {
-        Schema::dropIfExists('doctors');
+        Schema::dropIfExists('patients');
     }
 };

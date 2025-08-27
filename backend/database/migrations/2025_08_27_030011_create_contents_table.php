@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('image')->nullable();
             $table->foreign('category_id_int')->references('category_id_int')->on('categories');
-            $table->foreign('created_by')->references('user_id_int')->on('users');
+            $table->foreign('created_by')->references('user_id_int')->on('medi_users');
             $table->timestamps();
         });
     }

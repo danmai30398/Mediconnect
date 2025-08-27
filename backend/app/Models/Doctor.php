@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Doctor extends Model
 {
+    // Define the associated table name
     protected $table = 'doctors';
 
+    // Set the primary key column
     protected $primaryKey = 'doctor_id';
 
+    // Define the fields that are mass assignable
     protected $fillable = [
         'name',
         'qualification',
@@ -23,21 +26,23 @@ class Doctor extends Model
         'user_id',
     ];
 
+    //Disable default timestamps
     public $timestamps = false;
 
-    // Quan hệ với City
+
+    //Each doctor belongs to one city
     public function city()
     {
         return $this->belongsTo(City::class, 'city_id', 'city_id');
     }
 
-    // Quan hệ với MediUser
+    //Each doctor is linked to one user account
     public function user()
     {
         return $this->belongsTo(MediUser::class, 'user_id', 'user_id');
     }
 
-    // Quan hệ với AvailabilityScheduling
+    //One doctor has many availability schedulings
     public function availabilitySchedulings()
     {
         return $this->hasMany(AvailabilityScheduling::class, 'doctor_id', 'doctor_id');

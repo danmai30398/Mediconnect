@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class MedicalRecord extends Model
 {
+    // Define the associated table name
     protected $table = 'medical_records';
 
+    // Set the primary key column
     protected $primaryKey = 'record_id';
 
+    // Define the fields that are mass assignable
     protected $fillable = [
         'appointment_id',
         'diagnosis',
@@ -17,9 +20,10 @@ class MedicalRecord extends Model
         'date',
     ];
 
+    //Disable default timestamps
     public $timestamps = false;
 
-    // Quan hệ với bảng appointments
+    //Each record belongs to one appointment
     public function appointment()
     {
         return $this->belongsTo(Appointment::class, 'appointment_id', 'appointment_id');

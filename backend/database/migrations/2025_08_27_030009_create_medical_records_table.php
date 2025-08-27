@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->dateTime('date');
             $table->foreign('appointment_id')->references('appointment_id')->on('appointments')->onDelete('cascade');
-            $table->timestamps();
         });
     }
 

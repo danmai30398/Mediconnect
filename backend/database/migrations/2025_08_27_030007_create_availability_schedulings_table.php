@@ -17,7 +17,6 @@ return new class extends Migration
             $table->date('available_date');
             $table->time('available_time');
             $table->foreign('doctor_id')->references('doctor_id')->on('doctors')->onDelete('cascade');
-            $table->timestamps();
         });
     }
 

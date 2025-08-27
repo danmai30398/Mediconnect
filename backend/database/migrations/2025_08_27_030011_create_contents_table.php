@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-          Schema::create('contents', function (Blueprint $table) {
+        Schema::create('contents', function (Blueprint $table) {
             $table->id('content_id');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('created_by');
@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->foreign('category_id')->references('category_id')->on('categories');
             $table->foreign('created_by')->references('user_id')->on('medi_users');
-            $table->timestamps();
         });
     }
 

@@ -4,12 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration 
+return new class extends Migration
 {
     /**
      * Run the migrations.
      */
-    public function up(): void {
+    public function up(): void
+    {
         Schema::create('doctors', function (Blueprint $table) {
             $table->id('doctor_id');
             $table->string('name');
@@ -18,7 +19,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('email');
             $table->string('specialization');
-            $table->string('gender');
+            $table->enum('gender', ['Male', 'Female', 'Other']);
             $table->date('dob');
             $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('user_id');
@@ -30,7 +31,8 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void {
+    public function down(): void
+    {
         Schema::dropIfExists('doctors');
     }
 };

@@ -10,21 +10,18 @@ class AppointmentSeeder extends Seeder
     public function run(): void
     {
         Appointment::create([
-            'patient_id'      => 1,               
-            'availability_id' => 1,              
-            'status'          => 'confirmed',
-        ]);
-
-        Appointment::create([
-            'patient_id'      => 2,              
-            'availability_id' => 2,               
+            'patient_id'      => 1,
+            'availability_id' => 1,
             'status'          => 'pending',
         ]);
-
+    
         Appointment::create([
-            'patient_id'      => 1,
+            'patient_id'      => 2,
             'availability_id' => 3,
-            'status'          => 'cancelled',
+            'status'          => 'confirmed',
         ]);
+    
+        
+        
     }
 }

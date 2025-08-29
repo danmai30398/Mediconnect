@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('gender');
             $table->string('image')->nullable();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->unique();
             $table->foreign('user_id')->references('user_id')->on('medi_users')->onDelete('cascade');
             $table->timestamps();
         });

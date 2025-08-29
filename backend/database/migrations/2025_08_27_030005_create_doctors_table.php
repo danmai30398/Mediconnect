@@ -23,7 +23,7 @@ return new class extends Migration
             $table->date('dob');
             $table->string('image')->nullable();
             $table->unsignedBigInteger('city_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->unique();
             $table->foreign('city_id')->references('city_id')->on('cities');
             $table->foreign('user_id')->references('user_id')->on('medi_users')->onDelete('cascade');
         });

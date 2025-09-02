@@ -11,6 +11,7 @@ class DoctorSeeder extends Seeder
     {
         Doctor::insert([
             [
+                  'doctor_id'      => 1,
                 'name'           => 'Dr. A',
                 'qualification'  => 'MBBS, MD',
                 'experience'     => 10,
@@ -23,6 +24,7 @@ class DoctorSeeder extends Seeder
                 'user_id'        => 1, 
             ],
             [
+                  'doctor_id'      => 2,
                 'name'           => 'Dr. B',
                 'qualification'  => 'MBBS',
                 'experience'     => 5,

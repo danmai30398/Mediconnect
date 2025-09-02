@@ -11,6 +11,7 @@ class PatientSeeder extends Seeder
     {
         Patient::insert([
             [
+                'patient_id' => 1,
                 'name'     => 'Nguyen Van A',
                 'address'  => '123 Hai Ba Trung, Ha Noi',
                 'phone'    => '0987654321',
@@ -21,6 +22,7 @@ class PatientSeeder extends Seeder
                 'user_id'  => 1, 
             ],
             [
+                'patient_id' => 2,
                 'name'     => 'Tran Thi B',
                 'address'  => '456 Le Loi, Da Nang',
                 'phone'    => '0911222333',

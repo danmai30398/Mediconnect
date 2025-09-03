@@ -16,13 +16,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('qualification');
             $table->integer('experience');
-            $table->string('phone');
-            $table->string('email');
+            $table->string('phone')->unique();
+            $table->string('email')->unique();
             $table->string('specialization');
             $table->enum('gender', ['Male', 'Female', 'Other']);
             $table->date('dob');
+            $table->string('image')->nullable();
             $table->unsignedBigInteger('city_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->unique();
             $table->foreign('city_id')->references('city_id')->on('cities');
             $table->foreign('user_id')->references('user_id')->on('medi_users')->onDelete('cascade');
         });

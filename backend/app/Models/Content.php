@@ -19,6 +19,7 @@ class Content extends Model
         'title',
         'description',
         'image',
+        "name"
     ];
 
 

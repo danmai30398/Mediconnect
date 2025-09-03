@@ -14,7 +14,8 @@ class ContentSeeder extends Seeder
             'created_by'  => 1,      
             'title'       => 'Hướng dẫn đặt lịch khám bệnh',
             'description' => 'Chi tiết cách bệnh nhân có thể đặt lịch thông qua hệ thống.',
-            'image'       => 'guide.png', 
+            'image'       => 'guide.png',
+            'name'        => 'abc',
         ]);
     }
 }

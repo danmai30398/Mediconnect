@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             ContentSeeder::class,
             ContactMessageSeeder::class,
             MedicalRecordSeeder::class,
+            NotificationSeeder::class
         ]);
     }
 }

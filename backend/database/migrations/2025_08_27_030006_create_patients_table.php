@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id('patient_id');
             $table->string('name');
             $table->string('address');
-            $table->string('phone');
+            $table->string('phone')->unique();
             $table->date('dob');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->enum('gender', ['Male', 'Female', 'Other']);
             $table->string('image')->nullable();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->unique();
             $table->foreign('user_id')->references('user_id')->on('medi_users')->onDelete('cascade');
         });
     }

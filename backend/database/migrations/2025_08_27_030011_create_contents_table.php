@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('image')->nullable();
+            $table->text('name');
             $table->foreign('category_id')->references('category_id')->on('categories');
             $table->foreign('created_by')->references('user_id')->on('medi_users');
         });

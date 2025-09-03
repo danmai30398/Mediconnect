@@ -17,6 +17,7 @@ class AvailabilityScheduling extends Model
         'doctor_id',
         'available_date',
         'available_time',
+        'status'
     ];
 
     // Disable Laravel's automatic timestamp columns

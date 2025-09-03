@@ -14,7 +14,7 @@ const DoctorProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [errors, setErrors] = useState({}); // ✅ errors state
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (doctor) setLocalDoctor(doctor);
@@ -65,9 +65,7 @@ const DoctorProfile = () => {
   const handleSave = async () => {
     if (!validateDoctorForm()) return;
 
-    const token = localStorage.getItem("authToken");
     const formData = new FormData();
-
     Object.entries(localDoctor).forEach(([key, value]) => {
       if (value) formData.append(key, value);
     });
@@ -76,7 +74,6 @@ const DoctorProfile = () => {
     try {
       await axios.post("http://localhost:8000/api/doctor/update", formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
@@ -107,7 +104,7 @@ const DoctorProfile = () => {
       <div className="right-panel">
         <h3>Doctor Information</h3>
 
-        {/* ID - không chỉnh sửa */}
+        {/* ID - Read only */}
         <div className="info-row">
           <label><FaIdCard /> ID:</label>
           <span>{localDoctor.id}</span>

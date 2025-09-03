@@ -11,22 +11,12 @@ const DashboardLayout = () => {
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (!token) return;
-
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/json",
-    };
-
     const fetchDoctorInfo = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/doctor/me", {
-          headers,
-        });
+        const res = await axios.get("http://localhost:8000/api/doctor/me");
         const { name, avatar } = res.data;
         setDoctorName(name);
-        setAvatar(avatar);
+        setAvatar(`http://localhost:8000${avatar || "/default-avatar.jpg"}`);
       } catch (err) {
         console.error("Failed to fetch doctor info", err);
       }
@@ -34,9 +24,7 @@ const DashboardLayout = () => {
 
     const fetchNotifications = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/notifications", {
-          headers,
-        });
+        const res = await axios.get("http://localhost:8000/api/notifications");
         setNotifications(res.data);
       } catch (err) {
         console.error("Failed to fetch notifications", err);
@@ -54,26 +42,15 @@ const DashboardLayout = () => {
     const formData = new FormData();
     formData.append("avatar", file);
 
-    const token = localStorage.getItem("authToken");
-    if (!token) return;
-
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "multipart/form-data",
-    };
-
     try {
       setUploading(true);
-      const res = await axios.post(
-        "http://localhost:8000/api/doctor/avatar",
-        formData,
-        {
-          headers,
-        }
-      );
+      const res = await axios.post("http://localhost:8000/api/doctor/avatar", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-      setAvatar(res.data.avatar);
-      console.log("Avatar updated successfully:", res.data.avatar);
+      const newAvatar = res.data.avatar || "/default-avatar.jpg";
+      setAvatar(`http://localhost:8000${newAvatar}`);
+      console.log("Avatar updated successfully:", newAvatar);
     } catch (err) {
       console.error("Error uploading avatar:", err.response?.data || err.message);
     } finally {
@@ -83,7 +60,6 @@ const DashboardLayout = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Topbar */}
       <div className="topbar">
         <div className="logo-section">
           <span className="brand-name">
@@ -92,10 +68,7 @@ const DashboardLayout = () => {
         </div>
 
         <div className="right-section">
-          <FaBell
-            className="icon"
-            onClick={() => setShowNotifications(!showNotifications)}
-          />
+          <FaBell className="icon" onClick={() => setShowNotifications(!showNotifications)} />
           {showNotifications && (
             <div className="notification-popup">
               {notifications.length === 0 ? (
@@ -114,7 +87,11 @@ const DashboardLayout = () => {
             {uploading ? (
               <div className="s-avatar loading-spinner"></div>
             ) : (
-              <img src={avatar} alt="User" className="s-avatar" />
+              <img
+                src={avatar}
+                alt="User"
+                className="s-avatar"
+              />
             )}
             <input
               type="file"

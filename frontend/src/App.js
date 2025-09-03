@@ -8,7 +8,7 @@ import DoctorProfile from "./DoctorProfile.jsx";
 import { DoctorProvider } from "./DoctorContext";
 import DoctorAvailability from "./AvailabilityPage.jsx";
 import AppointmentList from "./Appointment.jsx";
-import LoginPage from "./LoginPage.jsx";
+// import LoginPage from "./LoginPage.jsx";
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
             <DashboardLayout />
             <div className="content-area">
               <Routes>
-                <Route path="/Login" element={<LoginPage />} />
+                {/* <Route path="/Login" element={<LoginPage />} /> */}
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/doctorprofile" element={<DoctorProfile />} />
                 <Route path="/AvailabilityPage" element={<DoctorAvailability />} />

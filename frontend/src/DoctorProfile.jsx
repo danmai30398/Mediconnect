@@ -14,10 +14,16 @@ const DoctorProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [errors, setErrors] = useState({}); // ✅ errors state
+  const [errors, setErrors] = useState({});
+  const [successMsg, setSuccessMsg] = useState("");
 
   useEffect(() => {
-    if (doctor) setLocalDoctor(doctor);
+    if (doctor) {
+      setLocalDoctor({
+        ...doctor,
+        city_id: doctor.city_id || doctor.city?.city_id || "",
+      });
+    }
   }, [doctor]);
 
   const handleChange = (e) => {
@@ -63,29 +69,39 @@ const DoctorProfile = () => {
   };
 
   const handleSave = async () => {
+    console.log("🧪 handleSave được gọi");
+
     if (!validateDoctorForm()) return;
 
-    const token = localStorage.getItem("authToken");
     const formData = new FormData();
-
     Object.entries(localDoctor).forEach(([key, value]) => {
-      if (value) formData.append(key, value);
+      if (key === "city_id") {
+        const cityId = parseInt(value);
+        if (!isNaN(cityId)) {
+          formData.append("city_id", cityId);
+        }
+      } else if (value !== null && value !== undefined && value !== "") {
+        formData.append(key, value);
+      }
     });
-    if (selectedFile) formData.append("image", selectedFile);
+
+    if (selectedFile) {
+      formData.append("image", selectedFile);
+    }
 
     try {
       await axios.post("http://localhost:8000/api/doctor/update", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
       });
       await fetchDoctor();
+      setPreview(null);
       setIsEditing(false);
       setErrors({});
-      alert("Profile updated.");
+      setSuccessMsg("Profile updated successfully.");
+      setTimeout(() => setSuccessMsg(""), 3000);
     } catch (err) {
-      console.error("Update failed", err);
+      console.error("Update failed", err.response?.data || err);
+      alert("Update failed. See console for details.");
     }
   };
 
@@ -93,7 +109,7 @@ const DoctorProfile = () => {
     <div className="doctor-profile-container">
       <div className="left-panel">
         <img
-          src={preview || localDoctor.image || "/default-avatar.jpg"}
+          src={preview || doctor?.image || "/default-avatar.jpg"}
           alt="Avatar"
           className="profile-avatar"
         />
@@ -106,14 +122,13 @@ const DoctorProfile = () => {
 
       <div className="right-panel">
         <h3>Doctor Information</h3>
+        {successMsg && <div className="success-msg">{successMsg}</div>}
 
-        {/* ID - không chỉnh sửa */}
         <div className="info-row">
           <label><FaIdCard /> ID:</label>
-          <span>{localDoctor.id}</span>
+          <span>{localDoctor.doctor_id}</span>
         </div>
 
-        {/* Name */}
         <div className="info-row">
           <label><FaUser /> Name:</label>
           {isEditing ? (
@@ -126,7 +141,6 @@ const DoctorProfile = () => {
           )}
         </div>
 
-        {/* Email */}
         <div className="info-row">
           <label><FaEnvelope /> Email:</label>
           {isEditing ? (
@@ -139,7 +153,6 @@ const DoctorProfile = () => {
           )}
         </div>
 
-        {/* Qualification */}
         <div className="info-row">
           <label><FaGraduationCap /> Qualification:</label>
           {isEditing ? (
@@ -149,7 +162,6 @@ const DoctorProfile = () => {
           )}
         </div>
 
-        {/* Experience */}
         <div className="info-row">
           <label><FaBriefcase /> Experience:</label>
           {isEditing ? (
@@ -159,7 +171,6 @@ const DoctorProfile = () => {
           )}
         </div>
 
-        {/* Phone */}
         <div className="info-row">
           <label><FaPhone /> Phone:</label>
           {isEditing ? (
@@ -172,7 +183,6 @@ const DoctorProfile = () => {
           )}
         </div>
 
-        {/* Specialization */}
         <div className="info-row">
           <label><FaStethoscope /> Specialization:</label>
           {isEditing ? (
@@ -182,17 +192,22 @@ const DoctorProfile = () => {
           )}
         </div>
 
-        {/* City */}
         <div className="info-row">
           <label><FaCity /> City:</label>
           {isEditing ? (
-            <input name="city" value={localDoctor.city || ""} onChange={handleChange} />
+            <select name="city_id" value={localDoctor.city_id || ""} onChange={handleChange}>
+              <option value="">Select City</option>
+              <option value="1">Hồ Chí Minh</option>
+              <option value="2">Hà Nội</option>
+              <option value="3">Đà Nẵng</option>
+              <option value="4">Cần Thơ</option>
+              <option value="5">Hải Phòng</option>
+            </select>
           ) : (
-            <span>{localDoctor.city}</span>
+            <span>{localDoctor.city?.name || "N/A"}</span>
           )}
         </div>
 
-        {/* Gender */}
         <div className="info-row">
           <label><FaVenusMars /> Gender:</label>
           {isEditing ? (
@@ -201,6 +216,7 @@ const DoctorProfile = () => {
                 <option value="">Select</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
+                <option value="Other">Other</option>
               </select>
               {errors.gender && <div className="error">{errors.gender}</div>}
             </>
@@ -209,7 +225,6 @@ const DoctorProfile = () => {
           )}
         </div>
 
-        {/* Date of Birth */}
         <div className="info-row">
           <label><FaBirthdayCake /> Date of Birth:</label>
           {isEditing ? (
@@ -222,8 +237,11 @@ const DoctorProfile = () => {
           )}
         </div>
 
-        {/* Save / Edit button */}
-        <button className="edit-btn" onClick={() => (isEditing ? handleSave() : setIsEditing(true))}>
+        <button
+          type="button"
+          className="edit-btn"
+          onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
+        >
           {isEditing ? "Save" : "Edit"}
         </button>
       </div>

@@ -8,11 +8,10 @@ import DoctorProfile from "./DoctorProfile.jsx";
 import { DoctorProvider } from "./DoctorContext";
 import DoctorAvailability from "./AvailabilityPage.jsx";
 import AppointmentList from "./Appointment.jsx";
-import LoginPage from "./LoginPage.jsx";
 
 function App() {
   return (
-    <DoctorProvider> {/* Bao toàn bộ Router */}
+    <DoctorProvider>
       <Router>
         <div className="container">
           <Sidebar />
@@ -20,7 +19,6 @@ function App() {
             <DashboardLayout />
             <div className="content-area">
               <Routes>
-                <Route path="/Login" element={<LoginPage />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/doctorprofile" element={<DoctorProfile />} />
                 <Route path="/AvailabilityPage" element={<DoctorAvailability />} />

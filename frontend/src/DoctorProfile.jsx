@@ -16,7 +16,6 @@ const DoctorProfile = () => {
   const [preview, setPreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [successMsg, setSuccessMsg] = useState("");
-
   useEffect(() => {
     if (doctor) {
       setLocalDoctor({
@@ -91,7 +90,8 @@ const DoctorProfile = () => {
 
     try {
       await axios.post("http://localhost:8000/api/doctor/update", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { "Content-Type": "multipart/form-data" }
+   
       });
       await fetchDoctor();
       setPreview(null);

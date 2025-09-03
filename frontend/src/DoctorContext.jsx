@@ -1,4 +1,3 @@
-// DoctorContext.jsx
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
@@ -8,14 +7,11 @@ export const DoctorProvider = ({ children }) => {
   const [doctor, setDoctor] = useState(null);
 
   const fetchDoctor = async () => {
-    const token = localStorage.getItem("authToken");
     try {
-      const res = await axios.get("http://localhost:8000/api/doctor/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get("http://localhost:8000/api/doctor/me");
       setDoctor(res.data);
     } catch (err) {
-      console.error("Lỗi khi lấy thông tin bác sĩ", err);
+      console.error("Error fetching doctor information", err);
     }
   };
 

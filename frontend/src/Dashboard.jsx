@@ -13,13 +13,8 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchDoctorData = async () => {
-      const token = localStorage.getItem("authToken");
-      if (!token) return;
-
       try {
-        const res = await axios.get("http://localhost:8000/api/doctor/dashboard", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get("http://localhost:8000/api/doctor/dashboard");
 
         const { totalAppointments, totalPatients, totalSchedules } = res.data;
 
@@ -38,12 +33,10 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Tiêu đề cố định */}
       <div className="welcome-text">
         <h1>Dashboard</h1>
       </div>
 
-      {/* Bảng thống kê nhanh */}
       <div className="stat-grid">
         <div className="stat-card">
           <FaCalendarAlt className="stat-icon" />
@@ -68,12 +61,10 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Hộp thông báo */}
       <div className="info-box">
         Stay on top of your schedule, patient updates, and availability—all from one dashboard.
       </div>
 
-      {/* Component bảng lịch hẹn */}
       <UpcomingAppointments />
     </div>
   );

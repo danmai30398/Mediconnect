@@ -665,7 +665,6 @@ h2 {
   cursor: pointer;
 }
 
-/* 🎨 Màu riêng cho từng nút */
 .btn-confirm {
   background-color: #3b82f6; /* blue-500 */
 }
@@ -735,17 +734,17 @@ h2 {
   margin-right: 8px;
 }
 
-/* booked - xanh lá */
+/* booked - green */
 .notification-popup li:nth-child(1)::before {
   background-color: #22c55e;
 }
 
-/* cancelled - đỏ */
+/* cancelled - red */
 .notification-popup li:nth-child(2)::before {
   background-color: #ef4444;
 }
 
-/* rescheduled - vàng */
+/* rescheduled - yellow */
 .notification-popup li:nth-child(3)::before {
   background-color: #facc15;
 }

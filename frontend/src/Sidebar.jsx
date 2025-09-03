@@ -1,11 +1,11 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaTachometerAlt, FaCalendarAlt, FaUsers, FaEnvelope, FaSignOutAlt } from "react-icons/fa";
-import { useDoctor } from "./DoctorContext"; // ✅ dùng context
+import { useDoctor } from "./DoctorContext"; 
 
 const Sidebar = () => {
   const location = useLocation();
-  const { doctor } = useDoctor(); // ✅ lấy thông tin từ context
+  const { doctor } = useDoctor(); 
 
   const linkClass = (path) =>
     location.pathname === path ? "active-link" : "inactive-link";

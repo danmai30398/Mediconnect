@@ -18,10 +18,8 @@ const DoctorAvailability = () => {
     clinic: "Central Clinic, 123 Main Street"
   };
 
-  // ✅ Format chuẩn theo local timezone, dạng YYYY-MM-DD
   const toDateStr = (d) => d.toLocaleDateString('sv-SE');
 
-  // ✅ Chính xác thứ Hai – Thứ Sáu + dùng local date
   const getCurrentWeekRange = () => {
     const now = new Date();
     const day = now.getDay();

@@ -23,4 +23,22 @@ class Role extends Model
     {
         return $this->hasMany(MediUser::class, 'role_id', 'role_id');
     }
+
+    //Disable update/insert trong Role Model
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function () {
+            throw new \Exception("Creating roles is not allowed.");
+        });
+
+        static::updating(function () {
+            throw new \Exception("Updating roles is not allowed.");
+        });
+
+        static::deleting(function () {
+            throw new \Exception("Deleting roles is not allowed.");
+        });
+    }
 }

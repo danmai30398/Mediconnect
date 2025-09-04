@@ -1,0 +1,53 @@
+/* DocQuickView/DocDetails - Start */
+.docqkview{
+    text-align: center;
+    border: solid rgb(162, 191, 216);
+    background-color: white;
+    border-radius: 30px;
+    padding: 5px;
+}
+
+.docqkview:hover{
+    color: blue;
+}
+
+
+.borderCustom{
+    border: dashed rgb(126, 233, 237);
+    border-radius: 40px;
+    margin: 10px;
+    background-color: rgb(248, 252, 252);
+}
+
+.customBooking{
+    border: solid white;
+    background-color: white;
+    box-shadow: 3px 5px gainsboro;
+    border-radius: 20px;
+    margin-right: 4px;
+    margin: 4px;
+}
+
+.bttnQkView, .bookingButton{
+    border: solid white;
+    border-radius: 5px;
+    background-color: lightskyblue;
+    margin: 4px;
+}
+
+.bttnQkView:hover, .bookingButton:hover{
+    background-color: blue;
+}
+
+.DocContent{
+    font-size: large;
+    font-weight: bold;
+    color: rgb(49, 161, 231);
+}
+
+.docSearch{
+    background-color: rgb(199, 225, 239);
+}
+/* DocQuickView/DocDetails - End */
+
+

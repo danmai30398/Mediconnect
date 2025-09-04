@@ -39,6 +39,14 @@ class MediUser extends Model
     }
 
     /**
+     * One user may have one patient profile
+     */
+    public function patient()
+    {
+        return $this->hasOne(Patient::class, 'user_id', 'user_id');
+    }
+
+    /**
      * One user (admin) can create many contents
      */
     public function contents()

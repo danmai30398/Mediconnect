@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('phone')->unique();
-            $table->date('dob');
+            $table->date('dob')->nullable();
             $table->string('email')->unique();
-            $table->enum('gender', ['Male', 'Female', 'Other']);
+            $table->enum('gender', ['Male', 'Female', 'Other'])->nullable();
             $table->string('image')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('user_id')->on('medi_users')->onDelete('cascade');

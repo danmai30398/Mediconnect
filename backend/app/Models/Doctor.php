@@ -23,6 +23,7 @@ class Doctor extends Model
         'gender',
         'dob',
         'image',
+        'description',
         'city_id',
         'user_id',
     ];

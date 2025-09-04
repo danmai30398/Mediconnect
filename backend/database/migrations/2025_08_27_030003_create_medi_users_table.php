@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id('user_id');
             $table->string('username')->unique();
             $table->string('password');
+            $table->integer('login_attempts')->default(0);
+            $table->timestamp('locked_until')->nullable();
             $table->unsignedBigInteger('role_id');
             $table->foreign('role_id')->references('role_id')->on('roles')->onDelete('cascade');
         });

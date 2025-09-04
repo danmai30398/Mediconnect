@@ -24,7 +24,7 @@ const Dashboard = () => {
           schedules: totalSchedules,
         });
       } catch (err) {
-        console.error("Không thể lấy dữ liệu dashboard", err);
+        console.error("Failed to fetch dashboard data", err);
       }
     };
 

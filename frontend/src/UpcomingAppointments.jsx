@@ -1,4 +1,3 @@
-// UpcomingAppointments.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -22,15 +21,12 @@ const UpcomingAppointments = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const token = localStorage.getItem("authToken");
-        const res = await axios.get(`http://localhost:8000/api/appointments?from=${days[0].iso}&to=${days[6].iso}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.get(
+          `http://localhost:8000/api/appointments?from=${days[0].iso}&to=${days[6].iso}`
+        );
         setAppointments(res.data);
       } catch (err) {
-        console.error("Lỗi khi lấy dữ liệu lịch hẹn:", err);
+        console.error("Failed to fetch appointments:", err);
       }
     };
 
@@ -50,7 +46,7 @@ const UpcomingAppointments = () => {
     <div className="appointments-container">
       <h3>Upcoming Appointments</h3>
 
-      {/* Timeline ngày */}
+      {/* Timeline selector */}
       <div className="timeline">
         {days.map((day) => (
           <button
@@ -66,7 +62,7 @@ const UpcomingAppointments = () => {
         ))}
       </div>
 
-      {/* Danh sách lịch hẹn */}
+      {/* Appointment list */}
       <div className="appointments-list">
         {currentAppointments.length === 0 ? (
           <p>No appointments for this day.</p>

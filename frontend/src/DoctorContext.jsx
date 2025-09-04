@@ -11,7 +11,7 @@ export const DoctorProvider = ({ children }) => {
       const res = await axios.get("http://localhost:8000/api/doctor/me");
       setDoctor(res.data);
     } catch (err) {
-      console.error("Error fetching doctor information", err);
+      console.error("Failed to fetch doctor info", err);
     }
   };
 

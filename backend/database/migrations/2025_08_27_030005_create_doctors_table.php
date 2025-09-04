@@ -22,8 +22,9 @@ return new class extends Migration
             $table->enum('gender', ['Male', 'Female', 'Other']);
             $table->date('dob');
             $table->string('image')->nullable();
+            $table->longText('description');
             $table->unsignedBigInteger('city_id');
-            $table->unsignedBigInteger('user_id')->unique();
+            $table->unsignedBigInteger('user_id');
             $table->foreign('city_id')->references('city_id')->on('cities');
             $table->foreign('user_id')->references('user_id')->on('medi_users')->onDelete('cascade');
         });

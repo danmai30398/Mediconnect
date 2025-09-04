@@ -126,7 +126,6 @@ const DoctorAvailability = () => {
     <div className="availability-container">
       <h2>Doctor's Weekly Availability</h2>
 
-      {/* Doctor Info */}
       <div className="doctor-info">
         <p><strong>👤 Name:</strong> {doctorInfo.name}</p>
         <p><strong>🆔 ID:</strong> {doctorInfo.id}</p>

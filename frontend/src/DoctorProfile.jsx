@@ -21,6 +21,7 @@ const DoctorProfile = () => {
       setLocalDoctor({
         ...doctor,
         city_id: doctor.city_id || doctor.city?.city_id || "",
+        description: doctor.description || "",
       });
     }
   }, [doctor]);
@@ -234,6 +235,20 @@ const DoctorProfile = () => {
             </>
           ) : (
             <span>{localDoctor.dob}</span>
+          )}
+        </div>
+
+        <div className="info-row">
+          <label><FaBriefcase /> Description:</label>
+          {isEditing ? (
+            <textarea
+              name="description"
+              value={localDoctor.description || ""}
+              onChange={handleChange}
+              rows={3}
+            />
+          ) : (
+            <span>{localDoctor.description || "N/A"}</span>
           )}
         </div>
 

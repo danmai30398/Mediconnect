@@ -7,6 +7,8 @@ use App\Models\MediUser;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+
 
 class UserController extends Controller
 {
@@ -56,10 +58,14 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = MediUser::with('patients')->findOrFail($id);
+        $user = MediUser::with('doctor')->find($id);
+        Log::info('doctor: ' . $user);
+        if($user->doctor === null){
+            $user = MediUser::with('patient')->find($id);
+            Log::info('patient: ' . $user);
+        }
         return response()->json($user);
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -89,14 +95,18 @@ class UserController extends Controller
     {
         $user = MediUser::whereHas('patient', function ($query) use ($request) {
             $query->where('email', $request->email)
-            ->orWhere('phone', $request->phone);;
-        })->with('patient')->first() ;
-
+                ->orWhere('phone', $request->phone);;
+        })->orwhereHas('doctor', function ($query) use ($request) {
+            $query->where('email', $request->email)
+                ->orWhere('phone', $request->phone);;
+        })
+            ->with(['patient', 'doctor'])
+            ->first();
 
         if ($user) {
             // Kiểm tra tài khoản có đang bị khoá không
             if ($user->locked_until && now()->lt($user->locked_until)) {
-                return response()->json(['message' => 'Tài khoản bị khoá. Vui lòng thử lại sau.'], 423);
+                return response()->json(['message' => 'Your account has been locked. Please try again later..'], 423);
             }
 
             if (!Hash::check($request->password, $user->password)) {
@@ -126,20 +136,10 @@ class UserController extends Controller
                 'user' => [
                     'id' => $user->user_id,
                     'role' => $user->role_id,
-                    'username' => $user->username,
-                    'name' => $user->patient->name,
-                    'address' => $user->patient->address,
-                    'phone' => $user->patient->phone,
-                    'dob' => $user->patient->dob,
-                    'email' => $user->patient->email,
-                    'gender' => $user->patient->gender,
-                    'image' => $user->patient->image,
                 ]
             ]);
         }
 
-            return response()->json(['message' => 'Invalid credentials'], 401);
+        return response()->json(['message' => 'Invalid credentials'], 401);
     }
-
-        
 }

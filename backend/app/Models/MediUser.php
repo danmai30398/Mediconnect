@@ -53,4 +53,7 @@ class MediUser extends Model
     {
         return $this->hasMany(Content::class, 'created_by', 'user_id');
     }
+
+    
+   
 }

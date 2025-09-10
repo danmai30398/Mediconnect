@@ -10,7 +10,7 @@ class Content extends Model
     protected $table = 'contents';
 
     // Set the primary key column
-    protected $primaryKey = 'content_id';
+    protected $primaryKey = 'content_id_int';
 
     // Define the fields that are mass assignable
     protected $fillable = [
@@ -30,7 +30,7 @@ class Content extends Model
     //Each content belongs to one category
     public function category()
     {
-        return $this->belongsTo(Category::class, 'category_id', 'category_id');
+        return $this->belongsTo(Category::class, 'category_id_int', 'category_id_int');
     }
 
     //Each content is created by one user

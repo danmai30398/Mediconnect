@@ -10,7 +10,7 @@ class Category extends Model
     protected $table = 'categories';
 
     // Set the primary key column
-    protected $primaryKey = 'category_id';
+    protected $primaryKey = 'category_id_int';
 
 
     // Specify mass assignable fields
@@ -24,6 +24,6 @@ class Category extends Model
     //A category can have many contents.
     public function contents()
     {
-        return $this->hasMany(Content::class, 'category_id', 'category_id');
+        return $this->hasMany(Content::class, 'category_id_int', 'category_id_int');
     }
 }

@@ -9,11 +9,15 @@ class MedicalRecordSeeder extends Seeder
 {
     public function run(): void
     {
-        MedicalRecord::create([
-            'appointment_id' => 1, 
-            'diagnosis'      => 'Cảm cúm nhẹ',
-            'notes'          => 'Nghỉ ngơi, uống nhiều nước',
-            'date'           => now(),
-        ]);
+        if (\App\Models\Appointment::where('appointment_id', 1)->exists()) {
+            MedicalRecord::updateOrCreate(
+                ['appointment_id' => 1],
+                [
+                    'diagnosis' => 'Cảm cúm nhẹ',
+                    'notes' => 'Nghỉ ngơi, uống nhiều nước',
+                    'date' => now(),
+                ]
+            );
+        }
     }
 }

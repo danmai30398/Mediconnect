@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class RoleSeeder extends Seeder
 {
@@ -12,10 +14,19 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-         \App\Models\Role::insert([
-        ['role_name' => 'Admin'],
-        ['role_name' => 'Doctor'],
-        ['role_name' => 'Patient'],
-    ]);
+        $rows = [
+            ['role_name' => 'Admin', 'slug' => 'admin'],
+            ['role_name' => 'Doctor', 'slug' => 'doctor'],
+            ['role_name' => 'Patient', 'slug' => 'patient'],
+        ];
+
+        $hasSlug = Schema::hasColumn('roles', 'slug');
+        foreach ($rows as $r) {
+            if ($hasSlug) {
+                DB::table('roles')->updateOrInsert(['slug' => $r['slug']], ['role_name' => $r['role_name'], 'slug' => $r['slug']]);
+            } else {
+                DB::table('roles')->updateOrInsert(['role_name' => $r['role_name']], ['role_name' => $r['role_name']]);
+            }
+        }
     }
 }

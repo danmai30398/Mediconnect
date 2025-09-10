@@ -1,82 +1,58 @@
 import React, { useEffect, useState } from "react";
-import { FaCalendarAlt, FaUserMd, FaClock } from "react-icons/fa";
-import axios from "axios";
-import "./App.css";
-import UpcomingAppointments from "./UpcomingAppointments.jsx";
+import { apiService } from "./services/apiService";
 
-const Dashboard = () => {
-  const [stats, setStats] = useState({
-    appointments: 0,
-    patients: 0,
-    schedules: 0,
-  });
+function Dashboard() {
+    const [stats, setStats] = useState({ total_doctors: 0, total_patients: 0, today_appointments: 0 });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchDoctorData = async () => {
-      const token = localStorage.getItem("authToken");
-      if (!token) return;
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const data = await apiService.getDashboardStats();
+                setStats(data);
+            } catch (e) {
+                setError("Unable to load statistics");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchStats();
+    }, []);
 
-      try {
-        const res = await axios.get("http://localhost:8000/api/doctor/dashboard", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const { totalAppointments, totalPatients, totalSchedules } = res.data;
-
-        setStats({
-          appointments: totalAppointments,
-          patients: totalPatients,
-          schedules: totalSchedules,
-        });
-      } catch (err) {
-        console.error("Không thể lấy dữ liệu dashboard", err);
-      }
-    };
-
-    fetchDoctorData();
-  }, []);
-
-  return (
-    <div className="dashboard-container">
-      {/* Tiêu đề cố định */}
-      <div className="welcome-text">
-        <h1>Dashboard</h1>
-      </div>
-
-      {/* Bảng thống kê nhanh */}
-      <div className="stat-grid">
-        <div className="stat-card">
-          <FaCalendarAlt className="stat-icon" />
-          <div>
-            <h3>{stats.appointments}</h3>
-            <p>Appointments</p>
-          </div>
+    return (
+        <div className="container">
+            <br /><br /><br />
+            <h2 className="mb-3">Dashboard</h2>
+            <div className="mb-3"><a href="/login">Login</a></div>
+            {loading ? (
+                <div>Loading...</div>
+            ) : error ? (
+                <div className="text-danger">{error}</div>
+            ) : (
+                <div className="row g-3">
+                    <div className="col-12 col-md-4">
+                        <div className="border p-3">
+                            <div className="fw-bold">Doctors</div>
+                            <div className="fs-3">{stats.total_doctors}</div>
+                        </div>
+                    </div>
+                    <div className="col-12 col-md-4">
+                        <div className="border p-3">
+                            <div className="fw-bold">Patients</div>
+                            <div className="fs-3">{stats.total_patients}</div>
+                        </div>
+                    </div>
+                    <div className="col-12 col-md-4">
+                        <div className="border p-3">
+                            <div className="fw-bold">Today's Appointments</div>
+                            <div className="fs-3">{stats.today_appointments}</div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
-        <div className="stat-card">
-          <FaUserMd className="stat-icon" />
-          <div>
-            <h3>{stats.patients}</h3>
-            <p>Patients</p>
-          </div>
-        </div>
-        <div className="stat-card">
-          <FaClock className="stat-icon" />
-          <div>
-            <h3>{stats.schedules}</h3>
-            <p>Available Slots</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Hộp thông báo */}
-      <div className="info-box">
-        Stay on top of your schedule, patient updates, and availability—all from one dashboard.
-      </div>
-
-      {/* Component bảng lịch hẹn */}
-      <UpcomingAppointments />
-    </div>
-  );
-};
+    );
+}
 
 export default Dashboard;

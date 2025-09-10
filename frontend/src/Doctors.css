@@ -1,0 +1,98 @@
+/* Common Navigation Styles - Start */
+.navCustom {
+    background-color: #13b5e0 !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1030;
+}
+
+.navCustom .nav-link {
+    color: white !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.navCustom .nav-link:hover {
+    color: #e3f2fd !important;
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 4px;
+}
+
+.navCustom .nav-link.active {
+    color: #007bff !important;
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    border-bottom: 2px solid white;
+}
+
+.navCustom .navbar-brand {
+    color: white !important;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.navCustom .btn-outline-light {
+    border-color: white;
+    color: white;
+}
+
+.navCustom .btn-outline-light:hover {
+    background-color: white;
+    color: #13b5e0;
+}
+
+/* Common Navigation Styles - End */
+
+/* DocQuickView/DocDetails - Start */
+.docqkview{
+    text-align: center;
+    border: solid rgb(162, 191, 216);
+    background-color: white;
+    border-radius: 30px;
+    padding: 5px;
+}
+
+.docqkview:hover{
+    color: blue;
+}
+
+
+.borderCustom{
+    border: dashed rgb(126, 233, 237);
+    border-radius: 40px;
+    margin: 10px;
+    background-color: rgb(248, 252, 252);
+}
+
+.customBooking{
+    border: solid white;
+    background-color: white;
+    box-shadow: 3px 5px gainsboro;
+    border-radius: 20px;
+    margin-right: 4px;
+    margin: 4px;
+}
+
+.bttnQkView, .bookingButton{
+    border: solid white;
+    border-radius: 5px;
+    background-color: lightskyblue;
+    margin: 4px;
+}
+
+.bttnQkView:hover, .bookingButton:hover{
+    background-color: blue;
+}
+
+.DocContent{
+    font-size: large;
+    font-weight: bold;
+    color: rgb(49, 161, 231);
+}
+
+.docSearch{
+    background-color: rgb(199, 225, 239);
+}
+/* DocQuickView/DocDetails - End */
+
+

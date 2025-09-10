@@ -41,4 +41,16 @@ class Patient extends Model
     {
         return $this->hasMany(Appointment::class, 'patient_id', 'patient_id');
     }
+
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (!$this->image) return null;
+        $relative = 'patient-images/' . $this->image;
+        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($relative)) {
+            return url('storage/' . $relative);
+        }
+        return null;
+    }
 }

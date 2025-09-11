@@ -145,13 +145,9 @@ function Register() {
                     </div>
                     <br />
                     <div className="col-12 text-center">Already have an account? <a href="/login">Login</a> </div >
-
                 </div >
-
             </form>
-
         </div>
-
     );
 }
 

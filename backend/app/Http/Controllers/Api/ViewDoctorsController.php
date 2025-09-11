@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
+use App\Models\AvailabilityScheduling;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,9 +14,7 @@ class ViewDoctorsController extends Controller
      */
     public function index()
     {
-        //liệt kê các thông tin trong bảng user (model UserProfile)
-        // return Doctor::all();
-        // Lấy tất cả sản phẩm kèm thông tin category
+        // Lấy tất cả bác sỹ kèm thông tin city
         $doctors = Doctor::with('city')->get();
 
         return response()->json($doctors);
@@ -36,8 +35,9 @@ class ViewDoctorsController extends Controller
     public function show(string $id)
     {
         //show chi tiết từng sản phẩm
-        $doctors = Doctor::with('city')->findOrFail($id);
+        $doctors = Doctor::with(['city', 'availabilitySchedulings'])->findOrFail($id);
         return response()->json($doctors);
+
     }
 
     /**
@@ -45,10 +45,7 @@ class ViewDoctorsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //cập nhật thông tin sản phẩm
-        $product = Doctor::findOrFail($id);
-        $product->update($request->all());
-        return $product;
+        //
     }
 
     /**

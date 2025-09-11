@@ -32,6 +32,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -39,7 +40,7 @@
 
 /* Login form css - start */
 /* Start User form */
-.firstLine{
+.firstLine {
   text-align: center;
   font-size: 20px;
   font-weight: 400;
@@ -63,19 +64,21 @@ input[type="password"]::-webkit-textfield-decoration-container {
 
 
 /* Start Register form */
-.registerForm{
+.registerForm {
   border: solid rgb(247, 245, 245);
   background-color: rgb(247, 245, 245);
   padding: 10px;
 }
-.registerButton{
+
+.registerButton {
   border: rgb(239, 164, 164);
   width: 100%;
   background-color: lightskyblue;
 }
 
 /* Start login form */
-.email_lg, .phone_lg{
+.email_lg,
+.phone_lg {
   border: solid lightskyblue;
   width: 40%;
   text-align: center;
@@ -83,19 +86,21 @@ input[type="password"]::-webkit-textfield-decoration-container {
   border-width: 1px;
 }
 
-.email_lg1, .phone_lg1{
+.email_lg1,
+.phone_lg1 {
   border: solid rgb(227, 239, 247);
   background-color: rgb(227, 239, 247);
 }
 
 
 
-.email_lg:visited{
+.email_lg:visited {
   background-color: rgb(145, 70, 210);
 }
 
 
-.email_edit, .phone_edit{
+.email_edit,
+.phone_edit {
   text-decoration: none;
   color: lightskyblue;
 }
@@ -103,15 +108,29 @@ input[type="password"]::-webkit-textfield-decoration-container {
 /* Login form css - end */
 
 /* Nar bar - start */
-.navCustom{
+.navCustom {
   background-color: #13b5e0;
 }
 
-.nav-link.active{
+.nav-link.active {
   color: navy !important;
   font-weight: bold;
   border-bottom: 2px solid white;
   padding-bottom: 2px;
   transition: 0.3s;
 }
+
+.dropdown-menu {
+  z-index: 2000 !important;
+  position: absolute !important;
+}
+
 /* Nar bar - end */
+
+/* buttons booking - start */
+.time_choosed{
+  background-color: #13b5e0 !important;
+}
+
+/* buttons booking - end */
+

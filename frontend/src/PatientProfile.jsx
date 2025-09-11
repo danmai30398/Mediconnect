@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import "./Doctors.css";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function PatientProfile() {
-
+    const navigate = useNavigate();
+    
     const user = JSON.parse(localStorage.getItem('MediUser'));
 
     console.log("User: ", user);
@@ -16,27 +17,27 @@ function PatientProfile() {
     console.log("User ID:", id);
 
     // const { id } = user.id;
-        const [profile, setProfile] = useState({
-            username: '',
-            // password: '',
-            patient: {
-                name: '',
-                phone: '',
-                email: '',
-                address: '',
-                dob: '',
-                gender:'',
-                image:''
-            }
-        });
-    
-        useEffect(() => {
-            fetch(`${API_BASE_URL}/api/user/${id}`)
-                .then(res => res.json())
-                .then(data => setProfile(data))
-                .catch(err => console.error("Fetch error:", err));
-                console.log("data:", profile);
-        }, [id]);
+    const [profile, setProfile] = useState({
+        username: '',
+        // password: '',
+        patient: {
+            name: '',
+            phone: '',
+            email: '',
+            address: '',
+            dob: '',
+            gender: '',
+            image: ''
+        }
+    });
+
+    useEffect(() => {
+        fetch(`${API_BASE_URL}/api/user/${id}`)
+            .then(res => res.json())
+            .then(data => setProfile(data))
+            .catch(err => console.error("Fetch error:", err));
+        // console.log("data:", profile);
+    }, [id]);
     //
 
     return (
@@ -45,8 +46,9 @@ function PatientProfile() {
             <h4>Hello {profile.username}</h4>
             <div className="">
                 <img
-                    src={profile.patient.image ? `${process.env.PUBLIC_URL}/Images/Patients/${profile.patient.image}` : `${process.env.PUBLIC_URL}/Images/Patients/Unknown_person.jpg`}
+                    src={profile.patient.image ? `${API_BASE_URL}/storage/avatars/${profile.patient.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
                     className="rounded-circle"
+                    alt=""
                     style={{ width: "150px", height: "auto" }}
                 />
             </div>
@@ -82,7 +84,7 @@ function PatientProfile() {
                 </div>
             </div>
             <hr />
-            <div><button className="col-6 btn btn-light m-3 text-primary" >Edit your profile</button></div>
+            <div><button className="col-6 btn btn-light m-3 text-primary" onClick={() => { navigate(`/patientEdit/${id}`) }} >Edit your profile</button></div>
         </div>
 
     );

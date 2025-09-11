@@ -9,7 +9,10 @@ import Register from './Register';
 import PatientProfile from './PatientProfile';
 import PatientLayout from './PatientLayout';
 import LoginByPhone from './LoginByPhone';
-import ForgotPass from './FogotPass';
+import PatientBooking from './PatientBooking';
+import PatientAppointmentManage from './PatientAppointmentManage';
+import ForgotPass from './ForgotPass';
+import PatientEdit from './PatientEdit';
 
 function App() {
   return (
@@ -23,17 +26,20 @@ function App() {
           <Route>
           <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/login_phone" element={<LoginByPhone />} />
             <Route path="/login" element={<LoginByEmail />} />
             <Route path="/forgotPass" element={<ForgotPass />} />
-
           </Route>
+
           <Route element={<PatientLayout/>}>
             <Route path="/patientPage" element={<PatientHeader />} />
             <Route path="/patientProfile" element={<PatientProfile />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/patientEdit/:id" element={<PatientEdit />} />
             <Route path="/findUDoctor" element={<DocQuickViews />} />
             <Route path="/doctorDetail/:id" element={<DoctorDetails />} />
+            <Route path="/patientBooking/:id" element={<PatientBooking />} />
+            <Route path="/appointmentMg" element={<PatientAppointmentManage />} />
           </Route>
         </Routes>
       </main>

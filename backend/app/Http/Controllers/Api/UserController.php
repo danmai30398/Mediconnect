@@ -17,10 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        // Lấy tất cả sản phẩm kèm thông tin category
-        // $patients = MediUser::with('user')->get();
-
-        // return response()->json($patients);
+        //
     }
 
     /**
@@ -28,7 +25,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //create sản phẩm và store lại trong db
+        //create and store 
         $validated = $request->validate([
             'username' => 'required|string|unique:medi_users,username',
             'password' => 'required|string|min:6',
@@ -39,18 +36,18 @@ class UserController extends Controller
         ]);
 
         DB::transaction(function () use ($validated) {
-            // 1. Tạo user
+            // 1. Create user
             $user = MediUser::create([
                 'username' => $validated['username'],
                 'password' => Hash::make($validated['password']),
                 'role_id'  => 3,
             ]);
 
-            //2. Tạo profile
+            //2. Create profile
             $user->patient()->create($validated['profile']);
         });
 
-        return response()->json(['message' => 'Tạo người dùng thành công']);
+        return response()->json(['message' => 'Create a user successfully']);
     }
 
     /**
@@ -59,10 +56,10 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = MediUser::with('doctor')->find($id);
-        Log::info('doctor: ' . $user);
+        // Log::info('doctor: ' . $user);
         if($user->doctor === null){
             $user = MediUser::with('patient')->find($id);
-            Log::info('patient: ' . $user);
+            // Log::info('patient: ' . $user);
         }
         return response()->json($user);
     }
@@ -72,10 +69,12 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //cập nhật thông tin sản phẩm
-        $product = MediUser::findOrFail($id);
-        $product->update($request->all());
-        return $product;
+        $user = MediUser::with('doctor')->find($id);
+        if($user->doctor === null){
+            $user = MediUser::with('patient')->find($id);
+        }
+        $user->update($request->all());
+        return $user;
     }
 
     /**
@@ -83,9 +82,7 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //xoá sản phẩm khỏi db
-        MediUser::destroy($id);
-        return response()->json(['message' => 'Deleted successfully']);
+        //
     }
 
     /**

@@ -1,34 +1,42 @@
+
+import './App.css';
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Sidebar from "./Sidebar";
-import Dashboard from "./Dashboard";
-import DashboardLayout from "./Navbar";
-import "./App.css";
-import DoctorProfile from "./DoctorProfile.jsx";
-import { DoctorProvider } from "./DoctorContext";
-import DoctorAvailability from "./AvailabilityPage.jsx";
-import AppointmentList from "./Appointment.jsx";
+import { Routes, Route } from "react-router-dom";
+
+import TopBar from "./TopBar";
+import HeaderNav from "./HeaderNav";
+import Footer from "./Footer";
+import BackToTop from "./BackToTop";
+
+import HomePage from "./HomePage";
+import Login from "./Login";
+import Register from "./Register";
+import ForgotPassword from "./ForgotPassword";
+import Category from "./Category";
+import Post from "./Post";
 
 function App() {
   return (
-    <DoctorProvider>
-      <Router>
-        <div className="container">
-          <Sidebar />
-          <div className="main-content">
-            <DashboardLayout />
-            <div className="content-area">
-              <Routes>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/doctorprofile" element={<DoctorProfile />} />
-                <Route path="/AvailabilityPage" element={<DoctorAvailability />} />
-                <Route path="/docappointment" element={<AppointmentList />} />
-              </Routes>
-            </div>
-          </div>
-        </div>
-      </Router>
-    </DoctorProvider>
+    <>
+      <TopBar />
+      <HeaderNav />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/home" element={<HomePage />} />
+
+       
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
+       
+        <Route path="/categories/:slug" element={<Category />} />
+        <Route path="/post/:id" element={<Post />} />
+      </Routes>
+
+      <Footer />
+      <BackToTop />
+    </>
   );
 }
 

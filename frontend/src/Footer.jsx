@@ -8,9 +8,9 @@ function Footer() {
             <div className="top">
                 <div className="container grid">
                     <div>
-                        <h4>eHospital</h4>
+                        <h4>MediConnect</h4>
                         <p>
-                            eHospital is the Rockies is a 710-bed local medicinal focus in
+                            Mediconnect is the Rockies is a 710-bed local medicinal focus in
                             Loveland, Colo. with a full range of administrations and spend
                             significant time in heart and injury mind.
                         </p>
@@ -44,7 +44,7 @@ function Footer() {
                 </div>
             </div>
 
-            <div className="bottom">Copyright© eHospital.UnlockDesign All right reserved.</div>
+            <div className="bottom">Copyright© MediConnect.UnlockDesign All right reserved.</div>
         </footer>
     );
 }

@@ -1,30 +1,63 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { posts, categories } from "./data/data.js";
+import axios from "axios";
 
 function Category() {
-  const { slug } = useParams();
-  const cat = categories.find(c => c.slug === slug);
-  const list = posts.filter(p => p.category === slug);
+  const { id } = useParams(); // Get category_id from URL
+  const [category, setCategory] = useState(null);
+  const [contents, setContents] = useState([]);
 
-  if (!cat) return <div className="auth-wrap"><div className="auth-card">Category not found.</div></div>;
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8000/api/categories/${id}/contents`)
+      .then(res => {
+        setCategory(res.data.category);
+        setContents(res.data.contents);
+      })
+      .catch(err => console.error("Category not found", err));
+  }, [id]);
+
+  if (!category) {
+    return (
+      <div className="auth-wrap">
+        <div className="auth-card">Category not found.</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="section" style={{background:"#f6f8f9", minHeight:"60vh"}}>
+    <div className="section" style={{ background: "#f6f8f9", minHeight: "60vh" }}>
       <div className="container">
-        <h2 className="section-title">{cat.name}</h2>
+        <h2 className="section-title">{category}</h2>
         <div className="cards">
-          {list.map(p=>(
-            <article key={p.id} className="card">
-              <img src={p.image} alt={p.title}/>
-              <div className="body">
-                <div className="meta">📅 {p.date}</div>
-                <div className="title">{p.title}</div>
-                <div className="meta">{p.author} · eHospital</div>
-                <div style={{marginTop:10}}><Link to={`/post/${p.id}`} className="btn btn-primary">Read more</Link></div>
-              </div>
-            </article>
-          ))}
+          {contents.length === 0 ? (
+            <p>No posts available in this category.</p>
+          ) : (
+            contents.map(p => (
+              <Link
+                to={`/post/${p.id}`}
+                key={p.id}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <article className="card" style={{ cursor: "pointer" }}>
+                  <img
+                    src={`http://localhost:8000/storage/${p.image}`} 
+                    alt={p.title}
+                  />
+                  <div className="body">
+                    {/* <div className="meta">📅 {p.date || "No date available"}</div> */}
+                    <div className="title">{p.title}</div>
+                    <p className="description">
+                      {p.description?.slice(0, 100) || "No description"}...
+                    </p>
+                    <div className="meta"> MediConnect · By Admin</div>
+                    {/* <div className="meta">{p.author || "Unknown author"} · eHospital</div> */}
+
+                  </div>
+                </article>
+              </Link>
+            ))
+          )}
         </div>
       </div>
     </div>

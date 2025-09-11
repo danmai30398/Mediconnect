@@ -14,6 +14,7 @@ import Register from "./Register";
 import ForgotPassword from "./ForgotPassword";
 import Category from "./Category";
 import Post from "./Post";
+import SearchResult from "./SearchResult";
 
 function App() {
   return (
@@ -28,10 +29,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-
-       
-        <Route path="/categories/:slug" element={<Category />} />
+        <Route path="/category/:id" element={<Category />} />
         <Route path="/post/:id" element={<Post />} />
+        <Route path="/search" element={<SearchResult />} />
       </Routes>
 
       <Footer />

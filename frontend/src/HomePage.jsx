@@ -26,6 +26,10 @@ import prevention from "./assets/pic/topic/prevention.jpg";
 import cure from "./assets/pic/topic/cure.jpg";
 
 import about1 from "./assets/pic/about/about1.png";
+import ContactSection from "./ContactForm"; 
+
+
+
 
 
 function HomePage() {
@@ -47,7 +51,7 @@ function HomePage() {
                 <div className="container grid">
                     <div>
                         <h1>Your Health Care <span className="text-accent">Center</span></h1>
-                        <p>eHospital Health Care System has gladly served the encompassing regions for more than 35 years.</p>
+                        <p>MediConnect Health Care System has gladly served the encompassing regions for more than 35 years.</p>
                         <div style={{ marginTop: 18 }}>
                             <button className="btn btn-outline" onClick={goToBookingFlow}>GET APPOINTMENT</button>
                         </div>
@@ -74,13 +78,13 @@ function HomePage() {
             <section className="about" id="about">
                 <div className="container grid">
                     <div className="about-text">
-                        <h2>About Our <span className="text-accent">eHospital</span></h2>
+                        <h2>About Our <span className="text-accent">MediConnect</span></h2>
                         <p>We additionally work very closely with our community healthcare group who provide antenatal, postnatal and nursing services and different specialist provision inclusive of the quitters scheme.</p>
                         <p>This 24 month benefit covers all ranges of basic upkeep. Notwithstanding every one of the things included on the Full administration we cover things that are frequently suggested for substitution like clockwork.</p>
                         
                         <button className="btn btn-primary">Read More</button>
                     </div>
-                    <div className="about-img"><img src={about1} alt="About eHospital" /></div>
+                    <div className="about-img"><img src={about1} alt="About MediConnect" /></div>
                 </div>
             </section>
 
@@ -188,14 +192,14 @@ function HomePage() {
                     </h2>
                     <div className="cards">
                         {[
-                            { img: disease, title: "Disease", slug: "disease" },
-                            { img: prevention, title: "Preventions", slug: "preventions" },
-                            { img: cure, title: "Cure", slug: "cure" },
+                            { img: disease, title: "Disease", id: 1 },
+                            { img: prevention, title: "Preventions", id: 2 },
+                            { img: cure, title: "Cure", id: 3 },
                         ].map((it, i) => (
                             <article
                                 className="card"
                                 key={i}
-                                onClick={() => navigate(`/categories/${it.slug}`)}
+                                onClick={() => navigate(`/category/${it.id}`)}
                                 style={{ cursor: "pointer" }}
                             >
                                 <img alt={it.title} src={it.img} className="topic-img" />
@@ -211,21 +215,7 @@ function HomePage() {
             </section>
 
             {/* CONTACT US */}
-            <section className="contact" id="contact">
-                <div className="container grid">
-                    <div>
-                        <h2 style={{ fontSize: 42, marginTop: 0 }}>CONTACT <span className="text-accent">US</span></h2>
-                        <p style={{ color: "#6b6f72" }}>Have any question? Send us a message and we’ll reply soon.</p>
-                    </div>
-                    <form className="contact-form">
-                        <input type="text" placeholder="Name" required />
-                        <input type="email" placeholder="E-mail Address" required />
-                        <input type="text" placeholder="Phone" required />
-                        <textarea rows="4" placeholder="How can we help?"></textarea>
-                        <button type="submit" className="btn-submit">Submit</button>
-                    </form>
-                </div>
-            </section>
+           <ContactSection />
         </>
     );
 }

@@ -1,24 +1,27 @@
-import React from "react";
-import { useParams, Link } from "react-router-dom";
-import { posts } from "./data/data.js";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-function Post() {
+function PostDetail() {
   const { id } = useParams();
-  const post = posts.find(p => p.id === id);
+  const [post, setPost] = useState(null);
 
-  if (!post) return <div className="auth-wrap"><div className="auth-card">Post not found.</div></div>;
+  useEffect(() => {
+    axios.get(`http://localhost:8000/api/contents/${id}`)
+      .then(res => setPost(res.data))
+      .catch(err => console.error("Không tìm thấy bài viết", err));
+  }, [id]);
+
+  if (!post) return <p>Đang tải bài viết...</p>;
 
   return (
-    <div className="section" style={{background:"#fff"}}>
-      <div className="container" style={{maxWidth:900}}>
-        <img src={post.image} alt={post.title} style={{width:"100%", borderRadius:10}} />
-        <h1 style={{marginTop:18}}>{post.title}</h1>
-        <div style={{color:"#6b6f72"}}>📅 {post.date} · {post.author}</div>
-        <p style={{marginTop:14, lineHeight:1.7}}>{post.content}</p>
-        <Link to={`/categories/${post.category}`} className="btn btn-primary">← Back to category</Link>
-      </div>
+    <div className="container">
+      <h1>{post.title}</h1>
+      <p><i>Danh mục: {post.category?.category_name}</i></p>
+      <img src={`http://localhost:8000/storage/${post.image}`} alt={post.title} />
+      <p>{post.description}</p>
     </div>
   );
 }
 
-export default Post;
+export default PostDetail;

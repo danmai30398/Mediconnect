@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaSearch, FaTimes, FaShoppingBag } from "react-icons/fa";
-import logo from './assets/pic/logo.png';
+import { FaSearch, FaTimes } from "react-icons/fa";
+import logo from "./assets/pic/logo.jpg";
 
-const NAV_OFFSET = 56; // chiều cao navbar
+const NAV_OFFSET = 70;
 
 function HeaderNav() {
   const [showSearch, setShowSearch] = useState(false);
@@ -21,9 +21,11 @@ function HeaderNav() {
   const onSearch = (e) => {
     e.preventDefault();
     if (!q.trim()) return;
-    // tuỳ ý: điều hướng đến trang category search
-    navigate(`/categories/${q.trim().toLowerCase()}`);
+
+    // Chuyển hướng sang trang SearchResult
+    navigate(`/search?q=${encodeURIComponent(q.trim())}`);
     setShowSearch(false);
+    setQ(""); // reset input
   };
 
   return (
@@ -33,7 +35,7 @@ function HeaderNav() {
           <Link to="/" className="brand-link">
             <img src={logo} alt="logo" className="brand-logo" />
             <div>
-              <div className="brand-title">eHospital</div>
+              <div className="brand-title">MediConnect</div>
               <div className="brand-subtitle">Your Health Care Assistant</div>
             </div>
           </Link>
@@ -44,30 +46,39 @@ function HeaderNav() {
         <div className="container inner">
           <div className="menu">
             <Link to="/home">HOME</Link>
-            <a href="#about" onClick={(e)=>scrollToId(e,"about")}>ABOUT</a>
-            <a href="#services" onClick={(e)=>scrollToId(e,"services")}>SERVICE</a>
-            <a href="#experts" onClick={(e)=>scrollToId(e,"experts")}>EXPERTS</a>
-            <a href="#topics" onClick={(e)=>scrollToId(e,"topics")}>TOPICS</a>
-            <a href="#pages" onClick={(e)=>scrollToId(e,"pages")}>PAGES</a>
+            <a href="#about" onClick={(e) => scrollToId(e, "about")}>ABOUT</a>
+            <a href="#services" onClick={(e) => scrollToId(e, "services")}>SERVICE</a>
+            <a href="#experts" onClick={(e) => scrollToId(e, "experts")}>EXPERTS</a>
+            <a href="#topics" onClick={(e) => scrollToId(e, "topics")}>TOPICS</a>
+            <a href="#pages" onClick={(e) => scrollToId(e, "pages")}>CONTACT</a>
           </div>
 
           <div className="actions">
-            <button className="iconbtn" title="Cart"><FaShoppingBag/></button>
-            <button className="iconbtn" title="Search" onClick={()=>setShowSearch(s=>!s)}><FaSearch/></button>
+            <button
+              className="iconbtn"
+              title="Search"
+              onClick={() => setShowSearch((s) => !s)}
+            >
+              <FaSearch />
+            </button>
           </div>
         </div>
 
         {showSearch && (
           <form className="searchBar" onSubmit={onSearch}>
-            <FaSearch style={{color:"#fff"}}/>
+            <FaSearch style={{ color: "#fff" }} />
             <input
               className="searchInput"
-              placeholder="Search"
+              placeholder="Search..."
               value={q}
-              onChange={(e)=>setQ(e.target.value)}
+              onChange={(e) => setQ(e.target.value)}
             />
-            <button className="closeBtn" type="button" onClick={()=>setShowSearch(false)}>
-              <FaTimes/>
+            <button
+              className="closeBtn"
+              type="button"
+              onClick={() => setShowSearch(false)}
+            >
+              <FaTimes />
             </button>
           </form>
         )}

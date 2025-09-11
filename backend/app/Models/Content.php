@@ -10,7 +10,7 @@ class Content extends Model
     protected $table = 'contents';
 
     // Set the primary key column
-    protected $primaryKey = 'content_id_int';
+    protected $primaryKey = 'content_id';
 
     // Define the fields that are mass assignable
     protected $fillable = [

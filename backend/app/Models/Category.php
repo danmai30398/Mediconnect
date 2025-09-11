@@ -10,7 +10,7 @@ class Category extends Model
     protected $table = 'categories';
 
     // Set the primary key column
-    protected $primaryKey = 'category_id_int';
+    protected $primaryKey = 'category_id';
 
 
     // Specify mass assignable fields

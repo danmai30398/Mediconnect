@@ -14,3 +14,7 @@ Route::post('/doctor/update', [DoctorProfileController::class, 'update']);
 Route::get('/categories',        [ContentController::class,'listCategories']);     
 Route::get('/categories/{slug}', [ContentController::class,'getByCategory']);      
 Route::get('/post/{id}',         [ContentController::class,'getPost']);
+
+//content - homepage
+Route::get('/categories/{id}/contents', [ContentController::class, 'getByCategory']);
+Route::get('/contents/{id}', [ContentController::class, 'show']);

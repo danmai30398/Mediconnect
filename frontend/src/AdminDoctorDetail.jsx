@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { apiService } from "./services/apiService";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:8000";
 
@@ -11,9 +12,9 @@ function AdminDoctorDetail() {
     useEffect(() => {
         const load = async () => {
             try {
-                const res = await fetch(`${API_BASE_URL}/api/doctors/${id}`);
-                if (!res.ok) throw new Error("Load failed");
-                setDoc(await res.json());
+                // Sử dụng apiService để lấy thông tin bác sĩ
+                const doc = await apiService.getDoctor(id);
+                setDoc(doc);
             } catch (e) { setError("Không thể tải chi tiết bác sĩ"); }
         };
         load();

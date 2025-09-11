@@ -9,6 +9,7 @@ import { apiService } from "./services/apiService";
  */
 function NotificationBell() {
     const [notifications, setNotifications] = useState([]); // Danh sách thông báo
+    const [unreadCount, setUnreadCount] = useState(0); // Số lượng thông báo chưa đọc
     const [loading, setLoading] = useState(true); // Trạng thái loading
     const [show, setShow] = useState(false); // Trạng thái hiển thị dropdown
 
@@ -18,12 +19,51 @@ function NotificationBell() {
      */
     const loadNotifications = async () => {
         try {
-            const data = await apiService.getNotifications();
-            setNotifications(data);
+            const [notificationsData, unreadCountData] = await Promise.all([
+                apiService.getNotifications(),
+                apiService.getUnreadNotificationCount()
+            ]);
+            setNotifications(notificationsData);
+            setUnreadCount(unreadCountData.count || 0);
         } catch (error) {
             console.error('Lỗi khi tải thông báo:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    /**
+     * Đánh dấu thông báo đã đọc
+     */
+    const markAsRead = async (notificationId) => {
+        try {
+            await apiService.markNotificationAsRead(notificationId);
+            // Cập nhật local state
+            setNotifications(prev => 
+                prev.map(notif => 
+                    notif.id === notificationId 
+                        ? { ...notif, is_read: true, read_at: new Date().toISOString() }
+                        : notif
+                )
+            );
+            setUnreadCount(prev => Math.max(0, prev - 1));
+        } catch (error) {
+            console.error('Lỗi khi đánh dấu đã đọc:', error);
+        }
+    };
+
+    /**
+     * Đánh dấu tất cả thông báo đã đọc
+     */
+    const markAllAsRead = async () => {
+        try {
+            await apiService.markAllNotificationsAsRead();
+            setNotifications(prev => 
+                prev.map(notif => ({ ...notif, is_read: true, read_at: new Date().toISOString() }))
+            );
+            setUnreadCount(0);
+        } catch (error) {
+            console.error('Lỗi khi đánh dấu tất cả đã đọc:', error);
         }
     };
 
@@ -95,13 +135,13 @@ function NotificationBell() {
                 style={{ border: 'none', background: 'none' }}
             >
                 <i className="fas fa-bell fa-lg text-muted"></i>
-                {notifications.length > 0 && (
+                {unreadCount > 0 && (
                     <Badge 
                         bg="danger" 
                         className="position-absolute top-0 start-100 translate-middle rounded-pill"
                         style={{ fontSize: '0.7rem', minWidth: '18px', height: '18px' }}
                     >
-                        {notifications.length}
+                        {unreadCount}
                     </Badge>
                 )}
             </Dropdown.Toggle>
@@ -117,7 +157,7 @@ function NotificationBell() {
             >
                 <Dropdown.Header className="d-flex justify-content-between align-items-center">
                     <span className="fw-bold">🔔 Latest Notifications</span>
-                    <small className="text-muted">{notifications.length} new</small>
+                    <small className="text-muted">{unreadCount} new</small>
                 </Dropdown.Header>
                 <Dropdown.Divider />
                 
@@ -136,9 +176,13 @@ function NotificationBell() {
                 ) : (
                     notifications.map((notification, index) => (
                         <Dropdown.Item 
-                            key={index} 
-                            className="py-2 px-3"
-                            style={{ borderBottom: index < notifications.length - 1 ? '1px solid #f8f9fa' : 'none' }}
+                            key={notification.id} 
+                            className={`py-2 px-3 ${!notification.is_read ? 'bg-light' : ''}`}
+                            style={{ 
+                                borderBottom: index < notifications.length - 1 ? '1px solid #f8f9fa' : 'none',
+                                borderLeft: !notification.is_read ? '3px solid #007bff' : 'none'
+                            }}
+                            onClick={() => !notification.is_read && markAsRead(notification.id)}
                         >
                             <div className="d-flex align-items-start">
                                 <div className={`me-3 mt-1`}>
@@ -146,12 +190,20 @@ function NotificationBell() {
                                 </div>
                                 <div className="flex-grow-1">
                                     <div className="fw-medium text-dark mb-1" style={{ fontSize: '0.9rem' }}>
+                                        {notification.title}
+                                    </div>
+                                    <div className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>
                                         {notification.message}
                                     </div>
                                     <small className="text-muted">
-                                        {formatTime(notification.time)}
+                                        {notification.time_ago || formatTime(notification.time)}
                                     </small>
                                 </div>
+                                {!notification.is_read && (
+                                    <div className="ms-2">
+                                        <i className="fas fa-circle text-primary" style={{ fontSize: '0.5rem' }}></i>
+                                    </div>
+                                )}
                             </div>
                         </Dropdown.Item>
                     ))
@@ -166,6 +218,14 @@ function NotificationBell() {
                         >
                             View All Appointments
                         </Dropdown.Item>
+                        {unreadCount > 0 && (
+                            <Dropdown.Item 
+                                className="text-center text-success fw-medium"
+                                onClick={markAllAsRead}
+                            >
+                                Mark All as Read
+                            </Dropdown.Item>
+                        )}
                     </>
                 )}
             </Dropdown.Menu>

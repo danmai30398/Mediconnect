@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { apiService } from "./services/apiService";
 import "./Doctors.css";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -12,8 +13,8 @@ function DoctorDetails() {
     const [bookingMsg, setBookingMsg] = useState("");
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/doctors/${id}`)
-            .then(res => res.json())
+        // Sử dụng apiService để lấy thông tin bác sĩ
+        apiService.getDoctor(id)
             .then(data => setProfile(data))
             .catch(err => console.error("Fetch error:", err));
     }, [id]);
@@ -22,8 +23,8 @@ function DoctorDetails() {
         if (!date) return;
         try {
             setLoadingSlots(true);
-            const res = await fetch(`${API_BASE_URL}/api/availabilities?doctor_id=${id}&date=${date}`);
-            const data = await res.json();
+            // Sử dụng apiService để lấy danh sách availability
+            const data = await apiService.getAvailabilities({ doctor_id: id, date: date });
             setSlots(data);
         } catch (e) {
             console.error(e);
@@ -41,10 +42,11 @@ function DoctorDetails() {
                 setBookingMsg("Bạn cần đăng nhập trước");
                 return;
             }
-            const res = await fetch(`${API_BASE_URL}/api/appointments`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ patient_id: user.id, availability_id, status: "pending" })
+            // Sử dụng apiService để tạo appointment
+            const res = await apiService.createAppointment({ 
+                patient_id: user.id, 
+                availability_id, 
+                status: "pending" 
             });
             if (!res.ok) {
                 setBookingMsg("Appointment booking failed");

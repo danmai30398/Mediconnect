@@ -77,8 +77,31 @@ export const apiService = {
     },
 
     getNotifications: async () => {
-        const response = await fetch(`${API_BASE_URL}/api/dashboard/notifications`, { 
+        const response = await fetch(`${API_BASE_URL}/api/notifications`, { 
             cache: "no-store",
+            headers: { "Authorization": `Bearer ${localStorage.getItem('MediToken') || ''}` }
+        });
+        return response.json();
+    },
+
+    markNotificationAsRead: async (notificationId) => {
+        const response = await fetch(`${API_BASE_URL}/api/notifications/${notificationId}/read`, {
+            method: 'POST',
+            headers: { "Authorization": `Bearer ${localStorage.getItem('MediToken') || ''}` }
+        });
+        return response;
+    },
+
+    markAllNotificationsAsRead: async () => {
+        const response = await fetch(`${API_BASE_URL}/api/notifications/read-all`, {
+            method: 'POST',
+            headers: { "Authorization": `Bearer ${localStorage.getItem('MediToken') || ''}` }
+        });
+        return response;
+    },
+
+    getUnreadNotificationCount: async () => {
+        const response = await fetch(`${API_BASE_URL}/api/notifications/unread-count`, {
             headers: { "Authorization": `Bearer ${localStorage.getItem('MediToken') || ''}` }
         });
         return response.json();
@@ -174,8 +197,8 @@ export const apiService = {
             headers['Content-Type'] = 'application/json';
         }
         
-        const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}`, {
-            method: 'POST',
+        const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/profile`, {
+            method: 'PUT',
             headers: headers,
             body: doctorData instanceof FormData ? doctorData : JSON.stringify(doctorData)
         });
@@ -262,6 +285,16 @@ export const apiService = {
     uploadPatientImage: async (patientId, formData) => {
         const token = localStorage.getItem('MediToken') || '';
         const response = await fetch(`${API_BASE_URL}/api/patients/${patientId}/upload-image`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` },
+            body: formData
+        });
+        return response;
+    },
+
+    uploadDoctorImage: async (doctorId, formData) => {
+        const token = localStorage.getItem('MediToken') || '';
+        const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/upload-image`, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}` },
             body: formData

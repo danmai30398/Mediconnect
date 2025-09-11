@@ -24,6 +24,7 @@ import AdminAppointments from './AdminAppointments';
 import DoctorDashboard from './DoctorDashboard';
 import DoctorLayout from './DoctorLayout';
 import DoctorHeader from './DoctorHeader';
+import DoctorProfile from './DoctorProfile';
 import PatientDashboard from './PatientDashboard';
 import PatientAppointments from './PatientAppointments';
 
@@ -91,6 +92,7 @@ function App() {
           {/* Doctor routes */}
           <Route path="/doctor" element={<DoctorLayout />}>
             <Route path="dashboard" element={<DoctorDashboard />} />
+            <Route path="profile" element={<DoctorProfile />} />
           </Route>
           
           {/* Patient routes */}

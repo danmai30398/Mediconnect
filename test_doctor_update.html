@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Doctor Update API</title>
+</head>
+<body>
+    <h1>Test Doctor Update API</h1>
+    <button onclick="testUpdate()">Test Update Doctor Profile</button>
+    <div id="result"></div>
+
+    <script>
+        async function testUpdate() {
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                // Test data
+                const testData = {
+                    name: 'Test Doctor Updated',
+                    email: 'test@example.com',
+                    phone: '1234567890',
+                    specialization: 'Cardiology',
+                    experience: 5,
+                    qualification: 'MD',
+                    gender: 'Male',
+                    dob: '1990-01-01',
+                    description: 'Test description'
+                };
+
+                const response = await fetch('http://127.0.0.1:8000/api/doctors/1/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer test-token'
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <h3>Response Status: ${response.status}</h3>
+                    <pre>${JSON.stringify(result, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<h3>Error: ${error.message}</h3>`;
+            }
+        }
+    </script>
+</body>
+</html>

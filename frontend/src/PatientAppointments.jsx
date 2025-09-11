@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Button, Badge, Container, Table, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { apiService } from './services/apiService';
 import './Doctors.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:8000";
@@ -17,22 +18,11 @@ function PatientAppointments() {
 
     const fetchAppointments = async () => {
         try {
-            const token = localStorage.getItem('MediToken') || '';
-            const response = await fetch(`${API_BASE_URL}/api/patient/appointments`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                // Handle both direct array and object with appointments property
-                const appointmentsArray = Array.isArray(data) ? data : (data.appointments || []);
-                setAppointments(appointmentsArray);
-            } else {
-                setAlert({ show: true, message: 'Failed to fetch appointments', type: 'danger' });
-            }
+            // Sử dụng apiService để lấy danh sách appointments
+            const data = await apiService.getPatientAppointments();
+            // Handle both direct array and object with appointments property
+            const appointmentsArray = Array.isArray(data) ? data : (data.appointments || []);
+            setAppointments(appointmentsArray);
         } catch (error) {
             setAlert({ show: true, message: 'Error fetching appointments', type: 'danger' });
         } finally {

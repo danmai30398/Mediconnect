@@ -387,6 +387,7 @@ class UserController extends Controller
     public function me(Request $request)
     {
         $authUser = $request->user();
+        
         if ($authUser instanceof MediUser) {
             $user = MediUser::with(['patient', 'doctor'])->find($authUser->user_id);
             
@@ -405,11 +406,18 @@ class UserController extends Controller
                     'image' => $user->patient->image
                 ] : null,
                 'doctor' => $user->doctor ? [
+                    'id' => $user->doctor->doctor_id,
                     'name' => $user->doctor->name,
                     'email' => $user->doctor->email,
                     'phone' => $user->doctor->phone,
                     'specialization' => $user->doctor->specialization,
-                    'image' => $user->doctor->image
+                    'experience' => $user->doctor->experience,
+                    'qualification' => $user->doctor->qualification,
+                    'gender' => $user->doctor->gender,
+                    'dob' => $user->doctor->dob,
+                    'description' => $user->doctor->description,
+                    'image' => $user->doctor->image,
+                    'city' => $user->doctor->city
                 ] : null
             ]);
         }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Toast, ToastContainer } from "react-bootstrap";
+import { apiService } from "./services/apiService";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:8000";
 
@@ -11,8 +12,9 @@ function AdminContactMessages() {
     // per-row update, no global status state needed
 
     const load = async () => {
-        const res = await fetch(`${API_BASE_URL}/api/contact-messages`);
-        setItems(await res.json());
+        // Sử dụng apiService để lấy danh sách contact messages
+        const data = await apiService.getContactMessages();
+        setItems(data);
     };
 
     useEffect(() => { load(); }, []);
@@ -21,13 +23,9 @@ function AdminContactMessages() {
         try {
             // Optimistic update for snappy UI
             setItems(prev => prev.map(x => x.message_id === id ? { ...x, status: nextStatus } : x));
-            const res = await fetch(`${API_BASE_URL}/api/contact-messages/${id}/status`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json", "Accept": "application/json", "Authorization": `Bearer ${localStorage.getItem('MediToken') || ''}` },
-                body: JSON.stringify({ status: nextStatus })
-            });
+            // Sử dụng apiService để cập nhật status
+            const res = await apiService.updateContactMessageStatus(id, nextStatus);
             if (!res.ok) {
-                const msg = await res.text();
                 setToastVariant("danger");
                 setToastText("Update failed");
                 setShowToast(true);
@@ -55,7 +53,8 @@ function AdminContactMessages() {
 
     const remove = async (id) => {
         if (!window.confirm("Delete message?")) return;
-        const res = await fetch(`${API_BASE_URL}/api/contact-messages/${id}`, { method: "DELETE", headers: { "Authorization": `Bearer ${localStorage.getItem('MediToken') || ''}` } });
+        // Sử dụng apiService để xóa contact message
+        const res = await apiService.deleteContactMessage(id);
         if (res.ok) {
             setToastVariant("success");
             setToastText("Deleted successfully");

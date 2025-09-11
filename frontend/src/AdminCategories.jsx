@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
+import { apiService } from "./services/apiService";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:8000";
 
@@ -17,15 +18,9 @@ function AdminCategories() {
 
     const load = async () => {
         try {
-            const res = await fetch(`${API_BASE_URL}/api/categories`, { 
-                headers: { 'Authorization': `Bearer ${localStorage.getItem('MediToken') || ''}` } 
-            });
-            if (res.ok) {
-                const data = await res.json();
-                setItems(data);
-            } else {
-                setItems([]);
-            }
+            // Sử dụng apiService để lấy danh sách categories
+            const data = await apiService.getCategories();
+            setItems(data);
         } catch (e) { 
             setItems([]); 
         }
@@ -35,44 +30,45 @@ function AdminCategories() {
 
     const submit = async (e) => {
         e.preventDefault();
-        const url = editId ? `${API_BASE_URL}/api/categories/${editId}` : `${API_BASE_URL}/api/categories`;
-        const method = editId ? "POST" : "POST";
-        const fd = new FormData();
-        Object.entries(form).forEach(([k, v]) => {
-            if (v !== undefined && v !== null) fd.append(k, v);
-        });
-        if (editId) fd.append('_method', 'PUT');
         setSaving(true);
-        const res = await fetch(url, { 
-            method, 
-            headers: { "Authorization": `Bearer ${localStorage.getItem('MediToken') || ''}` }, 
-            body: fd 
-        });
-        setSaving(false);
-        if (res.ok) { 
-            setMessage(editId ? 'Category updated successfully' : 'Category created successfully'); 
-            setShowToast(true); 
-            setForm({ category_name: "" }); 
-            setEditId(null); 
-            setShow(false); 
-            load(); 
-        } else {
-            try { 
-                const err = await res.json(); 
-                setMessage(err?.message || 'Save failed'); 
-            } catch { 
-                setMessage('Save failed'); 
-            } 
-            setShowToast(true); 
+        try {
+            let res;
+            if (editId) {
+                // Sử dụng apiService để cập nhật category
+                res = await apiService.updateCategory(editId, form);
+            } else {
+                // Sử dụng apiService để tạo category mới
+                res = await apiService.createCategory(form);
+            }
+            
+            if (res.ok) { 
+                setMessage(editId ? 'Category updated successfully' : 'Category created successfully'); 
+                setShowToast(true); 
+                setForm({ category_name: "" }); 
+                setEditId(null); 
+                setShow(false); 
+                load(); 
+            } else {
+                try { 
+                    const err = await res.json(); 
+                    setMessage(err?.message || 'Save failed'); 
+                } catch { 
+                    setMessage('Save failed'); 
+                } 
+                setShowToast(true); 
+            }
+        } catch (error) {
+            setMessage('Save failed');
+            setShowToast(true);
+        } finally {
+            setSaving(false);
         }
     };
 
     const remove = async (id) => {
         if (!window.confirm("Delete category?")) return;
-        const res = await fetch(`${API_BASE_URL}/api/categories/${id}`, { 
-            method: "DELETE", 
-            headers: { "Authorization": `Bearer ${localStorage.getItem('MediToken') || ''}` } 
-        });
+        // Sử dụng apiService để xóa category
+        const res = await apiService.deleteCategory(id);
         if (res.ok) {
             setMessage('Category deleted successfully');
             setShowToast(true);

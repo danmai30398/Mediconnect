@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\AvailabilityController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\PatientController;
+use App\Http\Controllers\Api\NotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('patient/appointments', [PatientController::class, 'appointments']);
     Route::post('patients/{id}/upload-image', [PatientController::class, 'uploadImage']);
     Route::put('patients/{id}/profile', [PatientController::class, 'updateProfile']);
+    Route::post('doctors/{id}/upload-image', [DoctorController::class, 'uploadImage']);
+    Route::put('doctors/{id}/profile', [DoctorController::class, 'update']);
+    
+    // Notification routes
+    Route::get('notifications', [NotificationController::class, 'index']);
+    Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::post('notifications/read-all', [NotificationController::class, 'markAllAsRead']);
+    Route::get('notifications/unread-count', [NotificationController::class, 'unreadCount']);
 });
 
 Route::apiResource('doctors', ViewDoctorsController::class)->only(['index', 'show']);

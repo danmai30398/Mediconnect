@@ -10,9 +10,7 @@ function Footer() {
                     <div>
                         <h4>MediConnect</h4>
                         <p>
-                            Mediconnect is the Rockies is a 710-bed local medicinal focus in
-                            Loveland, Colo. with a full range of administrations and spend
-                            significant time in heart and injury mind.
+                           MediConnect is a digital healthcare platform that connects patients with trusted doctors, allows instant appointment booking, and supports personalized care management—all in one seamless experience.
                         </p>
                     </div>
 

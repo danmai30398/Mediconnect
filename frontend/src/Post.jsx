@@ -12,12 +12,12 @@ function PostDetail() {
       .catch(err => console.error("Không tìm thấy bài viết", err));
   }, [id]);
 
-  if (!post) return <p>Đang tải bài viết...</p>;
+  if (!post) return <p>Loading post...</p>;
 
   return (
     <div className="container">
       <h1>{post.title}</h1>
-      <p><i>Danh mục: {post.category?.category_name}</i></p>
+      <p><i>Catgory: {post.category?.category_name}</i></p>
       <img src={`http://localhost:8000/storage/${post.image}`} alt={post.title} />
       <p>{post.description}</p>
     </div>

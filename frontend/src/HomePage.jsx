@@ -26,8 +26,8 @@ import prevention from "./assets/pic/topic/prevention.jpg";
 import cure from "./assets/pic/topic/cure.jpg";
 
 import about1 from "./assets/pic/about/about1.png";
-import ContactSection from "./ContactForm"; 
-
+import ContactSection from "./ContactForm";
+import { FaHeartbeat } from "react-icons/fa";
 
 
 
@@ -51,14 +51,14 @@ function HomePage() {
                 <div className="container grid">
                     <div>
                         <h1>Your Health Care <span className="text-accent">Center</span></h1>
-                        <p>MediConnect Health Care System has gladly served the encompassing regions for more than 35 years.</p>
+                        <p>MediConnect proudly delivers fast, trusted, and accessible healthcare — anytime, anywhere.</p>
                         <div style={{ marginTop: 18 }}>
                             <button className="btn btn-outline" onClick={goToBookingFlow}>GET APPOINTMENT</button>
                         </div>
                     </div>
 
                     <div className="booking-card">
-                        <h3>✅ Booking Here Now</h3>
+                        <h3>📅👨‍⚕️ Find Your Doctor</h3>
                         <button className="btn btn-primary" onClick={goBooking}>Booking Now</button>
                     </div>
                 </div>
@@ -67,10 +67,10 @@ function HomePage() {
             {/* FEATURES */}
             <section className="features" id="feature">
                 <div className="container row">
-                    <div className="card">💳 Online Payment<br /><span style={{ opacity: .9, fontWeight: 400 }}>Pay with EFT system.</span></div>
-                    <div className="card">🕘 Online Help<br /><span style={{ opacity: .9, fontWeight: 400 }}>24/7 medical line.</span></div>
-                    <div className="card">🚑 Emergency<br /><span style={{ opacity: .9, fontWeight: 400 }}>Ready for emergency.</span></div>
-                    <div className="card">👌 Top Care<br /><span style={{ opacity: .9, fontWeight: 400 }}>Get top care & satisfied.</span></div>
+                    <div className="outstanding">💳 Online Payment<br /><span style={{ opacity: .9, fontWeight: 400 }}>Pay with EFT system.</span></div>
+                    <div className="outstanding">🕘 24/7 Support <br /><span style={{ opacity: .9, fontWeight: 400 }}>Get real-time medical assistance.</span></div>
+                    <div className="outstanding">🚑 Emergency<br /><span style={{ opacity: .9, fontWeight: 400 }}>Quick response when it matters.</span></div>
+                    <div className="outstanding">🩺 Expert Care<br /><span style={{ opacity: .9, fontWeight: 400 }}>Trusted doctors. Personalized service.</span></div>
                 </div>
             </section>
 
@@ -79,9 +79,24 @@ function HomePage() {
                 <div className="container grid">
                     <div className="about-text">
                         <h2>About Our <span className="text-accent">MediConnect</span></h2>
-                        <p>We additionally work very closely with our community healthcare group who provide antenatal, postnatal and nursing services and different specialist provision inclusive of the quitters scheme.</p>
-                        <p>This 24 month benefit covers all ranges of basic upkeep. Notwithstanding every one of the things included on the Full administration we cover things that are frequently suggested for substitution like clockwork.</p>
-                        
+<p>MediConnect is a digital healthcare companion designed to make access to medical care simple, fast, and reliable.</p>
+<p>We empower patients to find the right doctors, book appointments online, and manage their health journey through a seamless and secure platform. No more waiting rooms or confusing processes—just clarity, convenience, and care.</p>
+<p>At MediConnect, we believe healthcare should be personal, proactive, and always within reach. Whether it’s a routine check-up or urgent need, MediConnect puts your health at your fingertips.</p>
+<p style={{
+  textAlign: "center",
+  fontWeight: "600",
+  fontSize: "1.1rem",
+  color: "#1e293b",
+  marginTop: "40px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "10px"
+}}>
+  <FaHeartbeat color="#e11d48" />
+  From appointment to assurance — MediConnect puts healthcare in your hands.
+</p>
+
                         <button className="btn btn-primary">Read More</button>
                     </div>
                     <div className="about-img"><img src={about1} alt="About MediConnect" /></div>
@@ -92,12 +107,12 @@ function HomePage() {
             <section className="section" id="services" style={{ background: "#fff" }}>
                 <div className="container">
                     <h2 className="section-title">Awesome <span className="text-accent">Services</span></h2>
-                    <p className="section-sub">Medicinal Service Company puts stock in conveying the most elevated quality administration every day.</p>
+                    <p className="section-sub">MediConnect is committed to delivering the highest quality healthcare services—every single day.</p>
                     <div className="cards">
-                        {[{ img: s1, t: "24/7 Service", m: "Always ready to help you day and night." },
-                        { img: s2, t: "Cancer Clinic", m: "Specialized treatment and consultations." },
-                        { img: s3, t: "Blood Test", m: "Accurate and fast laboratory results." },
-                        { img: s4, t: "Medical Counselling", m: "Talk with our senior medical experts." }
+                        {[{ img: s1, t: "24/7 Service", m: "Access care anytime, day or night. Get support, book appointments, or find help—24/7." },
+                        { img: s2, t: "Find the Right Doctor", m: "Search by specialty or location. View profiles, qualifications & availability in one click." },
+                        { img: s3, t: "Book Appointments Instantly", m: "No more waiting rooms. Schedule, reschedule, or cancel – anytime, anywhere." },
+                        { img: s4, t: "Smarter Doctor Access", m: "Real-time doctor availability, updated schedules, and instant booking confirmations." }
                         ].map((it, i) => (
                             <article key={i} className="card">
                                 <img src={it.img} alt={it.t} />
@@ -119,13 +134,13 @@ function HomePage() {
             {/* DEPARTMENTS */}
             <section className="section" style={{ background: "#fff" }}>
                 <div className="container">
-                    <h2 className="section-title">Our Special <span className="text-accent">Department</span></h2>
-                    <p className="section-sub">Department is responsible for Medical and Health Care helpful to patients.</p>
+                    <h2 className="section-title">Find Care<span className="text-accent">That Fits You</span></h2>
+                    <p className="section-sub">Explore top medical fields available on MediConnect—from cardiology to pediatrics.</p>
                     <div className="cards">
-                        {[{ img: labImg, t: "Lab Test Department", m: "The lab offers tests covering full range of pathology." },
-                        { img: dentalImg, t: "Dental Department", m: "Dental program helps patient lives." },
-                        { img: primaryImg, t: "Primary Health", m: "Provided by general practitioners and nurses." },
-                        { img: pediatricsImg, t: "Pediatrics Department", m: "Keep your child healthy and safe." }
+                        {[{ img: labImg, t: "Everyday Health", m: "General checkups, fevers, headaches, prescriptions, and common concerns." },
+                        { img: dentalImg, t: "Women’s Health", m: "Menstrual care, pregnancy support, fertility, and gynecological advice." },
+                        { img: primaryImg, t: "Skin & Allergies", m: "Rashes, acne, allergies, chronic skin issues, and skincare guidance." },
+                        { img: pediatricsImg, t: "Child & Teen Care", m: "Pediatricians for growth, vaccines, and age-specific conditions." }
                         ].map((it, i) => (
                             <article key={i} className="card">
                                 <img src={it.img} alt={it.t} />
@@ -166,23 +181,46 @@ function HomePage() {
             </section>
 
             {/* TESTIMONIALS */}
-            <section className="section testi" style={{ background: "#fff" }}>
-                <div className="container">
-                    <h2 className="section-title">TESTI <span className="text-accent">MONIALS</span></h2>
-                    <div className="row">
-                        {["Simone Andreea", "John Carter", "Lisa Monroe"].map((name, i) => (
-                            <div className="box" key={i}>
-                                <div className="name">{name}</div>
-                                <div className="role">Engineer</div>
-                                <p style={{ color: "#6b6f72" }}>
-                                    I had the delight of being an outpatient in your Surgical Unit for foot surgery.
-                                    From the moment I strolled in at 6:00AM, until I was released…
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+{/* TESTIMONIALS */}
+<section className="section testi" style={{ background: "#fff" }}>
+  <div className="container">
+    <h2 className="section-title">
+      TESTI <span className="text-accent">MONIALS</span>
+    </h2>
+    <div className="row">
+      {[
+        {
+          name: "Simone Andreea",
+          role: "Lecturers",
+          quote:
+            "MediConnect helped me find the right specialist within minutes. It’s fast, secure, and so convenient!",
+        },
+        {
+          name: "John Carter",
+          role: "Engineer",
+          quote:
+            "I used to wait weeks for appointments—now I book them in seconds. MediConnect changed how I manage my health.",
+        },
+        {
+          name: "Lisa Monroe",
+          role: "Freelancers",
+          quote:
+            "The doctor I found through MediConnect really listened. Game changer!",
+        },
+      ].map((person, i) => (
+        <div className="box" key={i}>
+          <div className="name">{person.name}</div>
+          <div className="role">{person.role}</div>
+          <div className="stars" style={{ color: "#fbc02d", margin: "5px 0" }}>
+            {"⭐️⭐️⭐️⭐️⭐️"}
+          </div>
+          <p style={{ color: "#6b6f72" }}>{person.quote}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
 
             {/* TOPICS */}
             <section className="section topics" id="topics">
@@ -192,9 +230,9 @@ function HomePage() {
                     </h2>
                     <div className="cards">
                         {[
-                            { img: disease, title: "Disease", id: 1 },
-                            { img: prevention, title: "Preventions", id: 2 },
-                            { img: cure, title: "Cure", id: 3 },
+                            { img: disease, title: "Disease", id: 1, des: "Explore articles on symptoms, treatments, and common diseases." },
+                            { img: prevention, title: "Preventions", id: 2, des: "Learn how to protect yourself and your loved ones with expert prevention tips." },
+                            { img: cure, title: "Cure", id: 3, des: "Discover the latest cures and treatment options for various health conditions." },
                         ].map((it, i) => (
                             <article
                                 className="card"
@@ -204,9 +242,8 @@ function HomePage() {
                             >
                                 <img alt={it.title} src={it.img} className="topic-img" />
                                 <div className="body">
-                                    <div className="meta" style={{ marginBottom: 6 }}>📅 25, Jun 2022</div>
                                     <div className="title">{it.title}</div>
-                                    <div className="meta">Z Lopez · Pediatrics · eHospital</div>
+                                    <div className="meta">{it.des}</div>
                                 </div>
                             </article>
                         ))}
@@ -215,7 +252,7 @@ function HomePage() {
             </section>
 
             {/* CONTACT US */}
-           <ContactSection />
+            <ContactSection />
         </>
     );
 }

@@ -280,6 +280,19 @@ html {
   overflow: hidden;
   border: 1px solid #e8edf0;
   box-shadow: 0 6px 14px rgba(0, 0, 0, .05);
+ 
+}
+
+.outstanding {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e8edf0;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .05);
+  text-align: center;
+  padding: 20px;
+  font-size: 20px;
+  font-weight: bolder;
+ 
 }
 
 .card img {
@@ -295,10 +308,13 @@ html {
 .card .title {
   font-weight: 800;
   margin: 6px 0 8px;
+  text-align: center;
+  font-size: larger;
 }
 
 .card .meta {
   color: #6b6f72;
+  text-align: center;
 }
 
 /* CTA band */
@@ -319,6 +335,11 @@ html {
 .about {
   padding: 60px 0;
   background: #f9f9f9;
+}
+
+.about-text {
+  max-width: 600px;
+  font-size: 17px;
 }
 
 .about .container.grid {
@@ -367,7 +388,7 @@ html {
   font-weight: 800;
 }
 
-/* Topics - để ảnh cao đều 320 */
+/* Topics */
 .topics .card img {
   height: 320px;
   object-fit: cover;
@@ -586,4 +607,107 @@ html {
   object-fit: cover;   
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
+}
+/* booking */
+.hero {
+  padding: 100px 0;
+  background: linear-gradient(135deg, #e0f2fe, #f9fafb);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInHero 1.2s ease-in-out;
+}
+
+@keyframes fadeInHero {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container {
+  width: 90%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 24px;
+  line-height: 1.2;
+}
+
+.hero .text-accent {
+  color: #0ea5e9;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #334155;
+  max-width: 600px;
+}
+
+.booking-card {
+  background: #ffffff;
+  padding: 48px 36px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(14, 165, 233, 0.15);
+  text-align: center;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.booking-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 30px 60px rgba(14, 165, 233, 0.25);
+}
+
+.booking-card h3 {
+  font-size: 1.6rem;
+  color: #0f766e;
+  margin-bottom: 24px;
+}
+
+.btn {
+  padding: 14px 28px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #0ea5e9;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: #0284c7;
+  box-shadow: 0 6px 18px rgba(14, 165, 233, 0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #0ea5e9;
+  border: 2px solid #0ea5e9;
+}
+
+.btn-outline:hover {
+  background-color: #0ea5e9;
+  color: white;
 }

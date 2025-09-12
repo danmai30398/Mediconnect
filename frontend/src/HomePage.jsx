@@ -163,24 +163,28 @@ function HomePage() {
 
             {/* EXPERTS */}
             <section className="section" id="experts">
-                <div className="container">
-                    <h2 className="section-title">Our <span className="text-accent">Experts</span></h2>
-                    <div className="cards">
-                        {[{ img: d1, n: "Dr. Henry Jones", r: "Senior Specialist" },
-                        { img: d2, n: "Dr. Elizabeth Henry", r: "Cardiologist" },
-                        { img: d3, n: "Dr. Williams Jones", r: "Orthopedic Specialist" },
-                        { img: d4, n: "Dr. Smith Johnson", r: "Neurologist" }
-                        ].map((it, i) => (
-                            <article key={i} className="card">
-                                <img src={it.img} alt={it.n} />
-                                <div className="body"><div className="title">{it.n}</div><div className="meta">{it.r}</div></div>
-                            </article>
-                        ))}
-                    </div>
-                </div>
-            </section>
+  <div className="container">
+    <h2 className="section-title">Our <span className="text-accent">Experts</span></h2>
+    <div className="doctor-grid">
+      {[
+        { img: d1, name: "Dr. Henry Jones", role: "Cardiologist" },
+        { img: d2, name: "Dr. Elizabeth Henry", role: "Dentist" },
+        { img: d3, name: "Dr. Williams Jones", role: "Neurologist" },
+        { img: d4, name: "Dr. Smith Johnson", role: "Gynecologist" }
+      ].map((doc, i) => (
+        <div className="doctor-card" key={i}>
+          <img src={doc.img} alt={doc.name} className="doctor-img" />
+          <div className="doctor-details">
+            <h4>{doc.name}</h4>
+            <p>- {doc.role}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
 
-            {/* TESTIMONIALS */}
+
 {/* TESTIMONIALS */}
 <section className="section testi" style={{ background: "#fff" }}>
   <div className="container">

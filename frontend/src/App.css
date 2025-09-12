@@ -711,3 +711,47 @@ html {
   background-color: #0ea5e9;
   color: white;
 }
+
+/* expert */
+.doctor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.doctor-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s;
+}
+
+.doctor-card:hover {
+  transform: translateY(-5px);
+}
+
+.doctor-img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+}
+
+.doctor-details {
+  background-color: #01b3e3;
+  color: white;
+  padding: 18px 12px;
+  text-align: center;
+}
+
+.doctor-details h4 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.doctor-details p {
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+

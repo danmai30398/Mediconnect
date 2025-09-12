@@ -30,7 +30,7 @@ class Content extends Model
     //Each content belongs to one category
     public function category()
     {
-        return $this->belongsTo(Category::class, 'category_id_int', 'category_id_int');
+        return $this->belongsTo(Category::class, 'category_id', 'category_id');
     }
 
     //Each content is created by one user

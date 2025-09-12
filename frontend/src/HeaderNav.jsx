@@ -21,15 +21,14 @@ function HeaderNav() {
   const onSearch = (e) => {
     e.preventDefault();
     if (!q.trim()) return;
-
-    // Chuyển hướng sang trang SearchResult
     navigate(`/search?q=${encodeURIComponent(q.trim())}`);
     setShowSearch(false);
-    setQ(""); // reset input
+    setQ("");
   };
 
   return (
     <header>
+      {/* Logo */}
       <div className="header">
         <div className="container row">
           <Link to="/" className="brand-link">
@@ -42,8 +41,10 @@ function HeaderNav() {
         </div>
       </div>
 
+      {/* Navbar */}
       <nav className="navbar">
         <div className="container inner">
+          {/* Menu links */}
           <div className="menu">
             <Link to="/home">HOME</Link>
             <a href="#about" onClick={(e) => scrollToId(e, "about")}>ABOUT</a>
@@ -53,7 +54,19 @@ function HeaderNav() {
             <a href="#pages" onClick={(e) => scrollToId(e, "pages")}>CONTACT</a>
           </div>
 
+          {/* Actions: CATEGORY + Search */}
           <div className="actions">
+            {/* Dropdown Category */}
+            <div className="dropdown category-dropdown">
+              <button className="dropbtn">CATEGORY</button>
+              <div className="dropdown-content">
+                <Link to="/category/1">Desease</Link>
+                <Link to="/category/2">Preventions</Link>
+                <Link to="/category/3">Cures</Link>
+              </div>
+            </div>
+
+            {/* Search icon */}
             <button
               className="iconbtn"
               title="Search"
@@ -64,6 +77,7 @@ function HeaderNav() {
           </div>
         </div>
 
+        {/* Search form */}
         {showSearch && (
           <form className="searchBar" onSubmit={onSearch}>
             <FaSearch style={{ color: "#fff" }} />

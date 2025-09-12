@@ -126,7 +126,7 @@ function HomePage() {
             {/* CTA */}
             <section className="cta" id="appointment">
                 <div className="container">
-                    <div className="title">We Offer Quality Full and Affordable Service For You.</div>
+                    <div className="title">We Provide Trusted, Comprehensive, and Affordable Healthcare Services for Everyone.</div>
                     <button className="btn btn-primary" onClick={goToBookingFlow}>GET APPOINTMENT</button>
                 </div>
             </section>
@@ -236,7 +236,7 @@ function HomePage() {
                         {[
                             { img: disease, title: "Disease", id: 1, des: "Explore articles on symptoms, treatments, and common diseases." },
                             { img: prevention, title: "Preventions", id: 2, des: "Learn how to protect yourself and your loved ones with expert prevention tips." },
-                            { img: cure, title: "Cure", id: 3, des: "Discover the latest cures and treatment options for various health conditions." },
+                            { img: cure, title: "Cures", id: 3, des: "Discover the latest cures and treatment options for various health conditions." },
                         ].map((it, i) => (
                             <article
                                 className="card"

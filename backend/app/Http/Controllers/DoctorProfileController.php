@@ -10,7 +10,7 @@ class DoctorProfileController extends Controller
 {
     public function update(Request $request)
     {
-        // \Log::info('✅ Đã vào DoctorProfileController@update');
+        // \Log::info('Đã vào DoctorProfileController@update');
 
         $mediUser = $request->user();
         $doctor = Doctor::where('user_id', $mediUser->user_id)->first();

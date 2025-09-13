@@ -19,7 +19,7 @@ const DoctorAvailability = () => {
     name: user?.name || "Dr. John Smith",
     id: finalDoctorId,
     specialty: user?.specialization || "Cardiology",
-    clinic: user?.clinic || "MediConnect Clinic"
+    clinic: user?.clinic || "MediConnect Group"
   };
 
   const toDateStr = (d) => d.toLocaleDateString('sv-SE');
@@ -245,19 +245,27 @@ const DoctorAvailability = () => {
       </div>
 
       <div className="button-group">
-        <button onClick={() => setWeekOffset(weekOffset - 1)}>⬅️ Previous Week</button>
-        <button onClick={() => setWeekOffset(0)}>📅 Current Week</button>
-        <button onClick={() => setWeekOffset(weekOffset + 1)}>Next Week ➡️</button>
+        <div className="week-button-group">
+  <button className="week-btn" onClick={() => setWeekOffset(weekOffset - 1)}>
+    ⬅️ Previous Week
+  </button>
+  <button className="week-btn" onClick={() => setWeekOffset(0)}>
+    📅 Current Week
+  </button>
+  <button className="week-btn" onClick={() => setWeekOffset(weekOffset + 1)}>
+    Next Week ➡️
+  </button>
+</div>
 
-        <button 
-          className="add-button" 
+        <button
+          className="add-button"
           onClick={openAddForm}
           disabled={loading}
         >
           {loading ? 'Loading...' : '+ Add Slot'}
         </button>
-        
-        <button 
+
+        <button
           className={`compact-toggle ${compactMode ? 'active' : ''}`}
           onClick={toggleCompactMode}
         >
@@ -383,15 +391,15 @@ const DoctorAvailability = () => {
                     <td>{time} – {addOneHour(time)}</td>
                     <td className={statusClass}>{a.status || 'N/A'}</td>
                     <td>
-                      <button 
-                        className="edit-btn" 
+                      <button
+                        className="edit-btn"
                         onClick={() => openEditForm(i)}
                         disabled={loading}
                       >
                         Edit
                       </button>
-                      <button 
-                        className="delete-btn" 
+                      <button
+                        className="delete-btn"
                         onClick={() => handleDelete(i)}
                         disabled={loading || a.status === 'booked'}
                         title={a.status === 'booked' ? 'Cannot delete booked slot' : 'Delete slot'}

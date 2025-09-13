@@ -1153,6 +1153,51 @@ button:disabled {
   flex-wrap: wrap;
 }
 
+.week-button-group {
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.week-btn {
+  background-color: #f1f3f5;
+  color: #007bff;
+  border: 1px solid #007bff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.week-btn:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.week-btn:active {
+  transform: scale(0.96);
+}
+
+.week-btn:disabled {
+  background-color: #e0e0e0;
+  color: #888;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+.week-btn.active {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: #fff;
+}
+
+
+
+
+
 /* Compact Toggle Button */
 .compact-toggle {
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);

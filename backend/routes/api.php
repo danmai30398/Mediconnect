@@ -20,25 +20,24 @@ Route::post('/book-appointment', [BookingController::class, 'bookAppointment']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
-    
+
     Route::get('/doctor/me', [DoctorController::class, 'me']);
     Route::get('/doctor/dashboard', [DoctorController::class, 'dashboard']);
     Route::get('/doctor/patients', [DoctorController::class, 'getPatients']);
     Route::get('/doctor/stats', [DoctorController::class, 'getStats']);
     Route::post('/doctor/avatar', [DoctorController::class, 'uploadAvatar']);
-                Route::get('/notifications', [NotificationController::class, 'index']);
-                Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
-                Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
-                Route::post('/doctor/update', [DoctorProfileController::class, 'update']);
-                
-                // Booking routes
-                Route::get('/appointments', [BookingController::class, 'getDoctorAppointments']);
-                Route::post('/appointments/{id}/status', [AppointmentController::class, 'updateStatus']);
-                
-                // Availability routes
-                Route::get('/availability', [AvailabilityController::class, 'index']);
-                Route::post('/availability', [AvailabilityController::class, 'store']);
-                Route::put('/availability/{id}', [AvailabilityController::class, 'update']);
-                Route::delete('/availability/{id}', [AvailabilityController::class, 'destroy']);
-            });
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
+    Route::post('/doctor/update', [DoctorProfileController::class, 'update']);
 
+    // Booking routes
+    Route::get('/appointments', [BookingController::class, 'getDoctorAppointments']);
+    Route::post('/appointments/{id}/status', [BookingController::class, 'updateStatus']);
+
+    // Availability routes
+    Route::get('/availability', [AvailabilityController::class, 'index']);
+    Route::post('/availability', [AvailabilityController::class, 'store']);
+    Route::put('/availability/{id}', [AvailabilityController::class, 'update']);
+    Route::delete('/availability/{id}', [AvailabilityController::class, 'destroy']);
+});

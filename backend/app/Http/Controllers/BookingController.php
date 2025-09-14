@@ -233,4 +233,6 @@ class BookingController extends Controller
 
         return $messages[$status] ?? $status;
     }
+
+
 }

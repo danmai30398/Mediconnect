@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Booking routes
     Route::get('/appointments', [BookingController::class, 'getDoctorAppointments']);
-    Route::post('/appointments/{id}/status', [BookingController::class, 'updateStatus']);
+Route::post('/appointments/{appointmentId}/status', [BookingController::class, 'updateAppointmentStatus']);
 
     // Availability routes
     Route::get('/availability', [AvailabilityController::class, 'index']);

@@ -10,10 +10,11 @@ class CitySeeder extends Seeder
     public function run(): void
     {
         City::insert([
-            ['city_name' => 'Hà Nội'],
-            ['city_name' => 'Hồ Chí Minh'],
-            ['city_name' => 'Đà Nẵng'],
-            ['city_name' => 'Cần Thơ'],
+            ['city_name' => 'Hanoi'],
+            ['city_name' => 'Ho Chi Minh'],
+            ['city_name' => 'Da Nang'],
+            ['city_name' => 'Can Tho'],
+     
         ]);
     }
 }

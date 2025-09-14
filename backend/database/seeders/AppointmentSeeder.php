@@ -14,14 +14,23 @@ class AppointmentSeeder extends Seeder
             'availability_id' => 1,
             'status'          => 'pending',
         ]);
-    
+
         Appointment::create([
             'patient_id'      => 2,
-            'availability_id' => 3,
+            'availability_id' => 2,
             'status'          => 'confirmed',
         ]);
-    
-        
-        
+
+        Appointment::create([
+            'patient_id'      => 3,
+            'availability_id' => 3,
+            'status'          => 'pending',
+        ]);
+
+        Appointment::create([
+            'patient_id'      => 4,
+            'availability_id' => 4,
+            'status'          => 'confirmed',
+        ]);
     }
 }

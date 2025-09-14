@@ -10,26 +10,46 @@ class PatientSeeder extends Seeder
     public function run(): void
     {
         Patient::insert([
-            // [
-            //     'name'     => 'Nguyen Van A',
-            //     'address'  => '123 Hai Ba Trung, Ha Noi',
-            //     'phone'    => '0987654321',
-            //     'dob'      => '1995-01-01',
-            //     'email'    => 'nva@example.com',
-            //     'gender'   => 'Male',
-            //     'image'    => null,
-            //     'user_id'  => 4, 
-            // ],
-            // [
-            //     'name'     => 'Tran Thi B',
-            //     'address'  => '456 Le Loi, Da Nang',
-            //     'phone'    => '0911222333',
-            //     'dob'      => '1997-02-02',
-            //     'email'    => 'ttb@example.com',
-            //     'gender'   => 'Female',
-            //     'image'    => null,
-            //     'user_id'  => 5, 
-            // ]
+            [
+                'name'     => 'John Smith',
+                'address'  => '123 Main Street, New York',
+                'phone'    => '1234567890',
+                'dob'      => '1990-05-10',
+                'email'    => 'john.smith@example.com',
+                'gender'   => 'Male',
+                'image'    => null,
+                'user_id'  => 1,
+            ],
+            [
+                'name'     => 'Emily Johnson',
+                'address'  => '456 Park Avenue, Los Angeles',
+                'phone'    => '0987654321',
+                'dob'      => '1992-07-15',
+                'email'    => 'emily.johnson@example.com',
+                'gender'   => 'Female',
+                'image'    => null,
+                'user_id'  => 2,
+            ],
+            [
+                'name'     => 'Michael Brown',
+                'address'  => '789 Broadway, Chicago',
+                'phone'    => '1122334455',
+                'dob'      => '1994-03-20',
+                'email'    => 'michael.brown@example.com',
+                'gender'   => 'Male',
+                'image'    => null,
+                'user_id'  => 3,
+            ],
+            [
+                'name'     => 'Sophia Davis',
+                'address'  => '321 Ocean Drive, Miami',
+                'phone'    => '6677889900',
+                'dob'      => '1996-09-25',
+                'email'    => 'sophia.davis@example.com',
+                'gender'   => 'Female',
+                'image'    => null,
+                'user_id'  => 4,
+            ],
         ]);
     }
 }

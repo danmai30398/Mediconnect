@@ -322,7 +322,7 @@ body {
 /* Rows with Icons */
 .info-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   padding: 10px 0;
   border-bottom: 1px solid #f1f3f5
@@ -348,7 +348,11 @@ body {
 }
 
 .info-row span {
-  color: #101828
+   flex: 1;
+  color: #333;
+  word-wrap: break-word;    
+  white-space: pre-wrap;     
+  line-height: 1.5;
 }
 
 .info-row input,
@@ -485,19 +489,6 @@ h2 {
   margin-bottom: 20px;
 }
 
-.add-button {
-  background-color: #1976d2;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.add-button:hover {
-  background-color: #1565c0;
-}
 
 .availability-form {
   display: flex;
@@ -515,19 +506,6 @@ h2 {
   min-width: 180px;
 }
 
-.save-button {
-  background-color: #2e7d32;
-  color: white;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.save-button:hover {
-  background-color: #1b5e20;
-}
 
 .availability-table {
   width: 100%;
@@ -634,14 +612,6 @@ h2 {
   justify-content: center;
   align-items: center;
   z-index: 999;
-}
-
-.popup-content {
-  background: white;
-  padding: 24px;
-  border-radius: 8px;
-  width: 400px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 
@@ -853,20 +823,6 @@ h2 {
   font-size: 18px;
 }
 
-.error-message {
-  background: #fee;
-  border: 1px solid #fcc;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.error-message p {
-  color: #c33;
-  margin: 0 0 15px 0;
-  font-size: 16px;
-}
 
 .retry-btn {
   background: #e74c3c;
@@ -1942,6 +1898,7 @@ body {
   margin: 15px 0;
   border-left: 4px solid #e74c3c;
   animation: slideInRight 0.3s ease-out;
+  font-size: 14px;
 }
 
 @keyframes slideInRight {
@@ -1955,90 +1912,96 @@ body {
   }
 }
 
+/* Grid danh sách card */
 .appointments-list {
   display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  align-items: stretch;
 }
 
+/* Card appointment */
 .appointment-card {
   background: #fff;
   border: 1px solid #e1e5e9;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .appointment-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
 }
 
+/* Header trong card */
 .appointment-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* trái: tên + badge | phải: nút */
   align-items: center;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #e1e5e9;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
 }
 
 .appointment-header h3 {
   margin: 0;
-  color: #333;
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2c3e50;
 }
 
 .status-badge {
   padding: 6px 12px;
   border-radius: 20px;
-  color: white;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
+  color: #fff;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  white-space: nowrap;
+  margin-left: 8px;
 }
 
+.update-status-btn {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.update-status-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(118, 75, 162, 0.4);
+}
+
+/* Nội dung chi tiết */
 .appointment-details {
-  margin-bottom: 20px;
+  border-top: 1px solid #f1f1f1;
+  padding-top: 10px;
+  margin-top: auto;
 }
 
 .detail-row {
   display: flex;
-  margin-bottom: 8px;
   font-size: 14px;
+  margin-bottom: 6px;
   color: #555;
 }
 
 .detail-row strong {
-  min-width: 120px;
+  min-width: 110px;
+  font-weight: 600;
   color: #333;
-  font-weight: 600;
 }
 
-.appointment-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-}
-
-.update-status-btn {
-  background: #667eea;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.update-status-btn:hover {
-  background: #5a67d8;
-}
 
 /* Modal Styles */
 .modal-overlay {

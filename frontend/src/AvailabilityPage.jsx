@@ -246,16 +246,16 @@ const DoctorAvailability = () => {
 
       <div className="button-group">
         <div className="week-button-group">
-  <button className="week-btn" onClick={() => setWeekOffset(weekOffset - 1)}>
-    ⬅️ Previous Week
-  </button>
-  <button className="week-btn" onClick={() => setWeekOffset(0)}>
-    📅 Current Week
-  </button>
-  <button className="week-btn" onClick={() => setWeekOffset(weekOffset + 1)}>
-    Next Week ➡️
-  </button>
-</div>
+          <button className="week-btn" onClick={() => setWeekOffset(weekOffset - 1)}>
+            ⬅️ Previous Week
+          </button>
+          <button className="week-btn" onClick={() => setWeekOffset(0)}>
+            📅 Current Week
+          </button>
+          <button className="week-btn" onClick={() => setWeekOffset(weekOffset + 1)}>
+            Next Week ➡️
+          </button>
+        </div>
 
         <button
           className="add-button"
@@ -394,15 +394,24 @@ const DoctorAvailability = () => {
                       <button
                         className="edit-btn"
                         onClick={() => openEditForm(i)}
-                        disabled={loading}
+                        disabled={loading || a.status === 'booked' || a.has_active_appointment}
+                        title={
+                          a.status === 'booked' || a.has_active_appointment
+                            ? 'Cannot edit slot with active appointments'
+                            : 'Edit slot'
+                        }
                       >
                         Edit
                       </button>
                       <button
                         className="delete-btn"
                         onClick={() => handleDelete(i)}
-                        disabled={loading || a.status === 'booked'}
-                        title={a.status === 'booked' ? 'Cannot delete booked slot' : 'Delete slot'}
+                        disabled={loading || a.status === 'booked' || a.has_active_appointment}
+                        title={
+                          a.status === 'booked' || a.has_active_appointment
+                            ? 'Cannot delete slot with active appointments'
+                            : 'Delete slot'
+                        }
                       >
                         {loading ? 'Deleting...' : 'Delete'}
                       </button>

@@ -46,7 +46,7 @@ class BookingController extends Controller
     /**
      * Book an appointment
      */
-    public function bookAppointment(Request $request)
+    /*public function bookAppointment(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'patient_id' => 'required|exists:patients,patient_id',
@@ -116,6 +116,64 @@ class BookingController extends Controller
             ], 500);
         }
     }
+        */
+    public function bookAppointment(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'patient_id' => 'required|exists:patients,patient_id',
+        'availability_id' => 'required|exists:availability_schedulings,availability_id'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Validation failed',
+            'errors' => $validator->errors()
+        ], 400);
+    }
+
+    try {
+        DB::beginTransaction();
+
+        // Check slot còn tồn tại
+        $availability = AvailabilityScheduling::findOrFail($request->availability_id);
+
+        // Tạo appointment pending
+        $appointment = Appointment::create([
+            'patient_id' => $request->patient_id,
+            'availability_id' => $request->availability_id,
+            'status' => 'pending'
+        ]);
+
+        // Lấy thông tin doctor & patient để notify
+        $doctor = Doctor::find($availability->doctor_id);
+        $patient = Patient::find($request->patient_id);
+
+        Notification::create([
+            'doctor_id' => $availability->doctor_id,
+            'title' => 'New Appointment Request',
+            'message' => "Patient {$patient->name} has requested an appointment for {$availability->available_date} at {$availability->available_time}",
+            'type' => 'appointment_request',
+            'is_read' => false
+        ]);
+
+        DB::commit();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Appointment request created successfully',
+            'data' => $appointment->load(['patient', 'availability.doctor'])
+        ]);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to create appointment request',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
 
     /**
      * Get appointments for a doctor
@@ -148,7 +206,7 @@ class BookingController extends Controller
     /**
      * Update appointment status (for doctor)
      */
-    public function updateAppointmentStatus(Request $request, $appointmentId)
+    /*public function updateAppointmentStatus(Request $request, $appointmentId)
     {
         $validator = Validator::make($request->all(), [
             'status' => 'required|in:pending,confirmed,completed,cancelled_by_doctor,no_show,rescheduled'
@@ -215,6 +273,90 @@ class BookingController extends Controller
             ], 500);
         }
     }
+*/
+public function updateAppointmentStatus(Request $request, $appointmentId)
+{
+    $validator = Validator::make($request->all(), [
+        'status' => 'required|in:pending,confirmed,completed,cancelled_by_doctor,no_show,rescheduled'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Validation failed',
+            'errors' => $validator->errors()
+        ], 400);
+    }
+
+    try {
+        $appointment = Appointment::findOrFail($appointmentId);
+        $mediUser = $request->user();
+        $doctor = Doctor::where('user_id', $mediUser->user_id)->first();
+
+        if (!$doctor) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Doctor profile not found'
+            ], 404);
+        }
+
+        // Check quyền
+        if ($appointment->availability->doctor_id !== $doctor->doctor_id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to update this appointment'
+            ], 403);
+        }
+
+        DB::beginTransaction();
+
+        // Cập nhật status
+        $appointment->update(['status' => $request->status]);
+
+        // Nếu doctor confirm → slot đổi thành booked + hủy các pending khác
+        if ($request->status === 'confirmed') {
+            $appointment->availability->update(['status' => 'booked']);
+
+            Appointment::where('availability_id', $appointment->availability_id)
+                ->where('appointment_id', '!=', $appointment->appointment_id)
+                ->where('status', 'pending')
+                ->update(['status' => 'cancelled_by_doctor']);
+        }
+
+        // Nếu cancelled/rescheduled/completed/no_show → slot mở lại
+        if (in_array($request->status, ['cancelled_by_doctor','cancelled_by_patient','rescheduled','completed','no_show'])) {
+            $appointment->availability->update(['status' => 'available']);
+        }
+
+        // Notify cho patient
+        $patient = $appointment->patient;
+        $statusMessage = $this->getStatusMessage($request->status);
+
+        Notification::create([
+            'doctor_id' => $doctor->doctor_id,
+            'patient_id' => $patient->patient_id,
+            'message' => "Your appointment status has been updated to: {$statusMessage}",
+            'type' => 'appointment_update',
+            'is_read' => false
+        ]);
+
+        DB::commit();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Appointment status updated successfully',
+            'data' => $appointment->load(['patient', 'availability'])
+        ]);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to update appointment status',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
 
     /**
      * Get status message for notifications

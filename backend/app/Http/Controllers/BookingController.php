@@ -324,7 +324,7 @@ public function updateAppointmentStatus(Request $request, $appointmentId)
         }
 
         // Nếu cancelled/rescheduled/completed/no_show → slot mở lại
-        if (in_array($request->status, ['cancelled_by_doctor','cancelled_by_patient','rescheduled','completed','no_show'])) {
+        if (in_array($request->status, ['cancelled_by_doctor','cancelled_by_patient','rescheduled','no_show'])) {
             $appointment->availability->update(['status' => 'available']);
         }
 

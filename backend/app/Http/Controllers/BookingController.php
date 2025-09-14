@@ -277,7 +277,7 @@ class BookingController extends Controller
 public function updateAppointmentStatus(Request $request, $appointmentId)
 {
     $validator = Validator::make($request->all(), [
-        'status' => 'required|in:pending,confirmed,completed,cancelled_by_doctor,no_show,rescheduled'
+        'status' => 'required|in:pending,confirmed,completed,cancelled_by_doctor,cancelled_by_patient,no_show,rescheduled'
     ]);
 
     if ($validator->fails()) {

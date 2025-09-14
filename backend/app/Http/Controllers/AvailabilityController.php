@@ -81,9 +81,9 @@ class AvailabilityController extends Controller
     }
 
     /**
-     * Update availability slot
-     */
-    public function update(Request $request, $id)
+ * Update availability slot
+ */
+public function update(Request $request, $id)
 {
     $validator = Validator::make($request->all(), [
         'available_date' => 'sometimes|date|after_or_equal:today',
@@ -100,8 +100,8 @@ class AvailabilityController extends Controller
     }
 
     $availability = AvailabilityScheduling::findOrFail($id);
-    
-    // Check if this availability belongs to the authenticated doctor
+
+    // Check quyền sở hữu
     $doctorId = $request->user()->doctor->doctor_id;
     if ($availability->doctor_id !== $doctorId) {
         return response()->json([
@@ -110,22 +110,22 @@ class AvailabilityController extends Controller
         ], 403);
     }
 
-    // Check if slot has active appointments
+    // Nếu slot đã có appointment pending/confirmed → không cho update
     $hasActiveAppointment = $availability->appointments()
         ->whereIn('status', ['pending', 'confirmed'])
         ->exists();
 
     if ($hasActiveAppointment) {
-        // Force slot to booked if there are active appointments
-        $availability->status = 'booked';
-    } else {
-        // Update status only if no active appointments
-        if ($request->has('status')) {
-            $availability->status = $request->status;
-        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Cannot edit slot with existing appointment requests.'
+        ], 400);
     }
 
-    // Update date and time if provided
+    // Nếu slot trống → cho update
+    if ($request->has('status')) {
+        $availability->status = $request->status;
+    }
     if ($request->has('available_date')) {
         $availability->available_date = $request->available_date;
     }
@@ -141,6 +141,7 @@ class AvailabilityController extends Controller
         'data' => $availability
     ]);
 }
+
 
 
     /**

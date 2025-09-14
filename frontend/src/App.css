@@ -1912,7 +1912,9 @@ body {
   }
 }
 
-/* Grid danh sách card */
+
+
+/* Card appointment */
 .appointments-list {
   display: grid;
   gap: 24px;
@@ -1920,7 +1922,6 @@ body {
   align-items: stretch;
 }
 
-/* Card appointment */
 .appointment-card {
   background: #fff;
   border: 1px solid #e1e5e9;
@@ -1938,10 +1939,10 @@ body {
   box-shadow: 0 6px 16px rgba(0,0,0,0.12);
 }
 
-/* Header trong card */
+/* Header in card*/
 .appointment-header {
   display: flex;
-  justify-content: space-between; /* trái: tên + badge | phải: nút */
+  justify-content: space-between; 
   align-items: center;
   flex-wrap: wrap;
   margin-bottom: 12px;
@@ -1982,7 +1983,7 @@ body {
   box-shadow: 0 4px 12px rgba(118, 75, 162, 0.4);
 }
 
-/* Nội dung chi tiết */
+/* Detail Appointment */
 .appointment-details {
   border-top: 1px solid #f1f1f1;
   padding-top: 10px;

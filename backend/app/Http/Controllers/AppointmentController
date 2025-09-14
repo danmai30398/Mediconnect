@@ -1,0 +1,39 @@
+<?php
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Appointment;
+use App\Models\AvailabilityScheduling;
+
+class AppointmentController extends Controller
+{
+    public function updateStatus(Request $request, $id)
+{
+    $appointment = Appointment::with('availability')->findOrFail($id);
+    $newStatus   = $request->status;
+
+    $appointment->status = $newStatus;
+    $appointment->save();
+
+    $availability = $appointment->availability;
+    if ($availability) {
+        if (in_array($newStatus, ['pending', 'confirmed', 'completed'])) {
+            $availability->status = 'booked';
+        } elseif (in_array($newStatus, [
+            'cancelled_by_doctor',
+            'cancelled_by_patient',
+            'rescheduled',
+            'no_show'
+        ])) {
+            $availability->status = 'available';
+        }
+        $availability->save();
+    }
+
+    return response()->json([
+        'message'      => "Appointment status updated to $newStatus",
+        'appointment'  => $appointment,
+        'availability' => $availability
+    ]);
+}
+}

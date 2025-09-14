@@ -7,6 +7,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\DoctorProfileController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\AvailabilityController;
+use App\Http\Controllers\AppointmentController;
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -32,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
                 
                 // Booking routes
                 Route::get('/appointments', [BookingController::class, 'getDoctorAppointments']);
-                Route::post('/appointments/{appointmentId}/status', [BookingController::class, 'updateAppointmentStatus']);
+                Route::post('/appointments/{id}/status', [AppointmentController::class, 'updateStatus']);
                 
                 // Availability routes
                 Route::get('/availability', [AvailabilityController::class, 'index']);

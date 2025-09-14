@@ -15,7 +15,7 @@ function PostDetail() {
   if (!post) return <p>Loading post...</p>;
 
   return (
-    <div className="container">
+    <div className="container-post">
       <h1>{post.title}</h1>
       <p><i>Catgory: {post.category?.category_name}</i></p>
       <img src={`http://localhost:8000/storage/${post.image}`} alt={post.title} />

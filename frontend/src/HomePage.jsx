@@ -78,10 +78,10 @@ function HomePage() {
             <section className="about" id="about">
                 <div className="container grid">
                     <div className="about-text">
-                        <h2>About Our <span className="text-accent">MediConnect</span></h2>
+                        <h2>About Our <span className="text-accent">MediConnect Group</span></h2>
 <p>MediConnect is a digital healthcare companion designed to make access to medical care simple, fast, and reliable.</p>
 <p>We empower patients to find the right doctors, book appointments online, and manage their health journey through a seamless and secure platform. No more waiting rooms or confusing processes—just clarity, convenience, and care.</p>
-<p>At MediConnect, we believe healthcare should be personal, proactive, and always within reach. Whether it’s a routine check-up or urgent need, MediConnect puts your health at your fingertips.</p>
+<p>At MediConnect, we believe healthcare should be personal, proactive, and always within reach. Whether it’s a routine check-up or urgent need, MediConnect Group puts your health at your fingertips.</p>
 <p style={{
   textAlign: "center",
   fontWeight: "600",
@@ -94,12 +94,12 @@ function HomePage() {
   gap: "10px"
 }}>
   <FaHeartbeat color="#e11d48" />
-  From appointment to assurance — MediConnect puts healthcare in your hands.
+  From appointment to assurance — MediConnect Group puts healthcare in your hands.
 </p>
 
                         <button className="btn btn-primary">Read More</button>
                     </div>
-                    <div className="about-img"><img src={about1} alt="About MediConnect" /></div>
+                    <div className="about-img"><img src={about1} alt="About MediConnect Group" /></div>
                 </div>
             </section>
 
@@ -107,7 +107,7 @@ function HomePage() {
             <section className="section" id="services" style={{ background: "#fff" }}>
                 <div className="container">
                     <h2 className="section-title">Awesome <span className="text-accent">Services</span></h2>
-                    <p className="section-sub">MediConnect is committed to delivering the highest quality healthcare services—every single day.</p>
+                    <p className="section-sub">MediConnect Group is committed to delivering the highest quality healthcare services—every single day.</p>
                     <div className="cards">
                         {[{ img: s1, t: "24/7 Service", m: "Access care anytime, day or night. Get support, book appointments, or find help—24/7." },
                         { img: s2, t: "Find the Right Doctor", m: "Search by specialty or location. View profiles, qualifications & availability in one click." },
@@ -126,7 +126,7 @@ function HomePage() {
             {/* CTA */}
             <section className="cta" id="appointment">
                 <div className="container">
-                    <div className="title">We Provide Trusted, Comprehensive, and Affordable Healthcare Services for Everyone.</div>
+                    <div className="title">We Provide Trusted, Comprehensive Healthcare Services for Everyone.</div>
                     <button className="btn btn-primary" onClick={goToBookingFlow}>GET APPOINTMENT</button>
                 </div>
             </section>
@@ -134,8 +134,8 @@ function HomePage() {
             {/* DEPARTMENTS */}
             <section className="section" style={{ background: "#fff" }}>
                 <div className="container">
-                    <h2 className="section-title">Find Care<span className="text-accent">That Fits You</span></h2>
-                    <p className="section-sub">Explore top medical fields available on MediConnect—from cardiology to pediatrics.</p>
+                    <h2 className="section-title">Find Care <span className="text-accent">That Fits You</span></h2>
+                    <p className="section-sub">Explore top medical fields available on MediConnect —from cardiology to pediatrics.</p>
                     <div className="cards">
                         {[{ img: labImg, t: "Everyday Health", m: "General checkups, fevers, headaches, prescriptions, and common concerns." },
                         { img: dentalImg, t: "Women’s Health", m: "Menstrual care, pregnancy support, fertility, and gynecological advice." },

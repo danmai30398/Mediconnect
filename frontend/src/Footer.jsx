@@ -8,7 +8,7 @@ function Footer() {
             <div className="top">
                 <div className="container grid">
                     <div>
-                        <h4>MediConnect</h4>
+                        <h4>MediConnect Group</h4>
                         <p>
                            MediConnect is a digital healthcare platform that connects patients with trusted doctors, allows instant appointment booking, and supports personalized care management—all in one seamless experience.
                         </p>
@@ -42,7 +42,7 @@ function Footer() {
                 </div>
             </div>
 
-            <div className="bottom">Copyright© MediConnect.UnlockDesign All right reserved.</div>
+            <div className="bottom">Copyright© MediConnect Group. All right reserved.</div>
         </footer>
     );
 }

@@ -280,7 +280,7 @@ html {
   overflow: hidden;
   border: 1px solid #e8edf0;
   box-shadow: 0 6px 14px rgba(0, 0, 0, .05);
- 
+ height: 100%;
 }
 
 .outstanding {
@@ -756,7 +756,7 @@ html {
 }
 
 
-/* sf */
+/* catgory */
 .category-dropdown {
   position: relative;
   display: inline-block;
@@ -796,4 +796,41 @@ html {
 
 .category-dropdown:hover .dropdown-content {
   display: block;
+}
+
+/* Post detail*/
+.container-post {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.container-post h1 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.container-post i {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.container-post img {
+   max-width: 500px;   
+  width: 100%;        
+  height: auto;      
+  border-radius: 10px;
+  margin: 20px auto;  
+  display: block;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.container-post p {
+  line-height: 1.6;
+  font-size: 1.05rem;
+  color: #333;
 }

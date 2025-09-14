@@ -34,7 +34,7 @@ function HeaderNav() {
           <Link to="/" className="brand-link">
             <img src={logo} alt="logo" className="brand-logo" />
             <div>
-              <div className="brand-title">MediConnect</div>
+              <div className="brand-title">MediConnect Group</div>
               <div className="brand-subtitle">Your Health Care Assistant</div>
             </div>
           </Link>

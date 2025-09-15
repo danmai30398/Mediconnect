@@ -108,8 +108,15 @@ const DoctorAvailability = () => {
     return `${String(newHour).padStart(2, '0')}:${String(newMinute).padStart(2, '0')}`;
   };
 
-  const getAvailability = (date, slot) =>
-    availabilities.find(a => (a.available_date || a.date) === date && (a.available_time || a.slot) === slot);
+const normalizeDate = (d) => d ? d.slice(0, 10) : null;
+
+const normalizeTime = (t) => t ? t.slice(0, 5) : null;
+
+const getAvailability = (date, slot) =>
+  availabilities.find(a =>
+    normalizeDate(a.available_date || a.date) === date &&
+    normalizeTime(a.available_time || a.slot) === slot
+  );
 
   // Add
   const handleAdd = async (e) => {

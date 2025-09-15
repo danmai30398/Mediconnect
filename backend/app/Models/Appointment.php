@@ -19,8 +19,8 @@ class Appointment extends Model
         'status',
     ];
 
-    //Disable default timestamps
-    public $timestamps = false;
+    //enable default timestamps
+    public $timestamps = true;
 
     /**
      * Each appointment belongs to one patient

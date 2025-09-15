@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 
 import labImg from "./assets/pic/departments/lab.png";
 import dentalImg from "./assets/pic/departments/dental.png";
@@ -34,7 +34,7 @@ import { FaHeartbeat } from "react-icons/fa";
 
 function HomePage() {
     const navigate = useNavigate();
-
+ 
     const goBooking = () => {
         const token = localStorage.getItem("token");
         navigate(token ? "/search-doctor" : "/login");

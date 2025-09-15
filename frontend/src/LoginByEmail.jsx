@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { apiService } from "./services/apiService";
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function LoginByEmail() {
     const navigate = useNavigate();
@@ -14,24 +15,26 @@ function LoginByEmail() {
         e.preventDefault();
 
         try {
-            const res = await apiService.login({ email, password });
+            const res = await fetch(`${API_BASE_URL}/api/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+                cache: "no-store",
+            });
 
             if (!res.ok) {
-                try {
-                    const err = await res.json();
-                    setError(err?.message || (res.status === 423 ? "Your account has been deactivated." : "Incorrect Email or password!"));
-                } catch {
-                    setError(res.status === 423 ? "Your account has been deactivated." : "Incorrect Email or password!");
-                }
+                setError("Incorrect Email or password!")
                 return;
             }
+            console.log("data: ", res); //debug status and object response
 
             const data = await res.json();
+            console.log("Login success:", data);
             if (data.status === "success") {
                 localStorage.setItem("MediUser", JSON.stringify(data.user)); //luu user
                 // navigate to Patient page 
                 if(data.user.role === 3){
-                    navigate("/patientPage");
+                    navigate("/patientLayout");
                 }    
                 // navigate to Doctor page 
 
@@ -50,7 +53,6 @@ function LoginByEmail() {
     return (
         <div className=" d-flex justify-content-center align-items-center">
             <form onSubmit={handleSubmit}>
-            <br /><br /><br />
                 <div className="container mt-4 registerForm">
                     <h2>Login to your account</h2>
                     <div className="row mb-3">

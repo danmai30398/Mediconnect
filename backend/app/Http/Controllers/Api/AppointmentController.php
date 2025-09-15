@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
@@ -23,6 +23,8 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
+        // Log::info('appointment request:' .$request);
+
         $request->validate([
             'availability_id' => 'required|integer',
             'patient_id' => 'required|integer',

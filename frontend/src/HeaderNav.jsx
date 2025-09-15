@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import logo from "./assets/pic/logo.jpg";
 
 const NAV_OFFSET = 70;
 
-function HeaderNav() {
+function HeaderNav({ defaultTab }) {
   const [showSearch, setShowSearch] = useState(false);
   const [q, setQ] = useState("");
   const navigate = useNavigate();
@@ -25,6 +25,7 @@ function HeaderNav() {
     setShowSearch(false);
     setQ("");
   };
+  
 
   return (
     <header>

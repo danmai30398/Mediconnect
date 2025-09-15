@@ -10,7 +10,7 @@ function PatientHeader({ onNavClick }) {
   const handleLogout = () => {
     localStorage.removeItem('MediUser');
     localStorage.removeItem('showWelcome');
-    navigate('/dashboard');
+    navigate('/home');
   };
 
   return (
@@ -19,7 +19,7 @@ function PatientHeader({ onNavClick }) {
         <Container fluid>
           {/* Logo bên trái */}
           <Navbar.Brand className='fw-bold' href="#home">
-            <img style={{ width: '50px', height: '50px', objectFit: 'contain' }} src={`${process.env.PUBLIC_URL}/Images/logo.jpg`} alt="logo" className="brand-logo" />
+            <img style={{ width: '50px', height: '50px', objectFit: 'contain' }} src={`${process.env.PUBLIC_URL}/Images/logo.jpg`} alt="logo" />
             MediConnect Group</Navbar.Brand>
 
           {/* Toggle cho responsive */}

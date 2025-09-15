@@ -7,14 +7,10 @@ function DoctorDetails() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [profile, setProfile] = useState([]);
-    const [date, setDate] = useState("");
-    const [slots, setSlots] = useState([]);
-    const [loadingSlots, setLoadingSlots] = useState(false);
-    const [bookingMsg, setBookingMsg] = useState("");
 
     useEffect(() => {
-        // Sử dụng apiService để lấy thông tin bác sĩ
-        apiService.getDoctor(id)
+        fetch(`${API_BASE_URL}/api/doctors/${id}`)
+            .then(res => res.json())
             .then(data => setProfile(data))
             .catch(err => console.error("Fetch error:", err));
 

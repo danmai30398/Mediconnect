@@ -33,21 +33,15 @@ function PatientBooking() {
     // console.log("User: ", user);
     // const id = localStorage.getItem('id');
     const userId = user?.id;
-    // console.log("User ID:", userId);
-    const [userProfile, setUserProfile] = useState({
-        username: '',
-        patient: {
-            patient_id: '',
-            name: '',
-        }
-    });
+    console.log("User ID:", userId);
+    const [userProfile, setUserProfile] = useState();
 
     useEffect(() => {
         fetch(`${API_BASE_URL}/api/user/${userId}`)
             .then(res => res.json())
             .then(data => setUserProfile(data))
             .catch(err => console.error("Fetch error:", err));
-        // console.log("data:", userProfile);
+        console.log("data:", userProfile);
     }, [userId]);
 
     //confirm booking or not
@@ -64,7 +58,7 @@ function PatientBooking() {
 
     //luu du lieu vao database sau khi confirm booking
     const formField = {
-        patient_id: userProfile.patient.patient_id,
+        patient_id: userProfile?.user?.patient?.patient_id,
         availability_id: selectedId,
     };
 
@@ -100,15 +94,15 @@ function PatientBooking() {
                     <div className="row">
                         <div className="col-3">
                             <img
-                                src={docProfile.image ? `${API_BASE_URL}/storage/avatars/${docProfile.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
+                                src={docProfile?.image ? `${API_BASE_URL}/storage/avatars/${docProfile.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
                                 alt={docProfile.name}
                                 className="rounded-circle"
                                 style={{ width: "70px", height: "70px" }}
                             />
                         </div>
                         <div className="col-8 mt-3">
-                            <div >{docProfile.name}</div>
-                            <div >{docProfile.city?.city_name}</div>
+                            <div >{docProfile?.name}</div>
+                            <div >{docProfile?.city?.city_name}</div>
                         </div>
                     </div>
                     <div className="row mt-3">
@@ -121,7 +115,7 @@ function PatientBooking() {
                     </div>
                     <div className="row mt-3">
                         <div className="col-6 ps-2 pe-5">Patient:</div>
-                        <div className="col-6 text-end">{userProfile.patient.name}</div>
+                        <div className="col-6 text-end">{userProfile?.user?.patient?.name}</div>
                     </div>
 
                     <div class="text-center mt-3"><button className="col-10 bookingButton" onClick={handleConfirm} >Book an appointment</button></div>

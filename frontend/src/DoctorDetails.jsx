@@ -1,19 +1,63 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { apiService } from "./services/apiService";
 import "./Doctors.css";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function DoctorDetails() {
     const { id } = useParams();
     const [profile, setProfile] = useState([]);
+    const [date, setDate] = useState("");
+    const [slots, setSlots] = useState([]);
+    const [loadingSlots, setLoadingSlots] = useState(false);
+    const [bookingMsg, setBookingMsg] = useState("");
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/doctors/${id}`)
-            .then(res => res.json())
+        // Sử dụng apiService để lấy thông tin bác sĩ
+        apiService.getDoctor(id)
             .then(data => setProfile(data))
             .catch(err => console.error("Fetch error:", err));
-            console.log("data:", profile);
     }, [id]);
+
+    const fetchSlots = async () => {
+        if (!date) return;
+        try {
+            setLoadingSlots(true);
+            // Sử dụng apiService để lấy danh sách availability
+            const data = await apiService.getAvailabilities({ doctor_id: id, date: date });
+            setSlots(data);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setLoadingSlots(false);
+        }
+    };
+
+    const book = async (availability_id) => {
+        try {
+            setBookingMsg("");
+            const stored = localStorage.getItem("MediUser");
+            const user = stored ? JSON.parse(stored) : null;
+            if (!user) {
+                setBookingMsg("Bạn cần đăng nhập trước");
+                return;
+            }
+            // Sử dụng apiService để tạo appointment
+            const res = await apiService.createAppointment({ 
+                patient_id: user.id, 
+                availability_id, 
+                status: "pending" 
+            });
+            if (!res.ok) {
+                setBookingMsg("Appointment booking failed");
+                return;
+            }
+            setBookingMsg("Appointment booked successfully");
+            fetchSlots();
+        } catch (e) {
+            setBookingMsg("Error booking appointment");
+        }
+    };
 
     return (
         <div className="container mt-1">
@@ -45,9 +89,24 @@ function DoctorDetails() {
                 <div className="col-md-4 text-center customBooking ">
                     <div><h5>Book an Appointment</h5></div>
                     <div><h6>Choose a date</h6></div>
-                    <input type="date" />
-                    <div><h6>Available Times</h6></div>
-                    <div><button className="col-12 bookingButton" >Book now</button></div>
+                    <input type="date" value={date} onChange={e => setDate(e.target.value)} onBlur={fetchSlots} />
+                    <div className="mt-2"><h6>Available Times</h6></div>
+                    {loadingSlots ? (
+                        <div>Đang tải...</div>
+                    ) : (
+                        <div className="d-grid gap-2">
+                            {slots.length === 0 ? (
+                                <div>Không có khung giờ trống</div>
+                            ) : (
+                                slots.map(s => (
+                                    <button key={s.availability_id} className="btn btn-outline-primary" onClick={() => book(s.availability_id)}>
+                                        {s.available_time}
+                                    </button>
+                                ))
+                            )}
+                        </div>
+                    )}
+                    {bookingMsg && <div className="mt-2">{bookingMsg}</div>}
                 </div>
             </div>
         </div>

@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+import { apiService } from "./services/apiService";
 
 function LoginByPhone() {
     const navigate = useNavigate();
@@ -15,30 +14,37 @@ function LoginByPhone() {
         e.preventDefault();
 
         try {
-            const res = await fetch(`${API_BASE_URL}/api/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ phone, password }),
-                cache: "no-store",
-            });
+            const res = await apiService.login({ phone, password });
 
             if (!res.ok) {
-                setError("Incorrect Phone or password!")
+                try {
+                    const err = await res.json();
+                    setError(err?.message || (res.status === 423 ? "Your account has been deactivated." : "Incorrect Phone or password!"));
+                } catch {
+                    setError(res.status === 423 ? "Your account has been deactivated." : "Incorrect Phone or password!");
+                }
                 return;
             }
-            console.log("data: ", res); //debug status and object response
 
             const data = await res.json();
-            console.log("Login success:", data);
             if (data.status === "success") {
-                localStorage.setItem("MediUser", JSON.stringify(data.user)); //luu user
-                // navigate to Patient page 
-                if (data.user.role === 3) {
-                    navigate("/patientPage");
+                // Clear old data first
+                localStorage.removeItem("MediUser");
+                localStorage.removeItem("MediToken");
+                
+                localStorage.setItem("MediUser", JSON.stringify(data.user));
+                if (data.token) localStorage.setItem("MediToken", data.token);
+                
+                const role = Number(data.user.role_id);
+                if (role === 1) {
+                    navigate("/admin");
+                } else if (role === 2) {
+                    navigate("/doctor/dashboard");
+                } else if (role === 3) {
+                    navigate("/patient/dashboard");
+                } else {
+                    navigate("/dashboard");
                 }
-                // navigate to Doctor page 
-
-                // navigate to Adimin page 
             }
 
 

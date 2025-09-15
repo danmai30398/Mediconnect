@@ -1,13 +1,3 @@
-function Dashboard() {
-    return ( 
-        <div>
-            <br /><br /><br />
-            <a href="/login">Login</a>
-        </div>
-     );
-}
-
-export default Dashboard;
 import React, { useEffect, useState } from "react";
 import { FaCalendarAlt, FaUserMd, FaClock } from "react-icons/fa";
 import axios from "axios";
@@ -40,6 +30,19 @@ const Dashboard = () => {
 
     fetchDoctorData();
   }, []);
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const data = await apiService.getDashboardStats();
+                setStats(data);
+            } catch (e) {
+                setError("Unable to load statistics");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchStats();
+    }, []);
 
   return (
     <div className="dashboard-container">
@@ -79,5 +82,18 @@ const Dashboard = () => {
     </div>
   );
 };
+useEffect(() => {
+  const fetchStats = async () => {
+      try {
+          const data = await apiService.getDashboardStats();
+          setStats(data);
+      } catch (e) {
+          setError("Unable to load statistics");
+      } finally {
+          setLoading(false);
+      }
+  };
+  fetchStats();
+}, []);
 
 export default Dashboard;

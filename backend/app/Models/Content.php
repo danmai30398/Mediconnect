@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Content extends Model
 {
@@ -19,12 +20,27 @@ class Content extends Model
         'title',
         'description',
         'image',
-        "name"
+        'name',
+        'doctor_id'
     ];
 
 
-    //Disable default timestamps
-    public $timestamps = false;
+    //Enable timestamps
+    public $timestamps = true;
+
+    // Add image_url accessor
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->image && Storage::disk('public')->exists($this->image)) {
+            $url = 'http://localhost:8000/storage/' . $this->image;
+            // Thêm timestamp và random để tránh cache
+            $url .= '?v=' . time() . '&r=' . rand(1000, 9999);
+            return $url;
+        }
+        return null;
+    }
 
 
     //Each content belongs to one category
@@ -37,5 +53,11 @@ class Content extends Model
     public function creator()
     {
         return $this->belongsTo(MediUser::class, 'created_by', 'user_id');
+    }
+
+    //Each content can be authored by one doctor
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class, 'doctor_id', 'doctor_id');
     }
 }

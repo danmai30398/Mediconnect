@@ -1,3 +1,10 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
 * {
   box-sizing: border-box;
 }
@@ -18,6 +25,17 @@ a {
   margin: 0 auto;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 .text-accent {
   color: #22c4b8;
 }
@@ -76,6 +94,13 @@ html {
 .header .row {
   display: flex;
   align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
   padding: 16px 0;
   gap: 18px;
 }
@@ -93,6 +118,50 @@ html {
   object-fit: contain;
 }
 
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Login form css - start */
+/* Start User form */
+.firstLine{
+  text-align: center;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+
+input.form-control {
+  border-radius: 0 !important;
+}
+
+/* Hide default icon "eye" of Edge/IE */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/* Hide default icon "eye" of Chrome */
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none;
+}
+
+
+/* Start Register form */
+.registerForm{
+  border: solid rgb(247, 245, 245);
+  background-color: rgb(247, 245, 245);
+  padding: 10px;
+}
+.registerButton{
+  border: rgb(239, 164, 164);
+  width: 100%;
+  background-color: lightskyblue;
 .brand-title {
   font-size: 50px;
   font-weight: 700;
@@ -267,6 +336,10 @@ html {
   padding: 20px;
 }
 
+/* Start login form */
+.email_lg, .phone_lg{
+  border: solid lightskyblue;
+  width: 40%;
 /* Cards common */
 .cards {
   display: grid;
@@ -289,6 +362,8 @@ html {
   border: 1px solid #e8edf0;
   box-shadow: 0 6px 14px rgba(0, 0, 0, .05);
   text-align: center;
+  background-color: white;
+  border-width: 1px;
   padding: 20px;
   font-size: 20px;
   font-weight: bolder;
@@ -305,6 +380,37 @@ html {
   padding: 16px;
 }
 
+.email_lg1, .phone_lg1{
+  border: solid rgb(227, 239, 247);
+  background-color: rgb(227, 239, 247);
+}
+
+
+
+.email_lg:visited{
+  background-color: rgb(145, 70, 210);
+}
+
+
+.email_edit, .phone_edit{
+  text-decoration: none;
+  color: lightskyblue;
+}
+
+/* Login form css - end */
+
+/* Nar bar - start */
+.navCustom{
+  background-color: #13b5e0;
+}
+
+/* Theme: primary #13b5e0 */
+:root {
+  --primary: #13b5e0;
+  --primary-600: #10a3c9;
+  --primary-700: #0e8faf;
+  --bg: #f6fbfd;
+  --text: #12263a;
 .card .title {
   font-weight: 800;
   margin: 6px 0 8px;
@@ -473,6 +579,9 @@ html {
   margin: 0 0 18px;
 }
 
+body {
+  background-color: var(--bg);
+  color: var(--text);
 .auth-card .line {
   height: 1px;
   background: #f0f2f4;
@@ -487,6 +596,14 @@ html {
   margin: 8px 0;
 }
 
+.btn-primary {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.btn-outline-primary {
+  color: var(--primary) !important;
+  border-color: var(--primary) !important;
 .auth-actions {
   display: flex;
   gap: 10px;
@@ -536,6 +653,17 @@ html {
   grid-template-columns: 1.3fr 1fr 1fr 1fr;
 }
 
+.form-select, .form-control {
+  border-radius: 8px !important;
+}
+
+.table thead th {
+  background: #e9f7fb;
+}
+
+.admin-header {
+  background: linear-gradient(90deg, var(--primary), #4fd3f3);
+  color: #fff;
 .footer .newsletter input {
   width: 100%;
   background-color: lightskyblue;
@@ -555,6 +683,21 @@ html {
   background-color: rgb(227, 239, 247);
 }
 
+.admin-card {
+  background: #fff;
+  border: 1px solid #e6eef2;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(18,38,58,0.06);
+}
+
+.nav-link.active{
+  color: navy !important;
+  font-weight: bold;
+  border-bottom: 2px solid white;
+  padding-bottom: 2px;
+  transition: 0.3s;
+}
+/* Nar bar - end */
 
 
 .email_lg:visited{

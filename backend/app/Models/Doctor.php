@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Doctor extends Model
 {
@@ -31,6 +32,9 @@ class Doctor extends Model
     //Disable default timestamps
     public $timestamps = false;
 
+    // Auto append computed URL for image in API responses
+    protected $appends = ['image_url'];
+
 
     //Each doctor belongs to one city
     public function city()
@@ -48,5 +52,17 @@ class Doctor extends Model
     public function availabilitySchedulings()
     {
         return $this->hasMany(AvailabilityScheduling::class, 'doctor_id', 'doctor_id');
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (!$this->image) {
+            return null;
+        }
+        $relative = 'doctor-images/' . $this->image;
+        if (Storage::disk('public')->exists($relative)) {
+            return url('storage/' . $relative);
+        }
+        return null;
     }
 }

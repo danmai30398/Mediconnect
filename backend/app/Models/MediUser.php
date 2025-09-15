@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
 
 class MediUser extends Model
 {
+    use HasApiTokens;
     // Define the associated table name
     protected $table = 'medi_users';
 
@@ -17,10 +19,15 @@ class MediUser extends Model
         'username',
         'password',
         'role_id',
+        'email',
+        'is_active',
     ];
 
-    //Disable default timestamps
-    public $timestamps = false;
+    //Enable timestamps
+    public $timestamps = true;
+
+    // Add display_name to appends
+    protected $appends = ['display_name'];
 
     /*Many-to-one relationship with roles table
      Each user belongs to one role
@@ -53,4 +60,21 @@ class MediUser extends Model
     {
         return $this->hasMany(Content::class, 'created_by', 'user_id');
     }
+
+    /**
+     * Get the user's display name (doctor name or patient name or username)
+     */
+    public function getDisplayNameAttribute()
+    {
+        if ($this->doctor) {
+            return $this->doctor->name;
+        }
+        if ($this->patient) {
+            return $this->patient->name;
+        }
+        return $this->username;
+    }
+
+    
+   
 }

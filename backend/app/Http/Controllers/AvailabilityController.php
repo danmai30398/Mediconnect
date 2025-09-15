@@ -12,26 +12,37 @@ class AvailabilityController extends Controller
      * Get availabilities for a doctor
      */
     public function index(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'doctor_id' => 'required|exists:doctors,doctor_id'
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        'doctor_id' => 'required|exists:doctors,doctor_id'
+    ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 400);
-        }
-
-        $availabilities = AvailabilityScheduling::where('doctor_id', $request->doctor_id)
-            ->orderBy('available_date')
-            ->orderBy('available_time')
-            ->get();
-
-        return response()->json($availabilities);
+    if ($validator->fails()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Validation failed',
+            'errors' => $validator->errors()
+        ], 400);
     }
+
+    $availabilities = AvailabilityScheduling::where('doctor_id', $request->doctor_id)
+        ->orderBy('available_date')
+        ->orderBy('available_time')
+        ->get()
+        ->map(function ($item) {
+            // chuẩn hóa format để FE match
+            $item->available_date = date('Y-m-d', strtotime($item->available_date));
+            $item->available_time = date('H:i', strtotime($item->available_time));
+            $item->status = strtolower($item->status ?? 'available');
+            return $item;
+        });
+
+    return response()->json([
+        'success' => true,
+        'data' => $availabilities
+    ]);
+}
+
 
     /**
      * Create new availability slot

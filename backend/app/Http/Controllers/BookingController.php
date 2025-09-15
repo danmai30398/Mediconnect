@@ -178,30 +178,40 @@ class BookingController extends Controller
     /**
      * Get appointments for a doctor
      */
-    public function getDoctorAppointments(Request $request)
-    {
-        $mediUser = $request->user();
-        $doctor = Doctor::where('user_id', $mediUser->user_id)->first();
-        
-        if (!$doctor) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Doctor profile not found'
-            ], 404);
-        }
-        
-        $appointments = Appointment::whereHas('availability', function($query) use ($doctor) {
-                $query->where('doctor_id', $doctor->doctor_id);
-            })
-            ->with(['patient', 'availability'])
-            ->orderBy('created_at', 'desc')
-            ->get();
-
+   public function getDoctorAppointments(Request $request)
+{
+    $mediUser = $request->user();
+    $doctor = Doctor::where('user_id', $mediUser->user_id)->first();
+    
+    if (!$doctor) {
         return response()->json([
-            'success' => true,
-            'data' => $appointments
-        ]);
+            'success' => false,
+            'message' => 'Doctor profile not found'
+        ], 404);
     }
+    
+    $appointments = Appointment::whereHas('availability', function($query) use ($doctor) {
+            $query->where('doctor_id', $doctor->doctor_id);
+        })
+        ->with(['patient', 'availability'])
+        ->orderBy('created_at', 'desc')
+        ->get()
+        ->map(function ($item) {
+            if ($item->availability) {
+                // format date: YYYY-MM-DD
+                $item->availability->available_date = date('Y-m-d', strtotime($item->availability->available_date));
+                // format time: HH:MM
+                $item->availability->available_time = date('H:i', strtotime($item->availability->available_time));
+            }
+            return $item;
+        });
+
+    return response()->json([
+        'success' => true,
+        'data' => $appointments
+    ]);
+}
+
 
     /**
      * Update appointment status (for doctor)

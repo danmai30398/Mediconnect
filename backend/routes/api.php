@@ -87,3 +87,12 @@ Route::apiResource('user', UserController::class);
 // contact-messages
 Route::apiResource('contact-messages', ContactMessageController::class);
 Route::post('login', [UserController::class, 'login']);
+Route::get('/check-username', [UserController::class, 'checkUsername']);
+
+
+Route::apiResource('appointments', AppointmentController::class);
+Route::get('/appointments/patient/{patient_id}', [AppointmentController::class, 'getByPatient']);
+Route::patch('/appointments/reschedule/{id}', [AppointmentController::class, 'reschedule']);
+
+
+

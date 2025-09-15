@@ -103,7 +103,7 @@
     border: solid rgb(162, 191, 216);
     background-color: white;
     border-radius: 30px;
-    padding: 5px;
+    padding: 30px;
 }
 
 .docqkview:hover{
@@ -112,7 +112,7 @@
 
 
 .borderCustom{
-    border: dashed rgb(126, 233, 237);
+    border: dashed rgb(224, 237, 238);
     border-radius: 40px;
     margin: 10px;
     background-color: rgb(248, 252, 252);
@@ -130,7 +130,7 @@
 .bttnQkView, .bookingButton{
     border: solid white;
     border-radius: 5px;
-    background-color: lightskyblue;
+    background-color: #13b5e0;
     margin: 4px;
 }
 

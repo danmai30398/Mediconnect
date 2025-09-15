@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { apiService } from "./services/apiService";
+import { useNavigate, useParams } from "react-router-dom";
 import "./Doctors.css";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function DoctorDetails() {
+    const navigate = useNavigate();
     const { id } = useParams();
     const [profile, setProfile] = useState([]);
     const [date, setDate] = useState("");
@@ -17,60 +17,72 @@ function DoctorDetails() {
         apiService.getDoctor(id)
             .then(data => setProfile(data))
             .catch(err => console.error("Fetch error:", err));
+
     }, [id]);
 
-    const fetchSlots = async () => {
-        if (!date) return;
-        try {
-            setLoadingSlots(true);
-            // Sử dụng apiService để lấy danh sách availability
-            const data = await apiService.getAvailabilities({ doctor_id: id, date: date });
-            setSlots(data);
-        } catch (e) {
-            console.error(e);
-        } finally {
-            setLoadingSlots(false);
-        }
-    };
+    console.log("data 1:", profile);
 
-    const book = async (availability_id) => {
-        try {
-            setBookingMsg("");
-            const stored = localStorage.getItem("MediUser");
-            const user = stored ? JSON.parse(stored) : null;
-            if (!user) {
-                setBookingMsg("Bạn cần đăng nhập trước");
-                return;
-            }
-            // Sử dụng apiService để tạo appointment
-            const res = await apiService.createAppointment({ 
-                patient_id: user.id, 
-                availability_id, 
-                status: "pending" 
-            });
-            if (!res.ok) {
-                setBookingMsg("Appointment booking failed");
-                return;
-            }
-            setBookingMsg("Appointment booked successfully");
-            fetchSlots();
-        } catch (e) {
-            setBookingMsg("Error booking appointment");
+
+    //
+    const today = new Date().toISOString().split('T')[0];
+    const [selectedDate, setSelectedDate] = useState(today);
+    console.log("selectedDate: ", today);
+
+    const filteredAvail = profile.availability_schedulings?.filter(doc => {
+        return (
+            (selectedDate === doc.available_date) &&
+            (doc.status === 'available')
+        );
+    });
+
+    console.log("selectedDate2: ", selectedDate);
+    console.log('filteredAvail: ', filteredAvail);
+
+    const [selectedTime, setSelectedTime] = useState(null);
+    const handleSelect = (sltTime) => {
+        setSelectedTime(sltTime); // Lưu lại nút được chọn
+        // console.log("nut duoc chon", sltTime);
+    }
+
+
+    const handleBooking = () => {
+        if (!selectedTime) {
+            alert('Please select a time before booking!');
+            return;
         }
-    };
+
+        const selectedResult = profile.availability_schedulings?.filter(doc => {
+            return (
+                (selectedDate === doc.available_date) &&
+                (selectedTime === doc.available_time)
+            );
+        });
+        // console.log('selectedResult: ', selectedResult);
+
+        const selectedId = selectedResult[0]?.availability_id;
+        // console.log('ID selected: ', selectedId);
+
+        navigate(`/patientBooking/${profile.doctor_id}`,
+            {
+                state: {
+                    userSelectedTime: selectedTime, userSelectedDate: selectedDate,
+                    userSelectedId: selectedId
+                }
+            });
+    }
 
     return (
-        <div className="container mt-1">
-            <br /> <br /> <br />
-            <h2 className="text-center">Book an Appointment Online</h2>
+        <div className="container mt-3">
+            <br /> 
+            <h2 className="text-center mt-2">Book an Appointment Online</h2>
             <h5 className="text-center">Find the Right Doctor - Book an Appointment Easily</h5>
 
-            <div className="row align-items-center mb-3 borderCustom" key={profile.id}>
+            <div className="row align-items-center mb-3 p-3 borderCustom" key={profile.id}>
                 <div className="col-md-2 text-center">
                     <img
-                        src={`${process.env.PUBLIC_URL}/Images/Doctors/${profile.image}`}
+                        src={profile.image ? `${API_BASE_URL}/storage/avatars/${profile.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
                         alt={profile.name}
-                        className="rounded-circle"
+                        className="rounded"
                         style={{ width: "150px", height: "auto" }}
                     />
                 </div>
@@ -79,37 +91,48 @@ function DoctorDetails() {
                     <div>Qualification: <span className="DocContent"> {profile.qualification} </span></div>
                     <div>Specialization: <span className="DocContent"> {profile.specialization}</span></div>
                     <div>Experience: <span className="DocContent"> {profile.experience} years</span></div>
-                    <div>Email: <span className="DocContent"> {profile.email}</span></div>
-                    <div>Phone: <span className="DocContent"> {profile.phone}</span></div>
-                    <div>{profile.gender ? 'Gender:' : ''} <span className="DocContent"> {profile.gender}</span></div>
-                    <div>Date of birth: <span className="DocContent"> {profile.dob}</span></div>
                     <div>Branch: <span className="DocContent"> {profile.city?.city_name || "No city"}</span></div>
-                    
                 </div>
-                <div className="col-md-4 text-center customBooking ">
+
+                <div className="col-11 col-md-4 text-center customBooking m-3 container p-3 ">
                     <div><h5>Book an Appointment</h5></div>
-                    <div><h6>Choose a date</h6></div>
-                    <input type="date" value={date} onChange={e => setDate(e.target.value)} onBlur={fetchSlots} />
-                    <div className="mt-2"><h6>Available Times</h6></div>
-                    {loadingSlots ? (
-                        <div>Đang tải...</div>
-                    ) : (
-                        <div className="d-grid gap-2">
-                            {slots.length === 0 ? (
-                                <div>Không có khung giờ trống</div>
-                            ) : (
-                                slots.map(s => (
-                                    <button key={s.availability_id} className="btn btn-outline-primary" onClick={() => book(s.availability_id)}>
-                                        {s.available_time}
-                                    </button>
-                                ))
-                            )}
+                    <div><h6>Choose a date</h6>
+                        <input className="rounded" min={today} defaultValue={today} onChange={e => setSelectedDate(e.target.value)}
+                            type="date"
+                        /> 
+                    </div>
+                    <br />
+                    <div><h6>Available Times</h6></div>
+
+                    {filteredAvail?.length > 0 ? (
+                        <div className="d-flex flex-wrap justify-content-center border rounded overflow-auto"
+                            style={{ minHeight: '100px', maxHeight: '150px', width: '345px' }} >
+                            {filteredAvail?.sort((a, b) => a.available_time.localeCompare(b.available_time)).map((item, availability_id) =>
+                            (
+                                <button style={{
+                                    width: '65px',
+                                    height: '40px',
+                                    
+                                  }} className={`rounded-1 btn m-1 p-1 fixed-size ${selectedTime === item.available_time ? 'time_choosed' : 'btn-outline-dark'}`} key={availability_id}
+                                    onClick={() => { handleSelect(item.available_time) }}> {item.available_time.slice(0,5)} </button>
+                            ))}
                         </div>
-                    )}
-                    {bookingMsg && <div className="mt-2">{bookingMsg}</div>}
+                    ) : (<div className="d-flex align-items-center h-50 docSearch p-3" >
+                        <div className="mx-auto pt-1">
+                            <p className="text-primary text-center ">There are no available times, please choose another day.</p>
+                        </div>
+                    </div>)}
+
+                    <div className="d-flex justify-content-center mt-2"><button className="col-12 bookingButton"
+                        onClick={() => { handleBooking() }} >Book now</button></div>
+                </div>
+                <br />
+                <div className="col-11 ms-4">
+                    <h4>About the doctor:</h4>
+                    <span className=" "> {profile.description}</span>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 

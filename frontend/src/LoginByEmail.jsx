@@ -28,22 +28,14 @@ function LoginByEmail() {
 
             const data = await res.json();
             if (data.status === "success") {
-                // Clear old data first
-                localStorage.removeItem("MediUser");
-                localStorage.removeItem("MediToken");
-                
-                localStorage.setItem("MediUser", JSON.stringify(data.user));
-                if (data.token) localStorage.setItem("MediToken", data.token);
-                const role = Number(data.user.role_id);
-                if (role === 1) {
-                    navigate("/admin");
-                } else if (role === 2) {
-                    navigate("/doctor/dashboard");
-                } else if (role === 3) {
-                    navigate("/patient/dashboard");
-                } else {
-                    navigate("/dashboard");
-                }
+                localStorage.setItem("MediUser", JSON.stringify(data.user)); //luu user
+                // navigate to Patient page 
+                if(data.user.role === 3){
+                    navigate("/patientPage");
+                }    
+                // navigate to Doctor page 
+
+                // navigate to Adimin page 
             }
 
             

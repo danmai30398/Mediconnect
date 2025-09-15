@@ -28,7 +28,6 @@ import DoctorProfile from './DoctorProfile';
 import PatientDashboard from './PatientDashboard';
 import PatientAppointments from './PatientAppointments';
 
-import './App.css';
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
@@ -55,44 +54,40 @@ import Register from './Register';
 import PatientProfile from './PatientProfile';
 import PatientLayout from './PatientLayout';
 import LoginByPhone from './LoginByPhone';
-import ForgotPass from './FogotPass';
+import PatientBooking from './PatientBooking';
+import PatientAppointmentManage from './PatientAppointmentManage';
+import ForgotPass from './ForgotPass';
+import PatientEdit from './PatientEdit';
+import PatientWelcomePage from './PatientWelcomePage';
 
 function App() {
-  const getUserRole = () => {
-    try {
-      const raw = localStorage.getItem('MediUser');
-      if (!raw) return null;
-      const user = JSON.parse(raw);
-      return Number(user.role_id);
-    } catch { return null; }
-  };
-
-  const userRole = getUserRole();
-  const isAdmin = userRole === 1;
-  const isDoctor = userRole === 2;
-  const isPatient = userRole === 3;
-  const isLoggedIn = userRole !== null;
-
-    const getRedirectPath = () => {
-        if (!isLoggedIn) return '/login';
-        
-        const role = getUserRole();
-        switch (role) {
-            case 1: return '/admin/dashboard'; // Admin
-            case 2: return '/doctor/dashboard'; // Doctor
-            case 3: return '/patient/dashboard'; // Patient
-            default: return '/login';
-        }
-    };
-
   return (
     <div>
       <header>
-        
+
       </header>
 
       <main>
         <Routes>
+          <Route>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login_phone" element={<LoginByPhone />} />
+            <Route path="/login" element={<LoginByEmail />} />
+            <Route path="/forgotPass" element={<ForgotPass />} />
+          </Route>
+
+          <Route path="/patientLayout" element={<PatientLayout />} />
+
+          <Route element={<PatientLayout />}>
+            <Route path="/patientProfile" element={<PatientProfile />} />
+            <Route path="/patientEdit/:id" element={<PatientEdit />} />
+            <Route path="/findUDoctor" element={<DocQuickViews />} />
+            <Route path="/doctorDetail/:id" element={<DoctorDetails />} />
+            <Route path="/patientBooking/:id" element={<PatientBooking />} />
+            <Route path="/appointmentMg" element={<PatientAppointmentManage />} />
+
           {/* Public routes */}
           <Route path="/" element={<Navigate to={getRedirectPath()} replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
@@ -102,7 +97,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/findUDoctor" element={<DocQuickViews />} />
           <Route path="/doctorDetail/:id" element={<DoctorDetails />} />
-          
+          </Route>
           {/* Admin routes */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
@@ -130,32 +125,9 @@ function App() {
             <Route path="profile" element={<PatientProfile />} />
             <Route path="appointments" element={<PatientAppointments />} />
           </Route>
-          
-          {/* Legacy routes for backward compatibility */}
-          <Route path="/patientPage" element={<PatientHeader />} />
-          <Route path="/patientProfile" element={<PatientProfile />} />
         </Routes>
       </main>
     </div>
-    <>
-      <TopBar />
-      <HeaderNav />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/home" element={<HomePage />} />
-
-       
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/category/:id" element={<Category />} />
-        <Route path="/post/:id" element={<Post />} />
-        <Route path="/search" element={<SearchResult />} />
-      </Routes>
-
-      <Footer />
-      <BackToTop />
-    </>
   );
 }
 

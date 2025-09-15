@@ -13,18 +13,19 @@ import PatientBooking from './PatientBooking';
 import PatientAppointmentManage from './PatientAppointmentManage';
 import ForgotPass from './ForgotPass';
 import PatientEdit from './PatientEdit';
+import PatientWelcomePage from './PatientWelcomePage';
 
 function App() {
   return (
     <div>
       <header>
-        
+
       </header>
 
       <main>
         <Routes>
           <Route>
-          <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login_phone" element={<LoginByPhone />} />
@@ -32,8 +33,9 @@ function App() {
             <Route path="/forgotPass" element={<ForgotPass />} />
           </Route>
 
-          <Route element={<PatientLayout/>}>
-            <Route path="/patientPage" element={<PatientHeader />} />
+          <Route path="/patientLayout" element={<PatientLayout />} />
+
+          <Route element={<PatientLayout />}>
             <Route path="/patientProfile" element={<PatientProfile />} />
             <Route path="/patientEdit/:id" element={<PatientEdit />} />
             <Route path="/findUDoctor" element={<DocQuickViews />} />

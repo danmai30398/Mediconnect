@@ -34,7 +34,8 @@ function LoginByEmail() {
                 localStorage.setItem("MediUser", JSON.stringify(data.user)); //luu user
                 // navigate to Patient page 
                 if(data.user.role === 3){
-                    navigate("/patientPage");
+                    // navigate("/patientPage");
+                    navigate("/patientLayout");
                 }    
                 // navigate to Doctor page 
 

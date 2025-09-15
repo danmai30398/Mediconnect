@@ -36,9 +36,13 @@ function PatientEdit() {
         if (file) {
             const url = URL.createObjectURL(file);
             setPreviewImage(url);
+            console.log('previewImage: ', URL.createObjectURL(file));
+            console.log('previewImage2: ', url);
         }
 
-        formField.user.patient.image = file;
+        formField.patient.image = file;
+        console.log('Hinh up len: ', file);
+
     }
 
     //validate username
@@ -48,10 +52,16 @@ function PatientEdit() {
 
 
     const checkUsername = async () => {
+        console.log('formField.user.username: ', formField.user.username);
+        console.log('Id: ', user?.id);
         try {
-            const res = await fetch(`${API_BASE_URL}/api/check-username?username=${formField.user.username}&userId=${user.id}`);
+            const res = await fetch(`${API_BASE_URL}/api/check-username?username=${formField.username}&userId=${id}`);
+            console.log('res: ', res);
+
             const data = await res.json();
             setUsernameData(data);
+            console.log('data: ', data);
+
         }
         catch (err) {
             setUsernameError('Error checking username');
@@ -72,31 +82,21 @@ function PatientEdit() {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        if (name.startsWith('user.patient.')) {
-            const key2 = name.split('.')[2];
+        if (name.startsWith('patient.')) {
+            const key = name.split('.')[1];
             setFormField(prev => ({
                 ...prev,
-                user: {
-                    ...prev.user,
-                    patient: {
-                        ...prev.user?.patient,
-                        [key2]: value
-                    }
+                patient: {
+                    ...prev.patient,
+                    [key]: value
                 }
             }));
         } else {
-            if (name.startsWith('user')) {
-                const key1 = name.split('.')[1];
-                setFormField(prev => ({
-                    ...prev,
-                    user: {
-                        ...prev.user,
-                        [key1]: value
-                    }
-                }));
-            }
+            setFormField(prev => ({
+                ...prev,
+                [name]: value
+            }));
         }
-
     };
 
     const handleChange2 = (e) => {
@@ -111,13 +111,11 @@ function PatientEdit() {
         if (name === 'new_pass') {
             setFormField(prev => ({
                 ...prev,
-                user: {
-                    ...prev.user,
-                    password: value,
-                }
+                password: value,
             }));
         }
     };
+
 
     const handleUpdate = async (e) => {
         e.preventDefault();
@@ -129,37 +127,29 @@ function PatientEdit() {
             alert("Username is already taken.");
             return;
         }
-        if (!formField.user.username.trim()) {
+        if (!formField.username.trim()) {
             alert("Please fill in the username.");
             return;
         }
-        if (!formField.user.patient.name.trim()) {
+        if (!formField.patient.name.trim()) {
             alert("Please fill in your name.");
             return;
         }
-        if (!formField.user.patient.address.trim()) {
+        if (!formField.patient.address.trim()) {
             alert("Please fill in the address.");
             return;
         }
-
         const formData = new FormData();
-        formData.append('username', formField.user.username);
-        if (newPass.new_pass && newPass.new_pass.trim() !== '') {
-            formData.append('password', formField.user.password);
-        }
-        formData.append('patient[name]', formField.user.patient.name);
-
-        if (formField?.user?.patient?.dob !== null) {
-            formData.append('patient[dob]', formField.user.patient.dob);
-        }
-        formData.append('patient[address]', formField.user.patient.address);
-        if (formField?.user?.patient?.gender !== null) {
-            formData.append('patient[gender]', formField.user.patient.gender);
-        }
+        formData.append('username', formField.username);
+        formData.append('password', formField.password);
+        formData.append('patient[name]', formField.patient.name);
+        formData.append('patient[dob]', formField.patient.dob);
+        formData.append('patient[address]', formField.patient.address);
+        formData.append('patient[gender]', formField.patient.gender);
         if (avatar) {
-            formData.append('image', avatar);
+            formData.append('patient[image]', avatar);
         }
-        console.log('image: ', avatar);
+        // console.log('image: ', avatar);
 
         formData.append('_method', 'PUT');
         try {
@@ -204,7 +194,7 @@ function PatientEdit() {
                                 onClick={() => fileInputRef.current.click()}
                             />) :
                             (<img
-                                src={formField?.image === 'http://localhost:8000/storage/' ? `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg` : formField?.image}
+                                src={formField?.patient?.image ? `${API_BASE_URL}/storage/avatars/${formField.patient.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
                                 className="rounded-circle btn"
                                 alt=""
                                 style={{ width: "150px", height: "auto" }}
@@ -216,8 +206,8 @@ function PatientEdit() {
                             <input
                                 className="form-control"
                                 type="text"
-                                name="user.username"
-                                value={formField?.user?.username}
+                                name="username"
+                                value={formField?.username}
                                 onChange={handleChange}
                                 placeholder="Nickname - unique"
                                 required
@@ -230,8 +220,8 @@ function PatientEdit() {
                             <input
                                 className="form-control"
                                 type="text"
-                                name="user.patient.name"
-                                value={formField?.user?.patient?.name}
+                                name="patient.name"
+                                value={formField?.patient?.name}
                                 onChange={handleChange}
                                 required
                                 placeholder="Name"
@@ -243,8 +233,8 @@ function PatientEdit() {
                         <input
                             className="form-control"
                             type="text"
-                            name="user.patient.address"
-                            value={formField?.user?.patient?.address}
+                            name="patient.address"
+                            value={formField?.patient?.address}
                             onChange={handleChange}
                             required
                             placeholder="e.g., 123 Hau Giang, Tan Binh, Ho Chi Minh"
@@ -255,8 +245,8 @@ function PatientEdit() {
                         <input
                             className="form-control"
                             type="number"
-                            name="user.patient.phone"
-                            value={formField?.user?.patient?.phone}
+                            name="patient.phone"
+                            value={formField?.patient?.phone}
                             onChange={handleChange}
                             readOnly
                             placeholder="Phone number"
@@ -266,8 +256,8 @@ function PatientEdit() {
                         <input
                             className="form-control"
                             type="email"
-                            name="user.patient.email"
-                            value={formField?.user?.patient?.email}
+                            name="patient.email"
+                            value={formField?.patient?.email}
                             onChange={handleChange}
                             readOnly
                             placeholder="Email"
@@ -282,9 +272,9 @@ function PatientEdit() {
                                 <input
                                     className=" ms-2 me-4"
                                     type="radio"
-                                    name="user.patient.gender"
+                                    name="patient.gender"
                                     value='Male'
-                                    checked={formField?.user?.patient?.gender === 'Male'}
+                                    checked={formField?.patient?.gender === 'Male'}
                                     onChange={handleChange}
                                 />
                             </label>
@@ -293,9 +283,9 @@ function PatientEdit() {
                                 <input
                                     className=" ms-2 me-4"
                                     type="radio"
-                                    name="user.patient.gender"
+                                    name="patient.gender"
                                     value='Female'
-                                    checked={formField?.user?.patient?.gender === 'Female'}
+                                    checked={formField?.patient?.gender === 'Female'}
                                     onChange={handleChange}
                                 />
                             </label>
@@ -304,9 +294,9 @@ function PatientEdit() {
                                 <input
                                     className=" ms-2 me-4"
                                     type="radio"
-                                    name="user.patient.gender"
+                                    name="patient.gender"
                                     value='Other'
-                                    checked={formField?.user?.patient?.gender === 'Other'}
+                                    checked={formField?.patient?.gender === 'Other'}
                                     onChange={handleChange}
                                 />
                             </label>
@@ -317,8 +307,8 @@ function PatientEdit() {
                             <input
                                 className="form-control"
                                 type="date"
-                                name="user.patient.dob"
-                                value={formField?.user?.patient?.dob}
+                                name="patient.dob"
+                                value={formField?.patient?.dob}
                                 onChange={handleChange}
                             />
                         </div>

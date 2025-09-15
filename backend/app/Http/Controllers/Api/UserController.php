@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -55,13 +55,23 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
+        
         $user = MediUser::with('doctor')->find($id);
         // Log::info('doctor: ' . $user);
-        if($user->doctor === null){
+        if ($user->doctor === null) {
             $user = MediUser::with('patient')->find($id);
             // Log::info('patient: ' . $user);
         }
-        return response()->json($user);
+
+        // Log::info('Patient image path:', [$user->patient->image]);
+
+        return response()->json(
+            [
+                'user' => $user,
+                'image' => Storage::url($user->patient->image)
+            ]
+        );
+        // return response()->json($user);
     }
 
     /**
@@ -69,12 +79,44 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $user = MediUser::with('doctor')->find($id);
-        if($user->doctor === null){
-            $user = MediUser::with('patient')->find($id);
+        // Log::info($request->all());
+        Log::info('=== API UPDATE USER ===');
+        Log::info('REQUEST all:', $request->all());
+        Log::info('FILES:', $request->allFiles());
+        $user = MediUser::with('doctor', 'patient')->findOrFail($id);
+
+        $data = $request->except(['doctor', 'patient']);
+
+        // check password
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
         }
-        $user->update($request->all());
-        return $user;
+
+        // update bảng mediuser
+        $user->update($data);
+
+        if ($user->doctor && $request->has('doctor')) {
+            $user->doctor->update($request->input('doctor'));
+        }
+
+        if ($user->patient && $request->has('patient')) {
+            $patientData = $request->input('patient');
+
+
+            // Kiem tra neu co anh moi
+            if ($request->hasFile('image')) {
+                $path = $request->file('image')->store('avatars', 'public');
+                $patientData['image'] = $path;
+                Log::info('Đã upload ảnh mới: ' . $path);
+            }
+            $user->patient->update($patientData);
+        }
+        // Reload relationship to get the newest data
+        $user->load('doctor', 'patient');
+
+        return response()->json($user);
     }
 
     /**
@@ -138,5 +180,18 @@ class UserController extends Controller
         }
 
         return response()->json(['message' => 'Invalid credentials'], 401);
+    }
+
+    public function checkUsername(Request $request)
+    {
+        $exists = MediUser::whereRaw('BINARY username = ?', [$request->username])->exists();
+        $id = MediUser::where('user_id', $request->userId)
+            ->whereRaw('BINARY username = ?', [$request->username])->first();
+
+        if ($id != null) {
+            return response()->json(['exists' => false]);
+        } else {
+            return response()->json(['exists' => $exists]);
+        }
     }
 }

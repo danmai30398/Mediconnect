@@ -69,8 +69,8 @@ function DoctorDetails() {
 
     return (
         <div className="container mt-3">
-            <br /> <br /> <br />
-            <h2 className="text-center">Book an Appointment Online</h2>
+            <br /> 
+            <h2 className="text-center mt-2">Book an Appointment Online</h2>
             <h5 className="text-center">Find the Right Doctor - Book an Appointment Easily</h5>
 
             <div className="row align-items-center mb-3 p-3 borderCustom" key={profile.id}>
@@ -87,10 +87,6 @@ function DoctorDetails() {
                     <div>Qualification: <span className="DocContent"> {profile.qualification} </span></div>
                     <div>Specialization: <span className="DocContent"> {profile.specialization}</span></div>
                     <div>Experience: <span className="DocContent"> {profile.experience} years</span></div>
-                    <div>Email: <span className="DocContent"> {profile.email}</span></div>
-                    <div>Phone: <span className="DocContent"> {profile.phone}</span></div>
-                    <div>{profile.gender ? 'Gender:' : ''} <span className="DocContent"> {profile.gender}</span></div>
-                    <div>Date of birth: <span className="DocContent"> {profile.dob}</span></div>
                     <div>Branch: <span className="DocContent"> {profile.city?.city_name || "No city"}</span></div>
                 </div>
 
@@ -106,11 +102,15 @@ function DoctorDetails() {
 
                     {filteredAvail?.length > 0 ? (
                         <div className="d-flex flex-wrap justify-content-center border rounded overflow-auto"
-                            style={{ height: '150px', width: '345px' }} >
-                            {filteredAvail?.map((item, availability_id) =>
+                            style={{ minHeight: '100px', maxHeight: '150px', width: '345px' }} >
+                            {filteredAvail?.sort((a, b) => a.available_time.localeCompare(b.available_time)).map((item, availability_id) =>
                             (
-                                <button className={`rounded-1 btn m-1 p-1 ${selectedTime === item.available_time ? 'time_choosed' : 'btn-outline-dark'}`} key={availability_id}
-                                    onClick={() => { handleSelect(item.available_time) }}> {item.available_time} </button>
+                                <button style={{
+                                    width: '65px',
+                                    height: '40px',
+                                    
+                                  }} className={`rounded-1 btn m-1 p-1 fixed-size ${selectedTime === item.available_time ? 'time_choosed' : 'btn-outline-dark'}`} key={availability_id}
+                                    onClick={() => { handleSelect(item.available_time) }}> {item.available_time.slice(0,5)} </button>
                             ))}
                         </div>
                     ) : (<div className="d-flex align-items-center h-50 docSearch p-3" >

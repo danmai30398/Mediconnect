@@ -13,9 +13,12 @@ Route::get('/user', function (Request $request) {
 Route::apiResource('doctors', ViewDoctorsController::class);
 Route::apiResource('user', UserController::class);
 Route::post('login', [UserController::class, 'login']);
+Route::get('/check-username', [UserController::class, 'checkUsername']);
+
 
 Route::apiResource('appointments', AppointmentController::class);
 Route::get('/appointments/patient/{patient_id}', [AppointmentController::class, 'getByPatient']);
 Route::patch('/appointments/reschedule/{id}', [AppointmentController::class, 'reschedule']);
+
 
 

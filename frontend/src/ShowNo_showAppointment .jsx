@@ -2,7 +2,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function ShowNo_showAppointment ({data, loading}) {
 
-    const filteredAppointments = data?.appointments?.filter(apt => apt.status === 'rescheduled');
+    const filteredAppointments = data?.appointments?.filter(apt => apt.status === 'no_show');
     console.log("data confirmed:", filteredAppointments);
 
 

@@ -58,16 +58,16 @@ function DocQuickViews() {
     return (
         <div className="container">
 
-            <br /><br /><br />
+            <br /><br />
 
             <h2 className="text-center">Book an Appointment Online</h2>
-            <h5 className="text-center">Find the Right Doctor - Book an Appointment Easily</h5>
+            <h5 className="text-center mb-0">Find the Right Doctor - Book an Appointment Easily</h5>
             {loading ? (
                 <div>Loading...</div>
             ) : (
                 <div>
                     <div className="text-end">
-                        <h2>Filter</h2>
+                        <h3>Filter</h3>
                         <div style={{ marginBottom: '10px' }}>
                             <label className="pe-3">Choose City: </label>
                             <select className="rounded" value={selectedCity} onChange={e => setSelectedCity(e.target.value)}>

@@ -16,7 +16,22 @@ function PatientProfile() {
     const id = user?.id;
     console.log("User ID:", id);
 
-    const [profile, setProfile] = useState();
+    // const { id } = user.id;
+    const [profile, setProfile] = useState({
+        user: {
+            username: '',
+            patient: {
+                name: '',
+                phone: '',
+                email: '',
+                address: '',
+                dob: '',
+                gender: '',
+            },
+        },
+        
+        image: ''
+    });
 
     useEffect(() => {
         fetch(`${API_BASE_URL}/api/user/${id}`)
@@ -25,6 +40,8 @@ function PatientProfile() {
             .catch(err => console.error("Fetch error:", err));
     }, [id]);
     //
+    // console.log("data:", profile);
+    // console.log('profile.image: ', profile?.image);
 
     return (
         <div className="container mt-5 text-center">
@@ -32,9 +49,9 @@ function PatientProfile() {
             <h4>Hello {profile?.user.username}</h4>
             <div className="">
                 <img
-                    src={profile?.image === 'http://localhost:8000/storage/' ? `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg` : profile?.image}
+                    src={profile?.image ? `${profile?.image }` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
                     className="rounded-circle"
-                    alt="avatar"
+                    alt=""
                     style={{ width: "150px", height: "auto" }}
                 />
             </div>

@@ -156,3 +156,73 @@ function Register() {
 }
 
 export default Register;
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
+function Register() {
+  const [form, setForm] = useState({
+    username: "",
+    password: "",
+    profile: { name:"", phone:"", email:"", address:"" }
+  });
+  const [showPwd, setShowPwd] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const {name,value} = e.target;
+    if (name.startsWith("profile.")) {
+      const key = name.split(".")[1];
+      setForm(prev => ({...prev, profile:{...prev.profile, [key]:value}}));
+    } else setForm(prev => ({...prev,[name]:value}));
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    alert("Account created (demo). Please sign in.");
+    navigate("/login");
+  };
+
+  return (
+    <div className="auth-wrap">
+      <form className="auth-card" onSubmit={onSubmit}>
+        <h2>Create an account</h2>
+        <p className="desc">Fill in your details to sign up.</p>
+        <div className="line" />
+
+        <div style={{display:"grid", gridTemplateColumns:"1fr 1fr", gap:12}}>
+          <input name="username" placeholder="Nickname - unique" required value={form.username} onChange={handleChange}/>
+          <input name="profile.name" placeholder="Your name" required value={form.profile.name} onChange={handleChange}/>
+        </div>
+
+        <input name="profile.address" placeholder="e.g., 123 Hau Giang, Tan Binh, Ho Chi Minh" required value={form.profile.address} onChange={handleChange}/>
+        <input name="profile.phone" placeholder="Phone number" required value={form.profile.phone} onChange={handleChange}/>
+        <input type="email" name="profile.email" placeholder="Email" required value={form.profile.email} onChange={handleChange}/>
+
+        <div style={{position:"relative"}}>
+          <input
+            type={showPwd ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            required
+            value={form.password}
+            onChange={handleChange}
+          />
+          <span
+            style={{position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", cursor:"pointer"}}
+            onClick={()=>setShowPwd(s=>!s)}
+          >
+            {showPwd ? <FaEye/> : <FaEyeSlash/>}
+          </span>
+        </div>
+
+        <div className="auth-actions">
+          <Link className="btn-ghost" to="/login">Cancel</Link>
+          <button className="btn-primary-wide" type="submit">Sign up</button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+export default Register;

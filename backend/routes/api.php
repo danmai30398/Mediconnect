@@ -1,18 +1,13 @@
 <?php
 
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\ViewDoctorsController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\ContentController;
-use App\Http\Controllers\Api\ContactMessageController;
 use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\AvailabilityController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\PatientController;
 use App\Http\Controllers\Api\NotificationController;
-use Illuminate\Http\Request;
 use App\Http\Controllers\ContentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactMessageController;

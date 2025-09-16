@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
@@ -35,7 +36,7 @@ class AppointmentController extends Controller
 
         try {
             DB::transaction(function () use ($slotId, $patientId) {
-                // Cập nhật status của slot
+                // Cap nhat status cua slot
                 $updated = DB::table('availability_schedulings')
                     ->where('availability_id', $slotId)
                     ->where('status', 'available')
@@ -52,6 +53,8 @@ class AppointmentController extends Controller
                     'status' => 'pending',
                 ]);
             });
+            // Cap nhat cache then SSE co the gui thong bao realtime
+            cache()->put('last_appointment_update', now()->timestamp);
 
             return response()->json([
                 'status'  => 'success',

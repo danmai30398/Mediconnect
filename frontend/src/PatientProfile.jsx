@@ -14,7 +14,7 @@ function PatientProfile() {
     ///
     // const id = localStorage.getItem('id');
     const id = user?.id;
-    console.log("User ID:", id);
+    // console.log("User ID:", id);
 
     const [profile, setProfile] = useState();
 

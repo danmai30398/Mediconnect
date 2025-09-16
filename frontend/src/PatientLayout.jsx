@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { useState } from 'react';
 import PatientHeader from './PatientHeader';
 import PatientWelcomePage from './PatientWelcomePage';
+import Footer from './Footer';
 
 function PatientLayout () {
   // const [showWelcome, setShowWelcome] = useState();
@@ -22,6 +23,7 @@ function PatientLayout () {
         {showWelcome && <PatientWelcomePage /> }
         <Outlet />
       </main>
+      <Footer />
     </>
   );
 };

@@ -1,8 +1,10 @@
+import React, { useEffect } from "react";
+
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function ShowRescheduledAppointment({data, loading}) {
     const filteredAppointments = data?.appointments?.filter(apt => apt.status === 'rescheduled');
-    console.log("data confirmed:", filteredAppointments);
+    // console.log("data confirmed:", filteredAppointments);
 
     return (
         <div className="container">

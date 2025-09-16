@@ -34,7 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('patients/{id}/profile', [PatientController::class, 'updateProfile']);
     Route::post('doctors/{id}/upload-image', [DoctorController::class, 'uploadImage']);
     Route::put('doctors/{id}/profile', [DoctorController::class, 'update']);
-    
+
     // Notification routes
     Route::get('notifications', [NotificationController::class, 'index']);
     Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead']);
@@ -56,7 +56,6 @@ Route::apiResource('cities', CityController::class)->only(['index', 'show']);
 Route::apiResource('categories', CategoryController::class)->only(['index', 'show']);
 Route::apiResource('contents', ContentController::class)->only(['index', 'show']);
 Route::apiResource('contact-messages', ContactMessageController::class)->only(['index', 'show']);
-Route::apiResource('patients', PatientController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
 Route::apiResource('appointments', AppointmentController::class)->only(['index', 'show', 'store']);
 Route::get('dashboard/stats', [DashboardController::class, 'stats']);
 Route::get('dashboard/recent-activities', [DashboardController::class, 'recentActivities']);
@@ -97,6 +96,24 @@ Route::get('/check-username', [UserController::class, 'checkUsername']);
 Route::apiResource('appointments', AppointmentController::class);
 Route::get('/appointments/patient/{patient_id}', [AppointmentController::class, 'getByPatient']);
 Route::patch('/appointments/reschedule/{id}', [AppointmentController::class, 'reschedule']);
+
+Route::get('/sse/appointments', function () {
+    return response()->stream(function () {
+        while (true) {
+            $lastUpdate = cache()->get('last_appointment_update');
+
+            echo "data: " . json_encode(['timestamp' => $lastUpdate]) . "\n\n";
+            ob_flush();
+            flush();
+
+            sleep(2); // moi 2 giay gui 1 lan
+        }
+    }, 200, [
+        'Content-Type' => 'text/event-stream',
+        'Cache-Control' => 'no-cache',
+        'Connection' => 'keep-alive',
+    ]);
+});
+
+
 //Phan cua Duyen - end
-
-

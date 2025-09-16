@@ -1,9 +1,7 @@
 import './App.css';
-import Dashboard from './Dashboard';
 import DocQuickViews from './DocQuickViews';
 import DoctorDetails from './DoctorDetails';
 import LoginByEmail from './LoginByEmail';
-import PatientHeader from './PatientHeader';
 import { Link, Navigate, Route, Routes } from 'react-router-dom';
 import Register from './Register';
 import PatientProfile from './PatientProfile';
@@ -29,14 +27,7 @@ import PatientDashboard from './PatientDashboard';
 import PatientAppointments from './PatientAppointments';
 
 import React from "react";
-
-import TopBar from "./TopBar";
-import HeaderNav from "./HeaderNav";
-import Footer from "./Footer";
-import BackToTop from "./BackToTop";
-
 import HomePage from "./HomePage";
-import Login from "./Login";
 import ForgotPassword from "./ForgotPassword";
 import Category from "./Category";
 import Post from "./Post";
@@ -45,7 +36,6 @@ import './App.css';
 import PatientBooking from './PatientBooking';
 import PatientAppointmentManage from './PatientAppointmentManage';
 import PatientEdit from './PatientEdit';
-import PatientWelcomePage from './PatientWelcomePage';
 import HomePageLayout from './HomePageLayout';
 
 function App() {
@@ -85,7 +75,6 @@ function App() {
       <main>
         <Routes>
           {/* Toan homepage - start */}
-          {/* <Route path="/" element={<HomePageLayout />} /> */}
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route element={<HomePageLayout />}>
             <Route path="/home" element={<HomePage />} />
@@ -94,6 +83,7 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/category/:id" element={<Category />} />
             <Route path="/post/:id" element={<Post />} />
+            <Route path="/search-doctor" element={<DocQuickViews />} />
             <Route path="/search" element={<SearchResult />} />
           </Route>
           {/* Toan homepage - end */}

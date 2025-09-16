@@ -18,11 +18,7 @@ function PatientAppointmentManage() {
     //lay lai user_id cua patient
     const user = JSON.parse(localStorage.getItem('MediUser'));
     const id = user?.id;
-    const [profile, setProfile] = useState({
-        patient: {
-            patient_id: '',
-        }
-    });
+    const [profile, setProfile] = useState();
 
     useEffect(() => {
         fetch(`${API_BASE_URL}/api/user/${id}`)
@@ -32,9 +28,8 @@ function PatientAppointmentManage() {
         // console.log("data:", profile);
     }, [id]);
 
-    const patient_id = profile?.patient?.patient_id;
-    console.log('patient id: ', patient_id);
-
+    const patient_id = profile?.user?.patient?.patient_id;
+    // console.log('patient id: ', patient_id);
 
     //fetch appointments from api
     const fetchAppointments = async () => {
@@ -69,7 +64,7 @@ function PatientAppointmentManage() {
 
     return (
         <div className="container">
-            <br /><br /> 
+            <br /><br />
             <div className="">
                 <StatusTabs onTabChange={setSelectedStatus} />
             </div>

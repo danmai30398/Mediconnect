@@ -1,23 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Doctors.css";
+import useRealtimeAppointmentUpdate from "./useRealtimeAppointmentUpdate";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function DoctorDetails() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [profile, setProfile] = useState([]);
+    const [timestamp, setTimestamp] = useState(null);
+
+    useRealtimeAppointmentUpdate((newTime) => {
+        console.log('Detected new update at', newTime);
+        setTimestamp(newTime);
+    });
 
     useEffect(() => {
+        if (!id) return;
+
         fetch(`${API_BASE_URL}/api/doctors/${id}`)
             .then(res => res.json())
             .then(data => setProfile(data))
             .catch(err => console.error("Fetch error:", err));
+    }, [id, timestamp]);
 
-    }, [id]);
-
-    console.log("data 1:", profile);
-
+    // console.log("data 1:", profile);
 
     //
     const today = new Date().toISOString().split('T')[0];
@@ -31,8 +38,8 @@ function DoctorDetails() {
         );
     });
 
-    console.log("selectedDate2: ", selectedDate);
-    console.log('filteredAvail: ', filteredAvail);
+    // console.log("selectedDate2: ", selectedDate);
+    // console.log('filteredAvail: ', filteredAvail);
 
     const [selectedTime, setSelectedTime] = useState(null);
     const handleSelect = (sltTime) => {
@@ -69,7 +76,7 @@ function DoctorDetails() {
 
     return (
         <div className="container mt-3">
-            <br /> 
+            <br />
             <h2 className="text-center mt-2">Book an Appointment Online</h2>
             <h5 className="text-center">Find the Right Doctor - Book an Appointment Easily</h5>
 
@@ -95,7 +102,7 @@ function DoctorDetails() {
                     <div><h6>Choose a date</h6>
                         <input className="rounded" min={today} defaultValue={today} onChange={e => setSelectedDate(e.target.value)}
                             type="date"
-                        /> 
+                        />
                     </div>
                     <br />
                     <div><h6>Available Times</h6></div>
@@ -108,9 +115,9 @@ function DoctorDetails() {
                                 <button style={{
                                     width: '65px',
                                     height: '40px',
-                                    
-                                  }} className={`rounded-1 btn m-1 p-1 fixed-size ${selectedTime === item.available_time ? 'time_choosed' : 'btn-outline-dark'}`} key={availability_id}
-                                    onClick={() => { handleSelect(item.available_time) }}> {item.available_time.slice(0,5)} </button>
+
+                                }} className={`rounded-1 btn m-1 p-1 fixed-size ${selectedTime === item.available_time ? 'time_choosed' : 'btn-outline-dark'}`} key={availability_id}
+                                    onClick={() => { handleSelect(item.available_time) }}> {item.available_time.slice(0, 5)} </button>
                             ))}
                         </div>
                     ) : (<div className="d-flex align-items-center h-50 docSearch p-3" >

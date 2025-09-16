@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./Doctors.css";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function DocQuickViews() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [profiles, setProfiles] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -108,7 +109,15 @@ function DocQuickViews() {
                                             <div>{profile.gender ? 'Gender:' : ''} <span className="DocContent"> {profile.gender}</span></div>
                                             <div>Branch: <span className="DocContent"> {profile.city?.city_name || "No city"}</span></div>
                                         </div>
-                                        <div><button className="bttnQkView" onClick={() => { navigate(`/doctorDetail/${profile.doctor_id}`) }}>Book now ➡</button> </div>
+                                        <div><button className="bttnQkView" onClick={() => {
+                                            if (location.pathname === '/search-doctor') {
+                                                navigate('/login');
+                                            } else if (location.pathname === '/findUDoctor') {
+                                                navigate(`/doctorDetail/${profile.doctor_id}`);
+                                            } else {
+                                                navigate('/home');
+                                            }
+                                        }}>Book now ➡</button> </div>
                                     </div>
                                 ))}
                             </div>

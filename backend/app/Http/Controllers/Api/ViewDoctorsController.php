@@ -25,8 +25,7 @@ class ViewDoctorsController extends Controller
      */
     public function store(Request $request)
     {
-        //create sản phẩm và store lại trong db
-        return Doctor::create($request->all());
+        //
     }
 
     /**
@@ -34,7 +33,7 @@ class ViewDoctorsController extends Controller
      */
     public function show(string $id)
     {
-        //show chi tiết từng sản phẩm
+        //show chi iet tung bac sy va lich available cua bac sy
         $doctors = Doctor::with(['city', 'availabilitySchedulings'])->findOrFail($id);
         return response()->json($doctors);
 

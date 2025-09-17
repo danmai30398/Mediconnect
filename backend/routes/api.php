@@ -6,8 +6,7 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\DoctorProfileController;
 use App\Http\Controllers\BookingController;
-use App\Http\Controllers\AvailabilityController;
-use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\DoctorAvailabilityController;
 
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -36,8 +35,8 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/appointments/{appointmentId}/status', [BookingController::class, 'updateAppointmentStatus']);
 
     // Availability routes
-    Route::get('/availability', [AvailabilityController::class, 'index']);
-    Route::post('/availability', [AvailabilityController::class, 'store']);
-    Route::put('/availability/{id}', [AvailabilityController::class, 'update']);
-    Route::delete('/availability/{id}', [AvailabilityController::class, 'destroy']);
+    Route::get('/availability', [DoctorAvailabilityController::class, 'index']);
+    Route::post('/availability', [DoctorAvailabilityController::class, 'store']);
+    Route::put('/availability/{id}', [DoctorAvailabilityController::class, 'update']);
+    Route::delete('/availability/{id}', [DoctorAvailabilityController::class, 'destroy']);
 });

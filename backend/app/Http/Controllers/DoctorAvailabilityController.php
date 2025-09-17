@@ -6,7 +6,7 @@ use App\Models\AvailabilityScheduling;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class AvailabilityController extends Controller
+class DoctorAvailabilityController extends Controller
 {
     /**
      * Get availabilities for a doctor

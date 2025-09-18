@@ -22,7 +22,7 @@ class DoctorSeeder extends Seeder
                 'city_id' => 1,
                 'user_id' => 1,
                 'image' => 'Doctor1.jpg',
-                'description' => 'Cardio specialist'
+                'description' => 'Experienced cardiologist specializing in heart diseases and cardiovascular treatments in Vietnam.'
             ]);
         }
 
@@ -39,7 +39,7 @@ class DoctorSeeder extends Seeder
                 'city_id' => 1,
                 'user_id' => 2,
                 'image' => 'Doctor1.jpg',
-                'description' => 'Neuro specialist'
+                'description' => 'Skilled neurologist with expertise in brain and nervous system disorders, practicing in Vietnam.'
             ]);
         }
     }

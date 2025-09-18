@@ -13,7 +13,7 @@ class PatientSeeder extends Seeder
             ['email' => 'nva@example.com'],
             [
                 'name' => 'Nguyen Van A',
-                'address' => '123 Hai Ba Trung, Ha Noi',
+                'address' => '123 Hai Ba Trung Street, Hanoi',
                 'phone' => '0987654321',
                 'dob' => '1995-01-01',
                 'gender' => 'Male',
@@ -26,7 +26,7 @@ class PatientSeeder extends Seeder
             ['email' => 'ttb@example.com'],
             [
                 'name' => 'Tran Thi B',
-                'address' => '456 Le Loi, Da Nang',
+                'address' => '456 Le Loi Street, Da Nang',
                 'phone' => '0911222333',
                 'dob' => '1997-02-02',
                 'gender' => 'Female',

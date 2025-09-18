@@ -21,6 +21,20 @@ class ViewDoctorsController extends Controller
     }
 
     /**
+     * Lấy danh sách các chuyên khoa y tế
+     * Trả về danh sách các chuyên khoa duy nhất từ bác sĩ
+     */
+    public function specializations()
+    {
+        $specs = Doctor::whereNotNull('specialization')
+            ->distinct()
+            ->orderBy('specialization')
+            ->pluck('specialization')
+            ->values();
+        return response()->json($specs);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)

@@ -13,6 +13,7 @@ function LoginByEmail() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(""); // Clear previous errors
 
         try {
             const res = await fetch(`${API_BASE_URL}/api/login`, {
@@ -23,28 +24,40 @@ function LoginByEmail() {
             });
 
             if (!res.ok) {
-                setError("Incorrect Email or password!")
+                try {
+                    const err = await res.json();
+                    setError(err?.message || (res.status === 423 ? "Your account has been deactivated." : "Incorrect Email or password!"));
+                } catch {
+                    setError(res.status === 423 ? "Your account has been deactivated." : "Incorrect Email or password!");
+                }
                 return;
             }
-            console.log("data: ", res); //debug status and object response
 
             const data = await res.json();
-            console.log("Login success:", data);
             if (data.status === "success") {
-                localStorage.setItem("MediUser", JSON.stringify(data.user)); //luu user
-                // navigate to Patient page 
-                if(data.user.role === 3){
-                    navigate("/patientLayout");
-                }    
-                // navigate to Doctor page 
-
-                // navigate to Adimin page 
+                // Clear old data first
+                localStorage.removeItem("MediUser");
+                localStorage.removeItem("MediToken");
+                
+                // Lưu user và token
+                localStorage.setItem("MediUser", JSON.stringify(data.user));
+                if (data.token) localStorage.setItem("MediToken", data.token);
+                
+                // Navigation dựa trên role_id - GIỮ NGUYÊN LOGIC CỦA DUYEN
+                const role = Number(data.user.role_id);
+                if (role === 1) {
+                    navigate("/admin");
+                } else if (role === 2) {
+                    navigate("/doctor/dashboard");
+                } else if (role === 3) {
+                    navigate("/patientLayout"); // GIỮ NGUYÊN ROUTE CỦA DUYEN
+                } else {
+                    navigate("/dashboard");
+                }
             }
-
-            
         } catch (err) {
-            console.error("Fetch error:", err); // check if fetch fail 
-            alert("Error logging in");
+            console.error("Fetch error:", err);
+            setError("Network error. Please try again.");
         }
     };
 
@@ -64,6 +77,7 @@ function LoginByEmail() {
                         <input
                             className="form-control"
                             type="email"
+                            value={email}
                             onChange={e => setEmail(e.target.value)}
                             required
                             placeholder="Email"
@@ -73,6 +87,7 @@ function LoginByEmail() {
                         <input
                             className="form-control "
                             type={showPassword ? "text" : "password"}
+                            value={password}
                             onChange={e => setPassword(e.target.value)}
                             required
                             placeholder="Password"

@@ -8,24 +8,25 @@ use App\Http\Controllers\Api\AvailabilityController;
 use App\Http\Controllers\Api\DoctorController;
 use App\Http\Controllers\Api\PatientController;
 use App\Http\Controllers\Api\NotificationController;
-use App\Http\Controllers\ContentController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ContactMessageController;
+use App\Http\Controllers\Api\ContentController;
+use App\Http\Controllers\Api\ContactMessageController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ViewDoctorsController;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 
-// content - homepage
+// Content - Homepage
 Route::get('/categories/{id}/contents', [ContentController::class, 'getByCategory']);
 Route::get('/contents/{id}', [ContentController::class, 'show']);
 Route::get('/search', [ContentController::class, 'search']);
+
+Route::get('me', [UserController::class, 'me']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-    Route::get('me', [UserController::class, 'me']);
     Route::post('logout', [UserController::class, 'logout']);
     Route::post('change-password', [UserController::class, 'changePassword']);
     Route::get('doctor/appointments', [DoctorController::class, 'appointments']);
@@ -35,20 +36,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('doctors/{id}/upload-image', [DoctorController::class, 'uploadImage']);
     Route::put('doctors/{id}/profile', [DoctorController::class, 'update']);
 
-    // Notification routes
+    // Notification Routes
     Route::get('notifications', [NotificationController::class, 'index']);
     Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead']);
     Route::post('notifications/read-all', [NotificationController::class, 'markAllAsRead']);
     Route::get('notifications/unread-count', [NotificationController::class, 'unreadCount']);
 });
 
-Route::apiResource('doctors', ViewDoctorsController::class)->only(['index', 'show']);
 Route::get('doctors/specializations', [ViewDoctorsController::class, 'specializations']);
-Route::apiResource('users', UserController::class);
 
-// Mapping user với profile
-Route::post('users/{id}/create-profile', [UserController::class, 'createProfile']);
+// Mapping User với Profile
 Route::post('login', [UserController::class, 'login']);
+Route::post('users/{id}/create-profile', [UserController::class, 'createProfile']);
 Route::post('users/{id}/unlock', [UserController::class, 'unlock']);
 Route::post('contact-messages/{id}/status', [ContactMessageController::class, 'updateStatus']);
 // Public read endpoints
@@ -57,12 +56,17 @@ Route::apiResource('categories', CategoryController::class)->only(['index', 'sho
 Route::apiResource('contents', ContentController::class)->only(['index', 'show']);
 Route::apiResource('contact-messages', ContactMessageController::class)->only(['index', 'show']);
 Route::apiResource('appointments', AppointmentController::class)->only(['index', 'show', 'store']);
+
+// Thêm route patients từ Thuan - CRUD operations cho patients
+Route::apiResource('patients', PatientController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+Route::apiResource('users', UserController::class);
+
 Route::get('dashboard/stats', [DashboardController::class, 'stats']);
 Route::get('dashboard/recent-activities', [DashboardController::class, 'recentActivities']);
 Route::get('dashboard/notifications', [DashboardController::class, 'notifications']);
 Route::get('availabilities', [AvailabilityController::class, 'index']);
 
-// Admin-protected write endpoints
+// Admin-protected Write Endpoints
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('doctors', ViewDoctorsController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('cities', CityController::class)->only(['store', 'update', 'destroy']);
@@ -73,26 +77,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('availabilities/{id}', [AvailabilityController::class, 'destroy']);
 });
 
-// Temporarily remove auth for contents to test
+// Temporarily Remove Auth for Contents to Test
 Route::apiResource('contents', ContentController::class)->only(['store', 'update', 'destroy']);
 Route::post('contents/{id}/upload-image', [ContentController::class, 'uploadImage']);
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
-Route::apiResource('doctors', ViewDoctorsController::class);
+//Phan cua Duyen - Start
 Route::apiResource('user', UserController::class);
-
-// contact-messages
-Route::apiResource('contact-messages', ContactMessageController::class);
-Route::post('login', [UserController::class, 'login']);
 Route::get('/check-username', [UserController::class, 'checkUsername']);
-
-//Phan cua Duyen - start
-Route::apiResource('doctors', ViewDoctorsController::class);
-Route::apiResource('user', UserController::class);
-Route::post('login', [UserController::class, 'login']);
-Route::get('/check-username', [UserController::class, 'checkUsername']);
+Route::get('/doctors', [ViewDoctorsController::class, 'index']);
 Route::apiResource('appointments', AppointmentController::class);
 Route::get('/appointments/patient/{patient_id}', [AppointmentController::class, 'getByPatient']);
 Route::patch('/appointments/reschedule/{id}', [AppointmentController::class, 'reschedule']);
@@ -106,7 +98,7 @@ Route::get('/sse/appointments', function () {
             ob_flush();
             flush();
 
-            sleep(2); // moi 2 giay gui 1 lan
+            sleep(2); // mỗi 2 giây gửi 1 lần
         }
     }, 200, [
         'Content-Type' => 'text/event-stream',
@@ -115,5 +107,4 @@ Route::get('/sse/appointments', function () {
     ]);
 });
 
-
-//Phan cua Duyen - end
+//Phan cua Duyen - End

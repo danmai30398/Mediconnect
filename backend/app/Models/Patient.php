@@ -53,4 +53,28 @@ class Patient extends Model
         }
         return null;
     }
+
+    /**
+     * Boot method để thiết lập Model Events
+     * Tự động đồng bộ email với bảng medi_users khi có thay đổi
+     */
+    protected static function booted()
+    {
+        // Khi patient được cập nhật
+        static::updated(function ($patient) {
+            // Kiểm tra nếu email thay đổi
+            if ($patient->isDirty('email')) {
+                // Đồng bộ email sang bảng medi_users
+                $patient->user->update(['email' => $patient->email]);
+            }
+        });
+
+        // Khi patient được tạo mới
+        static::created(function ($patient) {
+            // Nếu có email, đồng bộ sang medi_users
+            if ($patient->email) {
+                $patient->user->update(['email' => $patient->email]);
+            }
+        });
+    }
 }

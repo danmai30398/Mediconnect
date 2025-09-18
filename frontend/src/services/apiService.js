@@ -109,7 +109,7 @@ export const apiService = {
 
     // ===== USERS =====
     getUsers: async () => {
-        const response = await fetch(`${API_BASE_URL}/api/users`, {
+        const response = await fetch(getCacheBustingUrl('/api/users'), {
             headers: getAuthHeaders()
         });
         if (!response.ok) {
@@ -128,7 +128,13 @@ export const apiService = {
     },
 
     updateUser: async (userId, userData) => {
-        const response = await fetch(`${API_BASE_URL}/api/users/${userId}`, {
+        // Thêm source parameter vào URL nếu có
+        let url = `${API_BASE_URL}/api/users/${userId}`;
+        if (userData.source) {
+            url += `?source=${userData.source}`;
+        }
+        
+        const response = await fetch(url, {
             method: 'PUT',
             headers: getAuthHeaders(),
             body: JSON.stringify(userData)
@@ -296,7 +302,10 @@ export const apiService = {
         const token = localStorage.getItem('MediToken') || '';
         const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/upload-image`, {
             method: 'POST',
-            headers: { 'Authorization': `Bearer ${token}` },
+            headers: { 
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            },
             body: formData
         });
         return response;
@@ -558,6 +567,3 @@ export const apiService = {
 };
 
 export default apiService;
-
-
-

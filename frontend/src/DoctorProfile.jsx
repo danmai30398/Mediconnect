@@ -184,9 +184,23 @@ function DoctorProfile() {
             const formData = new FormData();
             formData.append('image', imageFile);
 
+            // Debug logging
+            console.log('Uploading doctor image:', {
+                doctorId: profile.doctor.id,
+                fileName: imageFile.name,
+                fileSize: imageFile.size,
+                fileType: imageFile.type
+            });
+
             // Sử dụng apiService để upload ảnh
             const response = await apiService.uploadDoctorImage(profile.doctor.id, formData);
             const responseData = await response.json();
+            
+            console.log('Upload response:', {
+                status: response.status,
+                ok: response.ok,
+                data: responseData
+            });
 
             if (response.ok) {
                 setProfile(prev => ({

@@ -65,4 +65,28 @@ class Doctor extends Model
         }
         return null;
     }
+
+    /**
+     * Boot method để thiết lập Model Events
+     * Tự động đồng bộ email với bảng medi_users khi có thay đổi
+     */
+    protected static function booted()
+    {
+        // Khi doctor được cập nhật
+        static::updated(function ($doctor) {
+            // Kiểm tra nếu email thay đổi
+            if ($doctor->isDirty('email')) {
+                // Đồng bộ email sang bảng medi_users
+                $doctor->user->update(['email' => $doctor->email]);
+            }
+        });
+
+        // Khi doctor được tạo mới
+        static::created(function ($doctor) {
+            // Nếu có email, đồng bộ sang medi_users
+            if ($doctor->email) {
+                $doctor->user->update(['email' => $doctor->email]);
+            }
+        });
+    }
 }

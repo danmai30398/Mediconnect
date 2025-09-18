@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use App\Models\User as LaravelUser;
 
 class UserController extends Controller
 {
@@ -17,7 +19,39 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $roleMap = [1 => 'Admin', 2 => 'Doctor', 3 => 'Patient'];
+        $mediUsers = MediUser::with(['doctor', 'patient'])->get()->map(function ($u) {
+            return [
+                'source' => 'medi_users',
+                'user_id' => $u->user_id,
+                'username' => $u->username,
+                'role_id' => $u->role_id,
+                'role_label' => match((int)($u->role_id ?? 0)) { 1 => 'Admin', 2 => 'Doctor', 3 => 'Patient', default => null },
+                'email' => $u->doctor?->email ?? $u->patient?->email ?? $u->email ?? null,
+                'name' => $u->doctor?->name ?? $u->patient?->name ?? null,
+                'phone' => $u->doctor?->phone ?? $u->patient?->phone ?? null,
+                'address' => $u->patient?->address ?? null,
+                'is_active' => $u->is_active ?? true,
+                'locked_until' => $u->locked_until,
+            ];
+        });
+
+        $laravelUsers = \App\Models\User::query()->get()->map(function ($u) {
+            return [
+                'source' => 'users',
+                'id' => $u->id,
+                'username' => $u->name,
+                'role_id' => isset($u->role_id) ? $u->role_id : null,
+                'role_label' => match((int)($u->role_id ?? 0)) { 1 => 'Admin', 2 => 'Doctor', 3 => 'Patient', default => null },
+                'email' => $u->email,
+                'name' => $u->name,
+                'is_active' => isset($u->is_active) ? (bool) $u->is_active : true,
+            ];
+        });
+
+        $all = $mediUsers->concat($laravelUsers)->values();
+        
+        return response()->json($all);
     }
 
     /**
@@ -65,12 +99,13 @@ class UserController extends Controller
 
         // Log::info('Patient image path:', [$user->patient->image]);
 
-        return response()->json(
-            [
+        $user->makeHidden(['password']);
+
+        return response()->json([
                 'user' => $user,
-                'image' => Storage::url($user->patient->image)
-            ]
-        );
+            'image' => asset(Storage::url($user->patient->image)),
+        ]);
+
         // return response()->json($user);
     }
 
@@ -79,44 +114,104 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // Log::info($request->all());
-        Log::info('=== API UPDATE USER ===');
-        Log::info('REQUEST all:', $request->all());
-        Log::info('FILES:', $request->allFiles());
-        $user = MediUser::with('doctor', 'patient')->findOrFail($id);
+        try {
+            Log::info('User update request', [
+                'id' => $id,
+                'method' => $request->method(),
+                'all_data' => $request->all(),
+                'query_source' => $request->query('source'),
+                'input_source' => $request->input('source'),
+                'is_active_raw' => $request->input('is_active'),
+                'is_active_type' => gettype($request->input('is_active')),
+                'has_is_active' => $request->has('is_active')
+            ]);
 
-        $data = $request->except(['doctor', 'patient']);
-
-        // check password
-        if (!empty($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
-        } else {
-            unset($data['password']);
-        }
-
-        // update bảng mediuser
-        $user->update($data);
-
-        if ($user->doctor && $request->has('doctor')) {
-            $user->doctor->update($request->input('doctor'));
-        }
-
-        if ($user->patient && $request->has('patient')) {
-            $patientData = $request->input('patient');
-
-
-            // Kiem tra neu co anh moi
-            if ($request->hasFile('image')) {
-                $path = $request->file('image')->store('avatars', 'public');
-                $patientData['image'] = $path;
-                Log::info('Đã upload ảnh mới: ' . $path);
+        // Allow updating Laravel users table too when source=users
+        if ($request->query('source') === 'users' || $request->input('source') === 'users') {
+            $u = \App\Models\User::findOrFail($id);
+            $validated = $request->validate([
+                'name' => 'sometimes|string|max:255',
+                'email' => 'sometimes|email|max:255|unique:users,email,' . $u->id,
+                'password' => 'sometimes|string|min:6',
+                'role_id' => 'nullable|integer',
+                'is_active' => 'nullable|boolean',
+            ]);
+            if (isset($validated['name'])) $u->name = $validated['name'];
+            if (isset($validated['email'])) $u->email = $validated['email'];
+            if (isset($validated['password'])) $u->password = Hash::make($validated['password']);
+            if (isset($validated['role_id'])) $u->role_id = (int) $validated['role_id'];
+            if ($request->has('is_active')) {
+                $u->is_active = $request->input('is_active') === null ? null : (bool) $request->boolean('is_active');
             }
-            $user->patient->update($patientData);
+            $u->save();
+            return response()->json(['message' => 'Cập nhật user (users) thành công']);
         }
-        // Reload relationship to get the newest data
-        $user->load('doctor', 'patient');
 
-        return response()->json($user);
+        $user = MediUser::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'username' => 'sometimes|string|unique:medi_users,username,' . $user->user_id . ',user_id',
+            'password' => 'sometimes|string|min:6',
+            'role_id'  => 'sometimes|in:1,2,3',
+            'name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|email|max:255',
+            'is_active' => 'nullable|boolean',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('User update validation failed', [
+                'errors' => $validator->errors(),
+                'input_data' => $request->all()
+            ]);
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $validated = $validator->validated();
+
+        return DB::transaction(function () use ($user, $validated, $request) {
+            Log::info('Starting user update transaction', [
+                'user_id' => $user->user_id,
+                'validated_data' => $validated
+            ]);
+
+            // Update base user
+            if (isset($validated['username'])) $user->username = $validated['username'];
+            if (isset($validated['password'])) $user->password = Hash::make($validated['password']);
+            if (isset($validated['role_id'])) $user->role_id = (int) $validated['role_id'];
+            if ($request->has('is_active')) {
+                $user->is_active = $request->input('is_active') === null ? null : (bool) $request->boolean('is_active');
+            }
+            $user->save();
+
+            Log::info('User base updated', [
+                'user_id' => $user->user_id,
+                'username' => $user->username,
+                'role_id' => $user->role_id,
+                'is_active' => $user->is_active
+            ]);
+
+            // Handle profile updates
+            if ($user->doctor) {
+                if (isset($validated['name'])) $user->doctor->name = $validated['name'];
+                if (isset($validated['email'])) $user->doctor->email = $validated['email'];
+                $user->doctor->save();
+            } else if ($user->patient) {
+                if (isset($validated['name'])) $user->patient->name = $validated['name'];
+                if (isset($validated['email'])) $user->patient->email = $validated['email'];
+                $user->patient->save();
+            }
+
+            return response()->json(['message' => 'Cập nhật user thành công']);
+        });
+
+        } catch (\Exception $e) {
+            Log::error('User update error: ' . $e->getMessage(), [
+                'id' => $id,
+                'request_data' => $request->all(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json(['error' => 'Failed to update user: ' . $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -132,6 +227,31 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
+        // 1) Ưu tiên đăng nhập tài khoản admin (bảng users) khi cung cấp email
+        if ($request->filled('email')) {
+            $userLaravel = LaravelUser::where('email', $request->email)->first();
+            if ($userLaravel) {
+                if (isset($userLaravel->is_active) && !$userLaravel->is_active) {
+                    return response()->json(['message' => 'Your account has been deactivated.'], 423);
+                }
+                if (!Hash::check($request->password, $userLaravel->password)) {
+                    return response()->json(['message' => 'Invalid credentials'], 401);
+                }
+                $role = $userLaravel->role_id ?? 1;
+                Log::info("Login API - User: {$userLaravel->email}, Role ID from DB: {$userLaravel->role_id}, Final Role: {$role}");
+                $token = $userLaravel->createToken('auth_token')->plainTextToken;
+                return response()->json([
+                    'status' => 'success',
+                    'token' => $token,
+                    'user' => [
+                        'id' => $userLaravel->id,
+                        'role_id' => $role,
+                    ]
+                ]);
+            }
+        }
+
+        // 2) MediUser: tìm qua email/phone trong hồ sơ hoặc username
         $user = MediUser::whereHas('patient', function ($query) use ($request) {
             $query->where('email', $request->email)
                 ->orWhere('phone', $request->phone);;
@@ -142,7 +262,16 @@ class UserController extends Controller
             ->with(['patient', 'doctor'])
             ->first();
 
+        // Fallback: allow admin (or any user) login by username when no profile match
+        if (!$user && ($request->filled('email') || $request->filled('phone') || $request->filled('username'))) {
+            $loginIdentifier = $request->username ?? $request->email ?? $request->phone;
+            $user = MediUser::where('username', $loginIdentifier)->first();
+        }
+
         if ($user) {
+            if (isset($user->is_active) && $user->is_active === 0) {
+                return response()->json(['message' => 'Your account has been deactivated.'], 423);
+            }
             // Kiểm tra tài khoản có đang bị khoá không
             if ($user->locked_until && now()->lt($user->locked_until)) {
                 return response()->json(['message' => 'Your account has been locked. Please try again later..'], 423);
@@ -167,14 +296,16 @@ class UserController extends Controller
             $user->locked_until = null;
             $user->save();
 
-            // Thực hiện tạo token hoặc session ở đây
-            // ...
+            $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
                 'status' => 'success',
+                'token' => $token,
                 'user' => [
                     'id' => $user->user_id,
-                    'role' => $user->role_id,
+                    'name' => $user->doctor?->name ?? $user->patient?->name ?? $user->username,
+                    'email' => $user->doctor?->email ?? $user->patient?->email ?? null,
+                    'role_id' => $user->role_id,
                 ]
             ]);
         }
@@ -192,6 +323,68 @@ class UserController extends Controller
             return response()->json(['exists' => false]);
         } else {
             return response()->json(['exists' => $exists]);
+        }
+    }
+
+    public function me(Request $request)
+    {
+        try {
+            $user = $request->user();
+            
+            if (!$user) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+            
+            Log::info('Me API called', [
+                'user_type' => get_class($user),
+                'user_id' => $user->id ?? $user->user_id ?? 'unknown'
+            ]);
+
+            // Handle MediUser
+            if ($user instanceof MediUser) {
+                $user->load(['doctor', 'patient']);
+                
+                return response()->json([
+                    'username' => $user->username,
+                    'role_id' => $user->role_id,
+                    'doctor' => $user->doctor ? [
+                        'id' => $user->doctor->doctor_id,
+                        'name' => $user->doctor->name,
+                        'email' => $user->doctor->email,
+                        'phone' => $user->doctor->phone,
+                        'specialization' => $user->doctor->specialization,
+                        'experience' => $user->doctor->experience,
+                        'qualification' => $user->doctor->qualification,
+                        'gender' => $user->doctor->gender,
+                        'dob' => $user->doctor->dob,
+                        'image' => $user->doctor->image,
+                        'description' => $user->doctor->description,
+                        'city' => $user->doctor->city
+                    ] : null,
+                    'patient' => $user->patient ? [
+                        'id' => $user->patient->patient_id,
+                        'name' => $user->patient->name,
+                        'email' => $user->patient->email,
+                        'phone' => $user->patient->phone,
+                        'address' => $user->patient->address,
+                        'gender' => $user->patient->gender,
+                        'dob' => $user->patient->dob,
+                        'image' => $user->patient->image
+                    ] : null
+                ]);
+            }
+
+            // Handle Laravel User (Admin)
+            return response()->json([
+                'username' => $user->name,
+                'role_id' => $user->role_id ?? 1,
+                'email' => $user->email,
+                'doctor' => null,
+                'patient' => null
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in me API: ' . $e->getMessage());
+            return response()->json(['error' => 'Internal server error'], 500);
         }
     }
 }

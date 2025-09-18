@@ -41,12 +41,16 @@ class ContentSeeder extends Seeder
 
         // ✅ Article 4
         Content::create([
-            'category_id' => 1,       
-            'created_by'  => 1,      
-            'title'       => 'Hướng dẫn đặt lịch khám bệnh',
-            'description' => 'Chi tiết cách bệnh nhân có thể đặt lịch thông qua hệ thống.',
-            'image'       => null, // Không có ảnh mẫu
-            'name'        => 'abc',
+            'category_id' => 2,
+            'created_by'  => 1,
+            'title'       => 'How to Book Medical Appointments',
+            'description' => 'Step-by-step guide for patients to book appointments through our medical system.',
+            'image'       => 'appointment_guide.png',
+            'name'        => 'admin',
+        ]);
+
+        // ✅ Article 5
+        Content::create([
             'category_id' => 1,
             'created_by'  => 1,
             'title'       => 'Mental Health Disorders and Support',

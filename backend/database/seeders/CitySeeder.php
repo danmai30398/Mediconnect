@@ -9,7 +9,7 @@ class CitySeeder extends Seeder
 {
     public function run(): void
     {
-        $names = ['Hà Nội','Hồ Chí Minh','Đà Nẵng','Cần Thơ'];
+        $names = ['Ha Noi','Ho Chi Minh','Da Nang','Can Tho'];
         foreach ($names as $n) {
             City::firstOrCreate(['city_name' => $n], ['city_name' => $n]);
         }

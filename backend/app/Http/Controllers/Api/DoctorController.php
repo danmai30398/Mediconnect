@@ -62,7 +62,6 @@ class DoctorController extends Controller
             });
 
             return response()->json($formattedAppointments);
-
         } catch (\Exception $e) {
             Log::error('Error fetching doctor appointments: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to fetch appointments'], 500);
@@ -89,7 +88,7 @@ class DoctorController extends Controller
             // Find doctor by user_id
             $userId = $user instanceof \App\Models\MediUser ? $user->user_id : $user->id;
             $doctor = Doctor::where('user_id', $userId)->first();
-            
+
             if (!$doctor) {
                 return response()->json(['error' => 'Doctor not found'], 404);
             }
@@ -127,7 +126,7 @@ class DoctorController extends Controller
     {
         try {
             $user = $request->user();
-            
+
             if (!$user) {
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
@@ -135,7 +134,7 @@ class DoctorController extends Controller
             // Find doctor by user_id
             $userId = $user->id ?? $user->user_id;
             $doctor = Doctor::where('user_id', $userId)->first();
-            
+
             if (!$doctor) {
                 return response()->json(['error' => 'Doctor not found'], 404);
             }
@@ -160,25 +159,27 @@ class DoctorController extends Controller
 
             // Update doctor
             $updateData = $request->only([
-                'name', 'email', 'phone', 'specialization', 
-                'experience', 'qualification', 'gender', 'dob', 'description'
+                'name',
+                'email',
+                'phone',
+                'specialization',
+                'experience',
+                'qualification',
+                'image',
+                'gender',
+                'dob',
+                'description'
             ]);
-            
+
             $doctor->update($updateData);
 
             return response()->json([
                 'message' => 'Doctor profile updated successfully',
                 'doctor' => $doctor->fresh()
             ]);
-
         } catch (\Exception $e) {
             Log::error('Error updating doctor profile: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to update doctor profile'], 500);
         }
     }
 }
-
-
-
-
-

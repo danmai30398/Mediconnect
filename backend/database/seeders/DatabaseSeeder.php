@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             CitySeeder::class,
+            AdminUserSeeder::class,
             MediUserSeeder::class,
             DoctorSeeder::class,
             PatientSeeder::class,

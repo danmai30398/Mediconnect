@@ -7,24 +7,29 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 function PatientProfile() {
     const navigate = useNavigate();
 
+    // Lấy token từ localStorage
+    const token = localStorage.getItem('MediToken');
+
     const user = JSON.parse(localStorage.getItem('MediUser'));
-
-    console.log("User: ", user);
-
-    ///
-    // const id = localStorage.getItem('id');
     const id = user?.id;
-    // console.log("User ID:", id);
+    console.log("User ID:", id);
+
 
     const [profile, setProfile] = useState();
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/user/${id}`)
-            .then(res => res.json())
-            .then(data => setProfile(data))
-            .catch(err => console.error("Fetch error:", err));
-    }, [id]);
-    //
+        fetch(`${API_BASE_URL}/api/user/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(res => res.json())
+        .then(data => setProfile(data))
+        .catch(err => console.error("Fetch error:", err));
+        
+    }, [token]);
+    console.log("Profile:", profile);
 
     return (
         <div className="container mt-5 text-center">

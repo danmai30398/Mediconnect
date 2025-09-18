@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -35,7 +36,8 @@ class AppointmentController extends Controller
         $patientId = $request->input('patient_id');
 
         try {
-            DB::transaction(function () use ($slotId, $patientId) {
+            $appointment = null;
+            DB::transaction(function () use ($slotId, $patientId, &$appointment) {
                 // Cap nhat status cua slot
                 $updated = DB::table('availability_schedulings')
                     ->where('availability_id', $slotId)
@@ -47,12 +49,30 @@ class AppointmentController extends Controller
                 }
 
                 // Tạo appointment mới
-                Appointment::create([
+                $appointment = Appointment::create([
                     'availability_id' => $slotId,
                     'patient_id' => $patientId,
                     'status' => 'pending',
                 ]);
             });
+            
+            // Tạo notification khi có appointment mới
+            if ($appointment) {
+                $appointment = Appointment::with(['patient', 'availability.doctor'])->find($appointment->id);
+                $patientName = $appointment->patient ? $appointment->patient->name : 'Unknown Patient';
+                $doctorName = $appointment->availability && $appointment->availability->doctor 
+                    ? $appointment->availability->doctor->name 
+                    : 'Unknown Doctor';
+                
+                Notification::createAppointmentNotification(
+                    'appointment_created',
+                    $appointment,
+                    '📅 New Appointment Booking',
+                    "{$patientName} has booked an appointment with Dr. {$doctorName}",
+                    ['action' => 'view_appointment']
+                );
+            }
+            
             // Cap nhat cache then SSE co the gui thong bao realtime
             cache()->put('last_appointment_update', now()->timestamp);
 
@@ -103,6 +123,23 @@ class AppointmentController extends Controller
                     // Cancel the appointment (by the patient)
                     $appointment->status = 'cancelled_by_patient';
                     $appointment->save();
+
+                    // Tạo notification khi appointment bị cancel
+                    $appointment = Appointment::with(['patient', 'availability.doctor'])->find($appointment->id);
+                    if ($appointment) {
+                        $patientName = $appointment->patient ? $appointment->patient->name : 'Unknown Patient';
+                        $doctorName = $appointment->availability && $appointment->availability->doctor 
+                            ? $appointment->availability->doctor->name 
+                            : 'Unknown Doctor';
+                        
+                        Notification::createAppointmentNotification(
+                            'appointment_cancelled_by_patient',
+                            $appointment,
+                            '❌ Appointment Cancelled by Patient',
+                            "Appointment cancelled by patient: {$patientName}",
+                            ['action' => 'view_appointment', 'old_status' => 'pending']
+                        );
+                    }
 
                     // Set the availability slot back to 'available'
                     DB::table('availability_schedulings')
@@ -184,6 +221,23 @@ class AppointmentController extends Controller
                     // Cancel the appointment (by the patient)
                     $appointment->status = 'rescheduled';
                     $appointment->save();
+
+                    // Tạo notification khi appointment được reschedule
+                    $appointment = Appointment::with(['patient', 'availability.doctor'])->find($appointment->id);
+                    if ($appointment) {
+                        $patientName = $appointment->patient ? $appointment->patient->name : 'Unknown Patient';
+                        $doctorName = $appointment->availability && $appointment->availability->doctor 
+                            ? $appointment->availability->doctor->name 
+                            : 'Unknown Doctor';
+                        
+                        Notification::createAppointmentNotification(
+                            'appointment_rescheduled',
+                            $appointment,
+                            '🔄 Appointment Rescheduled',
+                            "Appointment rescheduled: {$patientName} with Dr. {$doctorName}",
+                            ['action' => 'view_appointment', 'old_status' => 'pending']
+                        );
+                    }
 
                     // Set the availability slot back to 'available'
                     DB::table('availability_schedulings')

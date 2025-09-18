@@ -82,6 +82,7 @@ function AdminUsers() {
         if (form.source === 'users') {
             // Bảng Laravel users cần email/password/role_id/is_active ở cấp cao nhất
             payload = {
+                source: 'users', // Thêm source parameter
                 email: form.email,
                 role_id: form.role_id ? Number(form.role_id) : undefined,
                 is_active: form.is_active !== undefined ? !!form.is_active : undefined,
@@ -93,6 +94,7 @@ function AdminUsers() {
         } else {
             // Bảng MediUsers cần username, role_id, email, name, is_active
             payload = {
+                source: 'medi_users', // Thêm source parameter
                 username: form.username,
                 role_id: Number(form.role_id),
                 email: form.email,

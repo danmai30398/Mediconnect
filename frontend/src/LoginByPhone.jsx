@@ -12,6 +12,7 @@ function LoginByPhone() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(""); // Clear previous errors
 
         try {
             const res = await apiService.login({ phone, password });
@@ -35,22 +36,21 @@ function LoginByPhone() {
                 localStorage.setItem("MediUser", JSON.stringify(data.user));
                 if (data.token) localStorage.setItem("MediToken", data.token);
                 
+                // Navigation dựa trên role_id - GIỮ NGUYÊN LOGIC CỦA DUYEN
                 const role = Number(data.user.role_id);
                 if (role === 1) {
                     navigate("/admin");
                 } else if (role === 2) {
                     navigate("/doctor/dashboard");
                 } else if (role === 3) {
-                    navigate("/patient/dashboard");
+                    navigate("/patientLayout"); // GIỮ NGUYÊN ROUTE CỦA DUYEN
                 } else {
                     navigate("/dashboard");
                 }
             }
-
-
         } catch (err) {
-            console.error("Fetch error:", err); // check if fetch fail 
-            alert("Error logging in");
+            console.error("Fetch error:", err);
+            setError("Network error. Please try again.");
         }
     };
 
@@ -71,6 +71,7 @@ function LoginByPhone() {
                         <input
                             className="form-control"
                             type="phone"
+                            value={phone}
                             onChange={e => setPhone(e.target.value)}
                             required
                             placeholder="Phone"
@@ -80,6 +81,7 @@ function LoginByPhone() {
                         <input
                             className="form-control "
                             type={showPassword ? "text" : "password"}
+                            value={password}
                             onChange={e => setPassword(e.target.value)}
                             required
                             placeholder="Password"

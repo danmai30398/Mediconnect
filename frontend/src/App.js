@@ -123,8 +123,9 @@ function App() {
           </Route> */}
 
 
-          {/* Admin routes */}
-          {/* <Route path="/admin" element={<AdminLayout />}>
+          {/* ===== PHẦN MỚI THÊM TỪ THUAN - START ===== */}
+          {/* Admin routes - Kích hoạt từ Thuan */}
+          <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="contents" element={<AdminContents />} />
@@ -136,20 +137,21 @@ function App() {
             <Route path="cities" element={<AdminCities />} />
             <Route path="categories" element={<AdminCategories />} />
             <Route path="appointments" element={<AdminAppointments />} />
-          </Route> */}
+          </Route>
 
-          {/* Doctor routes */}
-          {/* <Route path="/doctor" element={<DoctorLayout />}>
+          {/* Doctor routes - Kích hoạt từ Thuan */}
+          <Route path="/doctor" element={<DoctorLayout />}>
             <Route path="dashboard" element={<DoctorDashboard />} />
             <Route path="profile" element={<DoctorProfile />} />
-          </Route> */}
+          </Route>
 
-          {/* Patient routes */}
-          {/* <Route path="/patient" element={<PatientLayout />}>
+          {/* Patient routes - Kích hoạt từ Thuan */}
+          <Route path="/patient" element={<PatientLayout />}>
             <Route path="dashboard" element={<PatientDashboard />} />
             <Route path="profile" element={<PatientProfile />} />
             <Route path="appointments" element={<PatientAppointments />} />
-          </Route> */}
+          </Route>
+          {/* ===== PHẦN MỚI THÊM TỪ THUAN - END ===== */}
         </Routes>
 
       </main>

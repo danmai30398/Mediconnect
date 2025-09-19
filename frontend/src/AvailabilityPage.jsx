@@ -75,7 +75,7 @@ const DoctorAvailability = () => {
       if (!finalDoctorId) return;
       try {
         setLoading(true);
-        const url = `http://localhost:8000/api/availability?doctor_id=${finalDoctorId}`;
+        const url = `http://localhost:8000/api/doctor/availability?doctor_id=${finalDoctorId}`;
         const response = await axios.get(url, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -118,7 +118,7 @@ const DoctorAvailability = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:8000/api/availability', {
+      const response = await axios.post('http://localhost:8000/api/doctor/availability', {
         doctor_id: finalDoctorId,
         available_date: addForm.date,
         available_time: addForm.slot,
@@ -151,7 +151,7 @@ const DoctorAvailability = () => {
     try {
       const availabilityId = availabilities[editingIndex]?.availability_id;
       if (!availabilityId) throw new Error('Availability ID not found');
-      await axios.put(`http://localhost:8000/api/availability/${availabilityId}`, {
+      const response = await axios.put(`http://localhost:8000/api/doctor/availability/${availabilityId}`, {
         available_date: editForm.date,
         available_time: editForm.slot,
         status: editForm.status?.toLowerCase() || 'available'
@@ -161,6 +161,7 @@ const DoctorAvailability = () => {
           'Accept': 'application/json'
         }
       });
+      console.log('Response:', response);
       const updated = [...availabilities];
       updated[editingIndex] = {
         ...updated[editingIndex],
@@ -195,7 +196,7 @@ const DoctorAvailability = () => {
     try {
       const availabilityId = entry.availability_id;
       if (!availabilityId) throw new Error('Availability ID not found');
-      await axios.delete(`http://localhost:8000/api/availability/${availabilityId}`, {
+      await axios.delete(`http://localhost:8000/api/doctor/availability/${availabilityId}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Accept': 'application/json'
@@ -286,6 +287,7 @@ const DoctorAvailability = () => {
         </Col>
       </Row>
 
+      {/* Add Slot Modal */}
       {showAddForm && (
         <Modal show={showAddForm} onHide={() => setShowAddForm(false)}>
           <Modal.Header closeButton>
@@ -335,6 +337,70 @@ const DoctorAvailability = () => {
         </Modal>
       )}
 
+      {/* Edit Slot Modal */}
+      {showEditForm && (
+        <Modal show={showEditForm} onHide={() => setShowEditForm(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Edit Slot</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={handleEdit}>
+              <Form.Group className="mb-3">
+                <Form.Label>Select Date</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={editForm.date}
+                  onChange={e => setEditForm({ ...editForm, date: e.target.value })}
+                  required
+                >
+                  <option value="">-- Select Date --</option>
+                  {weekDates.map((date, i) => (
+                    <option key={i} value={date}>
+                      {weekdays[i]} ({date})
+                    </option>
+                  ))}
+                </Form.Control>
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Select Slot</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={editForm.slot}
+                  onChange={e => setEditForm({ ...editForm, slot: e.target.value })}
+                  required
+                >
+                  <option value="">-- Select Slot --</option>
+                  {workingHours.map(time => (
+                    <option key={time} value={time}>
+                      {time} – {addOneHour(time)}
+                    </option>
+                  ))}
+                </Form.Control>
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Status</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={editForm.status}
+                  onChange={e => setEditForm({ ...editForm, status: e.target.value })}
+                >
+                  <option value="available">Available</option>
+                  <option value="booked">Booked</option>
+                  <option value="unavailable">Unavailable</option>
+                </Form.Control>
+              </Form.Group>
+
+              <Button type="submit" variant="primary" disabled={loading}>
+                {loading ? 'Saving...' : 'Save'}
+              </Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
+      )}
+
+      {/* Availability Slots Table */}
       <Table responsive="sm" striped bordered hover className="my-3">
         <thead>
           <tr>
@@ -393,7 +459,7 @@ const DoctorAvailability = () => {
                   <Button
                     variant="warning"
                     onClick={() => openEditForm(i)}
-                    disabled={loading || a.status === 'booked'}
+                    disabled={a.status === 'booked'}
                   >
                     Edit
                   </Button>
@@ -401,7 +467,7 @@ const DoctorAvailability = () => {
                     variant="danger"
                     className="ml-2"
                     onClick={() => handleDelete(i)}
-                    disabled={loading || a.status === 'booked'}
+                    disabled={a.status === 'booked'}
                   >
                     Delete
                   </Button>
@@ -416,3 +482,4 @@ const DoctorAvailability = () => {
 };
 
 export default DoctorAvailability;
+

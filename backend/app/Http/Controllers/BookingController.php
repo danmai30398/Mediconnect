@@ -348,6 +348,7 @@ class BookingController extends Controller
                 'user_id' => $patient->user_id,
                 'patient_id' => $patient->patient_id,
                 'role_id' => $patient->user->role_id,
+                'title' => "Update Appointment",
                 'message' => "Your appointment status has been updated to: {$statusMessage}",
                 'type' => 'appointment_update',
                 'is_read' => false

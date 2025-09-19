@@ -136,8 +136,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/appointments/{appointmentId}/status', [BookingController::class, 'updateAppointmentStatus']);
 
     // Availability routes
-    Route::get('/availability', [DoctorAvailabilityController::class, 'index']);
-    Route::post('/availability', [DoctorAvailabilityController::class, 'store']);
-    Route::put('/availability/{id}', [DoctorAvailabilityController::class, 'update']);
-    Route::delete('/availability/{id}', [DoctorAvailabilityController::class, 'destroy']);
+    Route::get('/doctor/availability', [DoctorAvailabilityController::class, 'index']);
+    Route::post('/doctor/availability', [DoctorAvailabilityController::class, 'store']);
+    Route::put('/doctor/availability/{id}', [DoctorAvailabilityController::class, 'update']);
+    Route::delete('/doctor/availability/{id}', [DoctorAvailabilityController::class, 'destroy']);
 });

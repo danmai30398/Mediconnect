@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->integer('role_id')->nullable(); // Role nhận thông báo (1=Admin, 2=Doctor, 3=Patient)
             $table->boolean('is_read')->default(false); // Đã đọc chưa
             $table->timestamp('read_at')->nullable(); // Thời gian đọc
-            $table->unsignedBigInteger('doctor_id');
+            $table->unsignedBigInteger('doctor_id')->nullable();
             $table->unsignedBigInteger('patient_id')->nullable();
             $table->unsignedBigInteger('appointment_id')->nullable();
             $table->timestamps();

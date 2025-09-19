@@ -38,39 +38,43 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     try {
       const response = await axios.post('http://localhost:8000/api/login', {
-        username,
+        email: username,
         password
       });
 
       const { access_token, doctor } = response.data;
-      
+
       setToken(access_token);
       setUser(doctor);
       localStorage.setItem('token', access_token);
-      
+
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.message || 'Login failed' 
+      // Log lỗi chi tiết hơn
+      console.error("Login Error: ", error);  // Log toàn bộ lỗi
+
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Login failed',
       };
     }
   };
 
+
   const register = async (formData) => {
     try {
       const response = await axios.post('http://localhost:8000/api/register', formData);
-      
+
       const { access_token, doctor } = response.data;
-      
+
       setToken(access_token);
       setUser(doctor);
       localStorage.setItem('token', access_token);
-      
+
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: error.response?.data?.message || 'Registration failed',
         errors: error.response?.data?.errors || {}
       };

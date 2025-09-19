@@ -20,7 +20,7 @@ function AdminLayout() {
             if (Number(user.role_id) !== 1) {
                 // Not admin, redirect based on role
                 if (Number(user.role_id) === 2) {
-                    navigate('/doctor/dashboard');
+                    navigate('/dashboard');
                 } else if (Number(user.role_id) === 3) {
                     navigate('/patient/dashboard');
                 } else {
@@ -37,7 +37,7 @@ function AdminLayout() {
             await apiService.logout();
         } catch {}
         localStorage.removeItem('MediUser');
-        localStorage.removeItem('MediToken');
+        localStorage.removeItem('token');
         navigate('/login');
     };
 

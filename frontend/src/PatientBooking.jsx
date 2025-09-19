@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
-import "./Doctors.css";
+import "./App.css";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 

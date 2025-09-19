@@ -8,7 +8,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:800
 
 // Helper function để lấy auth headers
 const getAuthHeaders = () => {
-    const token = localStorage.getItem('MediToken') || '';
+    const token = localStorage.getItem('token') || '';
     return {
         'Authorization': `Bearer ${token}`, // Token xác thực
         'Content-Type': 'application/json', // Loại nội dung JSON
@@ -35,7 +35,7 @@ export const apiService = {
 
     logout: async () => {
         // Đăng xuất - xóa token khỏi server
-        const token = localStorage.getItem('MediToken') || '';
+        const token = localStorage.getItem('token') || '';
         const response = await fetch(`${API_BASE_URL}/api/logout`, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}` }
@@ -79,7 +79,7 @@ export const apiService = {
     getNotifications: async () => {
         const response = await fetch(`${API_BASE_URL}/api/notifications`, { 
             cache: "no-store",
-            headers: { "Authorization": `Bearer ${localStorage.getItem('MediToken') || ''}` }
+            headers: { "Authorization": `Bearer ${localStorage.getItem('token') || ''}` }
         });
         return response.json();
     },
@@ -87,7 +87,7 @@ export const apiService = {
     markNotificationAsRead: async (notificationId) => {
         const response = await fetch(`${API_BASE_URL}/api/notifications/${notificationId}/read`, {
             method: 'POST',
-            headers: { "Authorization": `Bearer ${localStorage.getItem('MediToken') || ''}` }
+            headers: { "Authorization": `Bearer ${localStorage.getItem('token') || ''}` }
         });
         return response;
     },
@@ -95,14 +95,14 @@ export const apiService = {
     markAllNotificationsAsRead: async () => {
         const response = await fetch(`${API_BASE_URL}/api/notifications/read-all`, {
             method: 'POST',
-            headers: { "Authorization": `Bearer ${localStorage.getItem('MediToken') || ''}` }
+            headers: { "Authorization": `Bearer ${localStorage.getItem('token') || ''}` }
         });
         return response;
     },
 
     getUnreadNotificationCount: async () => {
         const response = await fetch(`${API_BASE_URL}/api/notifications/unread-count`, {
-            headers: { "Authorization": `Bearer ${localStorage.getItem('MediToken') || ''}` }
+            headers: { "Authorization": `Bearer ${localStorage.getItem('token') || ''}` }
         });
         return response.json();
     },
@@ -178,7 +178,7 @@ export const apiService = {
     },
 
     createDoctor: async (doctorData) => {
-        const token = localStorage.getItem('MediToken') || '';
+        const token = localStorage.getItem('token') || '';
         const headers = { 'Authorization': `Bearer ${token}` };
         
         // Không set Content-Type cho FormData, browser sẽ tự set
@@ -195,7 +195,7 @@ export const apiService = {
     },
 
     updateDoctor: async (doctorId, doctorData) => {
-        const token = localStorage.getItem('MediToken') || '';
+        const token = localStorage.getItem('token') || '';
         const headers = { 'Authorization': `Bearer ${token}` };
         
         // Không set Content-Type cho FormData, browser sẽ tự set
@@ -247,7 +247,7 @@ export const apiService = {
     },
 
     createPatient: async (patientData) => {
-        const token = localStorage.getItem('MediToken') || '';
+        const token = localStorage.getItem('token') || '';
         const headers = { 'Authorization': `Bearer ${token}` };
         
         // Không set Content-Type cho FormData, browser sẽ tự set
@@ -264,7 +264,7 @@ export const apiService = {
     },
 
     updatePatient: async (patientId, patientData) => {
-        const token = localStorage.getItem('MediToken') || '';
+        const token = localStorage.getItem('token') || '';
         const headers = { 'Authorization': `Bearer ${token}` };
         
         // Không set Content-Type cho FormData, browser sẽ tự set
@@ -289,7 +289,7 @@ export const apiService = {
     },
 
     uploadPatientImage: async (patientId, formData) => {
-        const token = localStorage.getItem('MediToken') || '';
+        const token = localStorage.getItem('token') || '';
         const response = await fetch(`${API_BASE_URL}/api/patients/${patientId}/upload-image`, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}` },
@@ -299,7 +299,7 @@ export const apiService = {
     },
 
     uploadDoctorImage: async (doctorId, formData) => {
-        const token = localStorage.getItem('MediToken') || '';
+        const token = localStorage.getItem('token') || '';
         const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/upload-image`, {
             method: 'POST',
             headers: { 
@@ -367,7 +367,7 @@ export const apiService = {
     uploadContentImage: async (contentId, formData) => {
         const response = await fetch(`${API_BASE_URL}/api/contents/${contentId}/upload-image`, {
             method: 'POST',
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('MediToken') || ''}` },
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` },
             body: formData
         });
         return response;

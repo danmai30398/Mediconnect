@@ -12,6 +12,9 @@ use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\ContactMessageController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ViewDoctorsController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\DoctorAvailabilityController;
+use App\Http\Controllers\DoctorProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -21,12 +24,13 @@ Route::get('/categories/{id}/contents', [ContentController::class, 'getByCategor
 Route::get('/contents/{id}', [ContentController::class, 'show']);
 Route::get('/search', [ContentController::class, 'search']);
 
-Route::get('me', [UserController::class, 'me']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+Route::get('me', [UserController::class, 'me']);
+
     Route::post('logout', [UserController::class, 'logout']);
     Route::post('change-password', [UserController::class, 'changePassword']);
     Route::get('doctor/appointments', [DoctorController::class, 'appointments']);
@@ -108,3 +112,31 @@ Route::get('/sse/appointments', function () {
 });
 
 //Phan cua Duyen - End
+
+Route::get('/cities', [UserController::class, 'getCities']);
+Route::get('/available-slots', [BookingController::class, 'getAvailableSlots']);
+Route::post('/book-appointment', [BookingController::class, 'bookAppointment']);
+
+// Protected routes
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/doctor/me', [App\Http\Controllers\DoctorController::class, 'me']);
+    Route::get('/doctor/dashboard', [App\Http\Controllers\DoctorController::class, 'dashboard']);
+    Route::get('/doctor/patients', [App\Http\Controllers\DoctorController::class, 'getPatients']);
+    Route::get('/doctor/stats', [App\Http\Controllers\DoctorController::class, 'getStats']);
+    Route::post('/doctor/avatar', [App\Http\Controllers\DoctorController::class, 'uploadAvatar']);
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
+    Route::post('/doctor/update', [App\Http\Controllers\DoctorProfileController::class, 'update']);
+
+    // Booking routes
+    Route::get('/appointments', [BookingController::class, 'getDoctorAppointments']);
+    Route::post('/appointments/{appointmentId}/status', [BookingController::class, 'updateAppointmentStatus']);
+
+    // Availability routes
+    Route::get('/availability', [DoctorAvailabilityController::class, 'index']);
+    Route::post('/availability', [DoctorAvailabilityController::class, 'store']);
+    Route::put('/availability/{id}', [DoctorAvailabilityController::class, 'update']);
+    Route::delete('/availability/{id}', [DoctorAvailabilityController::class, 'destroy']);
+});

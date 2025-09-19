@@ -31,17 +31,17 @@ function LoginByPhone() {
             if (data.status === "success") {
                 // Clear old data first
                 localStorage.removeItem("MediUser");
-                localStorage.removeItem("MediToken");
+                localStorage.removeItem("token");
                 
                 localStorage.setItem("MediUser", JSON.stringify(data.user));
-                if (data.token) localStorage.setItem("MediToken", data.token);
+                if (data.token) localStorage.setItem("token", data.token);
                 
                 // Navigation dựa trên role_id - GIỮ NGUYÊN LOGIC CỦA DUYEN
                 const role = Number(data.user.role_id);
                 if (role === 1) {
                     navigate("/admin");
                 } else if (role === 2) {
-                    navigate("/doctor/dashboard");
+                    navigate("/dashboard");
                 } else if (role === 3) {
                     navigate("/patientLayout"); // GIỮ NGUYÊN ROUTE CỦA DUYEN
                 } else {

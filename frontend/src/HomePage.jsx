@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import labImg from "./assets/pic/departments/lab.png";
 import dentalImg from "./assets/pic/departments/dental.png";
@@ -34,7 +34,7 @@ import { FaHeartbeat } from "react-icons/fa";
 
 function HomePage() {
     const navigate = useNavigate();
- 
+
     const goBooking = () => {
         const token = localStorage.getItem("token");
         navigate(token ? "/search-doctor" : "/login");
@@ -79,23 +79,23 @@ function HomePage() {
                 <div className="container grid">
                     <div className="about-text">
                         <h2>About Our <span className="text-accent">MediConnect Group</span></h2>
-<p>MediConnect is a digital healthcare companion designed to make access to medical care simple, fast, and reliable.</p>
-<p>We empower patients to find the right doctors, book appointments online, and manage their health journey through a seamless and secure platform. No more waiting rooms or confusing processes—just clarity, convenience, and care.</p>
-<p>At MediConnect, we believe healthcare should be personal, proactive, and always within reach. Whether it’s a routine check-up or urgent need, MediConnect Group puts your health at your fingertips.</p>
-<p style={{
-  textAlign: "center",
-  fontWeight: "600",
-  fontSize: "1.1rem",
-  color: "#1e293b",
-  marginTop: "40px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  gap: "10px"
-}}>
-  <FaHeartbeat color="#e11d48" />
-  From appointment to assurance — MediConnect Group puts healthcare in your hands.
-</p>
+                        <p>MediConnect is a digital healthcare companion designed to make access to medical care simple, fast, and reliable.</p>
+                        <p>We empower patients to find the right doctors, book appointments online, and manage their health journey through a seamless and secure platform. No more waiting rooms or confusing processes—just clarity, convenience, and care.</p>
+                        <p>At MediConnect, we believe healthcare should be personal, proactive, and always within reach. Whether it’s a routine check-up or urgent need, MediConnect Group puts your health at your fingertips.</p>
+                        <p style={{
+                            textAlign: "center",
+                            fontWeight: "600",
+                            fontSize: "1.1rem",
+                            color: "#1e293b",
+                            marginTop: "40px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "10px"
+                        }}>
+                            <FaHeartbeat color="#e11d48" />
+                            From appointment to assurance — MediConnect Group puts healthcare in your hands.
+                        </p>
 
                         <button className="btn btn-primary">Read More</button>
                     </div>
@@ -163,67 +163,67 @@ function HomePage() {
 
             {/* EXPERTS */}
             <section className="section" id="experts">
-  <div className="container">
-    <h2 className="section-title">Our <span className="text-accent">Experts</span></h2>
-    <div className="doctor-grid">
-      {[
-        { img: d1, name: "Dr. Henry Jones", role: "Cardiologist" },
-        { img: d2, name: "Dr. Elizabeth Henry", role: "Dentist" },
-        { img: d3, name: "Dr. Williams Jones", role: "Neurologist" },
-        { img: d4, name: "Dr. Smith Johnson", role: "Gynecologist" }
-      ].map((doc, i) => (
-        <div className="doctor-card" key={i}>
-          <img src={doc.img} alt={doc.name} className="doctor-img" />
-          <div className="doctor-details">
-            <h4>{doc.name}</h4>
-            <p>- {doc.role}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
+                <div className="container">
+                    <h2 className="section-title">Our <span className="text-accent">Experts</span></h2>
+                    <div className="doctor-grid">
+                        {[
+                            { img: d1, name: "Dr. Henry Jones", role: "Cardiologist" },
+                            { img: d2, name: "Dr. Elizabeth Henry", role: "Dentist" },
+                            { img: d3, name: "Dr. Williams Jones", role: "Neurologist" },
+                            { img: d4, name: "Dr. Smith Johnson", role: "Gynecologist" }
+                        ].map((doc, i) => (
+                            <div className="doctor-card" key={i}>
+                                <img src={doc.img} alt={doc.name} className="doctor-img" />
+                                <div className="doctor-details">
+                                    <h4>{doc.name}</h4>
+                                    <p>- {doc.role}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
 
 
-{/* TESTIMONIALS */}
-<section className="section testi" style={{ background: "#fff" }}>
-  <div className="container">
-    <h2 className="section-title">
-      TESTI <span className="text-accent">MONIALS</span>
-    </h2>
-    <div className="row">
-      {[
-        {
-          name: "Simone Andreea",
-          role: "Lecturers",
-          quote:
-            "MediConnect helped me find the right specialist within minutes. It’s fast, secure, and so convenient!",
-        },
-        {
-          name: "John Carter",
-          role: "Engineer",
-          quote:
-            "I used to wait weeks for appointments—now I book them in seconds. MediConnect changed how I manage my health.",
-        },
-        {
-          name: "Lisa Monroe",
-          role: "Freelancers",
-          quote:
-            "The doctor I found through MediConnect really listened. Game changer!",
-        },
-      ].map((person, i) => (
-        <div className="box" key={i}>
-          <div className="name">{person.name}</div>
-          <div className="role">{person.role}</div>
-          <div className="stars" style={{ color: "#fbc02d", margin: "5px 0" }}>
-            {"⭐️⭐️⭐️⭐️⭐️"}
-          </div>
-          <p style={{ color: "#6b6f72" }}>{person.quote}</p>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
+            {/* TESTIMONIALS */}
+            <section className="section testi" style={{ background: "#fff" }}>
+                <div className="container">
+                    <h2 className="section-title">
+                        TESTI <span className="text-accent">MONIALS</span>
+                    </h2>
+                    <div className="row">
+                        {[
+                            {
+                                name: "Simone Andreea",
+                                role: "Lecturers",
+                                quote:
+                                    "MediConnect helped me find the right specialist within minutes. It’s fast, secure, and so convenient!",
+                            },
+                            {
+                                name: "John Carter",
+                                role: "Engineer",
+                                quote:
+                                    "I used to wait weeks for appointments—now I book them in seconds. MediConnect changed how I manage my health.",
+                            },
+                            {
+                                name: "Lisa Monroe",
+                                role: "Freelancers",
+                                quote:
+                                    "The doctor I found through MediConnect really listened. Game changer!",
+                            },
+                        ].map((person, i) => (
+                            <div className="box" key={i}>
+                                <div className="name">{person.name}</div>
+                                <div className="role">{person.role}</div>
+                                <div className="stars" style={{ color: "#fbc02d", margin: "5px 0" }}>
+                                    {"⭐️⭐️⭐️⭐️⭐️"}
+                                </div>
+                                <p style={{ color: "#6b6f72" }}>{person.quote}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
 
 
             {/* TOPICS */}
@@ -232,7 +232,7 @@ function HomePage() {
                     <h2 className="section-title">
                         HEALTH <span className="text-accent">TOPICS</span>
                     </h2>
-                    <div className="cards">
+                    <div className="cards" style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
                         {[
                             { img: disease, title: "Disease", id: 1, des: "Explore articles on symptoms, treatments, and common diseases." },
                             { img: prevention, title: "Preventions", id: 2, des: "Learn how to protect yourself and your loved ones with expert prevention tips." },
@@ -242,18 +242,42 @@ function HomePage() {
                                 className="card"
                                 key={i}
                                 onClick={() => navigate(`/category/${it.id}`)}
-                                style={{ cursor: "pointer" }}
+                                style={{
+                                    cursor: "pointer",
+                                    width: '300px',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    textAlign: 'center',
+                                    height: '400px',
+                                    borderRadius: '8px',
+                                    overflow: 'hidden',
+                                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                                    transition: 'transform 0.3s ease',
+                                }}
                             >
-                                <img alt={it.title} src={it.img} className="topic-img" />
-                                <div className="body">
-                                    <div className="title">{it.title}</div>
-                                    <div className="meta">{it.des}</div>
+                                <img
+                                    alt={it.title}
+                                    src={it.img}
+                                    className="topic-img"
+                                    style={{
+                                        width: '100%',
+                                        height: '200px',
+                                        objectFit: 'cover',
+                                    }}
+                                />
+                                <div className="body" style={{ padding: '15px' }}>
+                                    <div className="title" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{it.title}</div>
+                                    <div className="meta" style={{ fontSize: '0.9rem', color: '#777' }}>{it.des}</div>
                                 </div>
                             </article>
                         ))}
                     </div>
                 </div>
             </section>
+
+
 
             {/* CONTACT US */}
             <ContactSection />

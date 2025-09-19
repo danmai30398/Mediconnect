@@ -17,7 +17,7 @@ function PatientDashboard() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = localStorage.getItem('MediToken') || '';
+                const token = localStorage.getItem('token') || '';
                 if (!token) return;
 
                 // Get patient info

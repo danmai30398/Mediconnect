@@ -76,7 +76,7 @@ export const HTTP_HEADERS = {
 // Các key lưu trữ trong localStorage
 export const STORAGE_KEYS = {
     USER: 'MediUser',   // Thông tin user đã đăng nhập
-    TOKEN: 'MediToken'  // Token xác thực
+    TOKEN: 'token'  // Token xác thực
 };
 
 // Các tùy chọn cache cho request

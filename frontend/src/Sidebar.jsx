@@ -1,66 +1,83 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaTachometerAlt, FaCalendarAlt, FaUsers, FaEnvelope, FaSignOutAlt } from "react-icons/fa";
-import { useDoctor } from "./DoctorContext"; 
+import { useDoctor } from "./DoctorContext";
+import { useAuth } from "./AuthContext";
+import { Nav, Button, Image, Col, Row } from "react-bootstrap";
 
 const Sidebar = () => {
   const location = useLocation();
-  const { doctor } = useDoctor(); 
+  const navigate = useNavigate();
+  const { doctor } = useDoctor();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   const linkClass = (path) =>
-    location.pathname === path ? "active-link" : "inactive-link";
+    location.pathname === path ? "active" : "inactive";
 
   return (
-    <div className="sidebar">
-      <div className="logo-container">
-        <img
+    <Col md={2} className="sidebar" style={{ backgroundColor: "#0069D9" }}>
+      <Row className="d-flex align-items-center justify-content-center p-3 doctor-profile-logo-row">
+        <Image
           src="/doctor-images/logo.png"
           alt="MediConnect Logo"
-          className="sidebar-logo"
+          fluid
         />
-      </div>
+      </Row>
 
-      <div className="profile-section">
-        <div className="avatar-wrapper">
-          <img
-            src={doctor?.avatar || "/default-avatar.jpg"}
+      <Row className="d-flex flex-column align-items-center justify-content-center p-3 text-center" style={{ width: '100%' }}>
+        <div className="avatar-wrapper mb-2">
+          <Image
+            src={doctor?.image ? `http://localhost:8000${doctor.image}` : "/default-avatar.jpg"}
             alt="Doctor"
-            className="avatar"
+            roundedCircle
+            fluid
+            style={{ width: "120px", height: "120px" }}
           />
         </div>
-        <h3 className="name">{doctor?.name || "Doctor"}</h3>
-        <p className="role">{doctor?.role || "Specialist"}</p>
-      </div>
+        <h5>{doctor?.name || user?.name || "Doctor"}</h5>
+        <p className="text-muted">{doctor?.specialization || "Specialist"}</p>
+      </Row>
 
-      <ul className="nav-links">
-        <li>
-          <Link to="/dashboard" className={linkClass("/dashboard")}>
+      <Nav className="flex-column">
+        <Nav.Item>
+          <Nav.Link as={Link} to="/dashboard" className={`nav-link ${linkClass("/dashboard")}`}>
             <FaTachometerAlt /> Dashboard
-          </Link>
-        </li>
-        <li>
-          <Link to="/doctorprofile" className={linkClass("/doctorprofile")}>
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link as={Link} to="/doctorprofile" className={`nav-link ${linkClass("/doctorprofile")}`}>
             <FaCalendarAlt /> Doctor Profile
-          </Link>
-        </li>
-        <li>
-          <Link to="/AvailabilityPage" className={linkClass("/AvailabilityPage")}>
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link as={Link} to="/AvailabilityPage" className={`nav-link ${linkClass("/AvailabilityPage")}`}>
             <FaUsers /> Availability Scheduling
-          </Link>
-        </li>
-        <li>
-          <Link to="/docappointment" className={linkClass("/docappointment")}>
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link as={Link} to="/docappointment" className={`nav-link ${linkClass("/docappointment")}`}>
             <FaEnvelope /> Appointment Viewing
-          </Link>
-        </li>
-      </ul>
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link as={Link} to="/appointment-management" className={`nav-link ${linkClass("/appointment-management")}`}>
+            <FaEnvelope /> Appointment Management
+          </Nav.Link>
+        </Nav.Item>
+      </Nav>
 
-      <div className="logout">
-        <Link to="/logout" className="inactive-link">
+
+      <div className="mt-auto p-3">
+        <Button variant="link" onClick={handleLogout} className="text-danger d-flex align-items-center">
           <FaSignOutAlt /> Logout
-        </Link>
+        </Button>
       </div>
-    </div>
+    </Col>
   );
 };
 

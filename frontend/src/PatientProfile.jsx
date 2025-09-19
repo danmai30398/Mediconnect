@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Doctors.css";
+import "./App.css";
 import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -8,7 +8,7 @@ function PatientProfile() {
     const navigate = useNavigate();
 
     // Lấy token từ localStorage
-    const token = localStorage.getItem('MediToken');
+    const token = localStorage.getItem('token');
 
     const user = JSON.parse(localStorage.getItem('MediUser'));
     const id = user?.id;

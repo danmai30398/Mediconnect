@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Button, Badge, Container, Table, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from './services/apiService';
-import './Doctors.css';
+import './App.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:8000";
 

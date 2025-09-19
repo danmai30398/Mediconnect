@@ -127,7 +127,7 @@ function NotificationBell() {
     };
 
     return (
-        <Dropdown show={show} onToggle={setShow} align="end">
+        <Dropdown show={show} onToggle={setShow} align="end" className="notification-bell">
             <Dropdown.Toggle 
                 as="button" 
                 variant="link" 
@@ -169,7 +169,7 @@ function NotificationBell() {
                         <div className="mt-2">Loading notifications...</div>
                     </Dropdown.ItemText>
                 ) : notifications.length === 0 ? (
-                    <Dropdown.ItemText className="text-center py-3 text-muted">
+                    <Dropdown.ItemText className="text-center py-3 text-muted empty-notification">
                         <i className="fas fa-bell-slash fa-2x mb-2"></i>
                         <div>No new notifications</div>
                     </Dropdown.ItemText>
@@ -177,16 +177,15 @@ function NotificationBell() {
                     notifications.map((notification, index) => (
                         <Dropdown.Item 
                             key={notification.id} 
-                            className={`py-2 px-3 ${!notification.is_read ? 'bg-light' : ''}`}
+                            className={`py-2 px-3 ${!notification.is_read ? 'unread' : 'read'}`}
                             style={{ 
                                 borderBottom: index < notifications.length - 1 ? '1px solid #f8f9fa' : 'none',
-                                borderLeft: !notification.is_read ? '3px solid #007bff' : 'none'
                             }}
                             onClick={() => !notification.is_read && markAsRead(notification.id)}
                         >
                             <div className="d-flex align-items-start">
-                                <div className={`me-3 mt-1`}>
-                                    <i className={`${getStatusIcon(notification.type.split('_')[1])} text-${getStatusColor(notification.type.split('_')[1])}`}></i>
+                                <div className="me-3 mt-1">
+                                    <i className={`${getStatusIcon(notification.type.split('_')[1])} status-icon text-${getStatusColor(notification.type.split('_')[1])}`}></i>
                                 </div>
                                 <div className="flex-grow-1">
                                     <div className="fw-medium text-dark mb-1" style={{ fontSize: '0.9rem' }}>
@@ -234,8 +233,3 @@ function NotificationBell() {
 }
 
 export default NotificationBell;
-
-
-
-
-

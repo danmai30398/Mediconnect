@@ -974,3 +974,287 @@ body {
 .time_choosed{
   background-color: #13b5e0 !important;
 }
+
+/* DAN DOCTOR */
+
+/* General Styles */
+.doctor_profile_container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.doctor_profile_left_panel {
+  flex: 1;
+  text-align: center;
+}
+
+.doctor_profile_avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.doctor_profile_avatar-upload {
+  display: inline-block;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.doctor_profile_right_panel {
+  flex: 2;
+  padding-left: 30px;
+}
+
+.doctor_profile_header {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #343a40;
+}
+
+.doctor_profile_specialization {
+  font-size: 1.2rem;
+  color: #6c757d;
+}
+
+.doctor_profile_info-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.doctor_profile_info-row label {
+  flex-basis: 120px;
+  font-weight: bold;
+  color: #495057;
+}
+
+.doctor_profile_info-row span,
+.doctor_profile_info-row input,
+.doctor_profile_info-row select,
+.doctor_profile_info-row textarea {
+  flex-grow: 1;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.doctor_profile_info-row input:focus,
+.doctor_profile_info-row select:focus,
+.doctor_profile_info-row textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.doctor_profile_error {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+
+.doctor_profile_success-msg {
+  color: green;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.doctor_profile_button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.doctor_profile_button-container button {
+  width: 48%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.doctor_profile_button-container button:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.doctor_profile_button-container .doctor_profile_save-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.doctor_profile_button-container .doctor_profile_save-btn:hover {
+  background-color: #0056b3;
+}
+
+.doctor_profile_button-container .doctor_profile_cancel-btn {
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  color: #007bff;
+}
+
+.doctor_profile_button-container .doctor_profile_cancel-btn:hover {
+  background-color: #e9ecef;
+}
+
+.doctor_profile_avatar-upload-btn {
+  cursor: pointer;
+  font-weight: bold;
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.doctor_profile_select {
+  background-color: #ffffff;
+  color: #495057;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 8px 12px;
+}
+
+.doctor_profile_textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .doctor_profile_container {
+    flex-direction: column;
+  }
+
+  .doctor_profile_left_panel {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .doctor_profile_right_panel {
+    padding-left: 0;
+  }
+
+  .doctor_profile_button-container {
+    flex-direction: column;
+  }
+
+  .doctor_profile_button-container button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+/* Cập nhật lại CSS cho ảnh */
+.doctor_profile_profile-avatar {
+  cursor: pointer; /* Thêm con trỏ tay khi hover vào ảnh */
+  border-radius: 50%; /* Làm tròn ảnh */
+  width: 120px;
+  height: 120px;
+  object-fit: cover; /* Đảm bảo ảnh không bị méo */
+  transition: transform 0.3s ease-in-out; /* Hiệu ứng zoom nhẹ khi hover */
+}
+
+.doctor_profile_profile-avatar:hover {
+  transform: scale(1.05); /* Zoom ảnh khi hover */
+}
+/* Cải thiện giao diện thông báo */
+.notification-bell .dropdown-menu {
+    min-width: 350px;
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 8px;
+}
+
+/* Nền thông báo chưa đọc */
+.notification-bell .dropdown-item.unread {
+    background-color: #f0f8ff; /* Nền sáng */
+    border-left: 3px solid #007bff; /* Viền trái màu xanh để phân biệt */
+}
+
+/* Nền thông báo đã đọc */
+.notification-bell .dropdown-item.read {
+    background-color: #f9f9f9; /* Nền nhẹ nhàng cho thông báo đã đọc */
+}
+
+/* Hiệu ứng hover */
+.notification-bell .dropdown-item:hover {
+    background-color: #e9ecef; /* Tăng độ sáng khi hover */
+}
+
+/* Icon trạng thái thông báo */
+.notification-bell .status-icon {
+    font-size: 1.2rem;
+    margin-top: 2px;
+}
+
+/* Thông báo khi chưa có dữ liệu */
+.notification-bell .empty-notification {
+    text-align: center;
+    padding: 50px;
+    color: #6c757d;
+}
+
+.notification-bell .badge-danger {
+    font-size: 0.7rem;
+    min-width: 18px;
+    height: 18px;
+}
+
+/* Tăng độ tương phản cho thông báo chưa đọc */
+.notification-bell .unread .status-icon {
+    color: #007bff;
+}
+/* Đảm bảo các liên kết trong sidebar có chữ và icon màu trắng */
+.nav-link {
+    color: white !important; /* Màu chữ trắng */
+    display: flex; /* Để icon và chữ căn chỉnh thẳng hàng */
+    align-items: center; /* Căn giữa icon và chữ */
+}
+
+.nav-link .fa { 
+    margin-right: 8px; /* Khoảng cách giữa icon và chữ */
+}
+
+/* Khi item không được chọn (inactive link), vẫn giữ màu trắng */
+.nav-link.inactive {
+    opacity: 0.7; /* Giảm độ sáng của liên kết không được chọn */
+}
+
+/* Khi item được chọn (active link), chữ và icon vẫn trắng nhưng có nền khác */
+.nav-link.active {
+    background-color: #0069D9; /* Nền xanh cho link đang được chọn */
+    color: white !important; /* Đảm bảo chữ vẫn trắng */
+}
+
+.nav-link:hover {
+    color: white !important; /* Đảm bảo chữ và icon vẫn trắng khi hover */
+    background-color: #0051D9; /* Nền xanh khi hover */
+}
+
+.features {
+  display: flex;
+  justify-content: center;  /* Căn giữa các phần tử theo chiều ngang */
+  align-items: center;      /* Căn giữa các phần tử theo chiều dọc */
+  flex-wrap: wrap;          /* Cho phép các phần tử xuống dòng khi không đủ không gian */
+  gap: 20px;                /* Khoảng cách giữa các phần tử */
+  padding: 50px 0;          /* Thêm padding để tạo khoảng cách từ trên xuống dưới */
+}
+
+.outstanding {
+  text-align: center;       /* Căn giữa văn bản trong mỗi phần tử */
+  font-size: 1.1rem;        /* Tăng kích thước chữ */
+  font-weight: bold;
+  color: #22c4b8;
+  max-width: 250px;         /* Giới hạn chiều rộng để các phần tử không bị quá rộng */
+}
+
+.outstanding span {
+  font-size: 0.9rem;
+  font-weight: 400;
+  opacity: 0.9;
+}

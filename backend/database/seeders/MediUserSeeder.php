@@ -40,5 +40,14 @@ class MediUserSeeder extends Seeder
                 'role_id'  => 3,
             ]);
         }
+
+        if (!MediUser::where('user_id', 5)->exists()) {
+            MediUser::create([
+                'username' => 'admin@mediconnect.vn',
+                'email' => 'admin@mediconnect.vn',
+                'password' => bcrypt('admin123'),
+                'role_id'  => 1,
+            ]);
+        }
     }
 }

@@ -52,6 +52,7 @@ Route::get('doctors/specializations', [ViewDoctorsController::class, 'specializa
 // Mapping User với Profile
 Route::post('login', [UserController::class, 'login']);
 Route::post('users/{id}/create-profile', [UserController::class, 'createProfile']);
+Route::post('users/insert', [UserController::class, 'insert']);
 Route::post('users/{id}/unlock', [UserController::class, 'unlock']);
 Route::post('contact-messages/{id}/status', [ContactMessageController::class, 'updateStatus']);
 // Public read endpoints

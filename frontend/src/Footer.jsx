@@ -10,7 +10,7 @@ function Footer() {
                     <div>
                         <h4>MediConnect Group</h4>
                         <p>
-                           MediConnect is a digital healthcare platform that connects patients with trusted doctors, allows instant appointment booking, and supports personalized care management—all in one seamless experience.
+                            MediConnect is a digital healthcare platform that connects patients with trusted doctors, allows instant appointment booking, and supports personalized care management—all in one seamless experience.
                         </p>
                     </div>
 
@@ -42,7 +42,20 @@ function Footer() {
                 </div>
             </div>
 
-            <div className="bottom">Copyright© MediConnect Group. All right reserved.</div>
+            <div
+                className="bottom"
+                style={{
+                    display: "flex",
+                    justifyContent: "center", 
+                    alignItems: "center",     
+                    height: "50px",          
+                    padding: "10px",
+                }}
+            >
+                Copyright© MediConnect Group. All right reserved.
+            </div>
+
+
         </footer>
     );
 }

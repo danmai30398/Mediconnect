@@ -86,6 +86,29 @@ class UserController extends Controller
         return response()->json(['message' => 'Create a user successfully']);
     }
 
+
+    public function insert(Request $request)
+    {
+        //create and store 
+        $validated = $request->validate([
+            'username' => 'required|string|unique:medi_users,username',
+            'password' => 'required|string|min:6',
+            'role' => 'required|int',
+        ]);
+
+        DB::transaction(function () use ($validated) {
+            //  Create user
+            $user = MediUser::create([
+                'username' => $validated['username'],
+                'password' => Hash::make($validated['password']),
+                'role_id' => $validated['role'],
+            ]);
+
+        });
+
+        return response()->json(['message' => 'Create a user successfully']);
+    }
+
     /**
      * Display the specified resource.
      */

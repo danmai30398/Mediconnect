@@ -28,14 +28,14 @@ function Category() {
   return (
     <div className="section" style={{ background: "#f6f8f9", minHeight: "60vh" }}>
       <div className="container">
-        <h2 className="section-title">{category}</h2>
+        <h2 className="section-title">{category.category_name}</h2>
         <div className="cards">
           {contents.length === 0 ? (
             <p>No posts available in this category.</p>
           ) : (
             contents.map(p => (
               <Link
-                to={`/post/${p.id}`}
+                to={`/post/${p.content_id}`}
                 key={p.id}
                 style={{ textDecoration: "none", color: "inherit" }}
               >

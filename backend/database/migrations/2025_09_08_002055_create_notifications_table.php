@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -21,11 +20,18 @@ return new class extends Migration
             $table->integer('role_id')->nullable(); // Role nhận thông báo (1=Admin, 2=Doctor, 3=Patient)
             $table->boolean('is_read')->default(false); // Đã đọc chưa
             $table->timestamp('read_at')->nullable(); // Thời gian đọc
+            $table->unsignedBigInteger('doctor_id');
+            $table->unsignedBigInteger('patient_id')->nullable();
+            $table->unsignedBigInteger('appointment_id')->nullable();
             $table->timestamps();
-            
+
             $table->index(['user_id', 'is_read']);
             $table->index(['role_id', 'is_read']);
             $table->index('created_at');
+
+            $table->foreign('doctor_id')->references('doctor_id')->on('doctors')->onDelete('cascade');
+            $table->foreign('patient_id')->references('patient_id')->on('patients')->onDelete('set null');
+            $table->foreign('appointment_id')->references('appointment_id')->on('appointments')->onDelete('set null');
         });
     }
 

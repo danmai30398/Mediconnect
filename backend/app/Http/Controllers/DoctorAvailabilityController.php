@@ -98,21 +98,7 @@ class DoctorAvailabilityController extends Controller
     public function update(Request $request, $id)
     {
         Log::info('Updating availability for ID: ' . $id);
-        $validator = Validator::make($request->all(), [
-            'available_date' => 'sometimes|date',
-            'available_time' => 'sometimes|date_format:H:i',
-            'status' => 'sometimes|in:available,booked'
-        ]);
-
-
-        if ($validator->fails()) {
-            \Log::info('err: ' . $validator->errors());
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 400);
-        }
+   
 
         $availability = AvailabilityScheduling::findOrFail($id);
 

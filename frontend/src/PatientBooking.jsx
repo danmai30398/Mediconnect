@@ -15,7 +15,7 @@ function PatientBooking() {
     const [docProfile, setDocProfile] = useState([]);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/doctors/${id}`)
+        fetch(`${API_BASE_URL}/api/doc/${id}`)
             .then(res => res.json())
             .then(data => setDocProfile(data))
             .catch(err => console.error("Fetch error:", err));
@@ -29,20 +29,24 @@ function PatientBooking() {
     // console.log("Da chon ID:", selectedId);
 
     //lay lai du lieu patient
+    const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('MediUser'));
-    // console.log("User: ", user);
-    // const id = localStorage.getItem('id');
     const userId = user?.id;
-    console.log("User ID:", userId);
+    // console.log("User ID:", userId);
     const [userProfile, setUserProfile] = useState();
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/user/${userId}`)
+            fetch(`${API_BASE_URL}/api/user/${userId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            })
             .then(res => res.json())
             .then(data => setUserProfile(data))
             .catch(err => console.error("Fetch error:", err));
-        console.log("data:", userProfile);
-    }, [userId]);
+            
+        }, [token]);
 
     //confirm booking or not
     const [confirm, setConfirm] = useState();

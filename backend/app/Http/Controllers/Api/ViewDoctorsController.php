@@ -16,7 +16,7 @@ class ViewDoctorsController extends Controller
     {
         // Lấy tất cả bác sỹ kèm thông tin city
         $doctors = Doctor::with('city')->get();
-
+        $doctors->makeHidden(['password', 'dob', 'phone', 'email', 'gender']);
         return response()->json($doctors);
     }
 

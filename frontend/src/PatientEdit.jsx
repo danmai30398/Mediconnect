@@ -163,7 +163,7 @@ function PatientEdit() {
 
         formData.append('_method', 'PUT');
         try {
-            const res = await fetch(`${API_BASE_URL}/api/user/${id}`, {
+            const res = await fetch(`${API_BASE_URL}/api/update/patient/${id}`, {
                 method: 'POST',
                 headers: { 'Accept': 'application/json', },
                 body: formData,

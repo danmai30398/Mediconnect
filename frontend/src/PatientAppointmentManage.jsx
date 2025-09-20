@@ -16,17 +16,24 @@ function PatientAppointmentManage() {
     const [loading, setLoading] = useState(true);
 
     //lay lai user_id cua patient
+    const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('MediUser'));
-    const id = user?.id;
+    const userId = user?.id;
+    // console.log("User ID:", userId);
     const [profile, setProfile] = useState();
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/user/${id}`)
+        fetch(`${API_BASE_URL}/api/user/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        })
             .then(res => res.json())
             .then(data => setProfile(data))
             .catch(err => console.error("Fetch error:", err));
-        // console.log("data:", profile);
-    }, [id]);
+
+    }, [token]);
 
     const patient_id = profile?.user?.patient?.patient_id;
     // console.log('patient id: ', patient_id);

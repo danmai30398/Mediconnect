@@ -15,7 +15,7 @@ function DocQuickViews() {
     const fetchProfiles = async () => {
         const startTime = Date.now();
         try {
-            const res = await fetch(`${API_BASE_URL}/api/doctors`);
+            const res = await fetch(`${API_BASE_URL}/api/doc`);
             const data = await res.json();
             setProfiles(data);
             console.log("data:", data);

@@ -445,4 +445,42 @@ class UserController extends Controller
         $cities = City::all();
         return response()->json($cities);
     }
+
+    public function updatePatient(Request $request, string $id)
+    {
+        // Log::info($request->all());
+        // Log::info('=== API UPDATE USER ===');
+        // Log::info('REQUEST all:', $request->all());
+        // Log::info('FILES:', $request->allFiles());
+        $user = MediUser::with('patient')->findOrFail($id);
+
+        $data = $request->except(['patient']);
+
+        // check password
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
+        }
+
+        // update bảng patient
+        $user->update($data);
+
+        if ($user->patient && $request->has('patient')) {
+            $patientData = $request->input('patient');
+
+            // Kiem tra neu co anh moi
+            if ($request->hasFile('image')) {
+                $path = $request->file('image')->store('avatars', 'public');
+                $patientData['image'] = $path;
+                Log::info('Đã upload ảnh mới: ' . $path);
+            }
+            $user->patient->update($patientData);
+        }
+        // Reload relationship to get the newest data
+        $user->load('patient');
+
+        return response()->json($user);
+    }
+
 }

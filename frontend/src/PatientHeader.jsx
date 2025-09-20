@@ -10,6 +10,7 @@ function PatientHeader({ onNavClick }) {
   const handleLogout = () => {
     localStorage.removeItem('MediUser');
     localStorage.removeItem('showWelcome');
+    localStorage.removeItem('token');
     navigate('/home');
   };
 

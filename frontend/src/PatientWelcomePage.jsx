@@ -21,7 +21,7 @@ function PatientWelcomePage() {
 
     return (
         <div className="text-center">
-            <br /><br /><br /><br /><br />
+            <br /><br /> <br />
             <h4>Welcome, <span className="text-primary">{profile?.user?.username}</span> </h4>
             <br />
             <p>

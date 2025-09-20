@@ -88,29 +88,12 @@ Route::post('contents/{id}/upload-image', [ContentController::class, 'uploadImag
 
 //Phan cua Duyen - Start
 Route::apiResource('user', UserController::class);
+Route::put('update/patient/{id}', [UserController::class, 'updatePatient']);
 Route::get('/check-username', [UserController::class, 'checkUsername']);
-Route::get('/doctors', [ViewDoctorsController::class, 'index']);
+Route::apiResource('doc', ViewDoctorsController::class);
 Route::apiResource('appointments', AppointmentController::class);
 Route::get('/appointments/patient/{patient_id}', [AppointmentController::class, 'getByPatient']);
 Route::patch('/appointments/reschedule/{id}', [AppointmentController::class, 'reschedule']);
-
-Route::get('/sse/appointments', function () {
-    return response()->stream(function () {
-        while (true) {
-            $lastUpdate = cache()->get('last_appointment_update');
-
-            echo "data: " . json_encode(['timestamp' => $lastUpdate]) . "\n\n";
-            ob_flush();
-            flush();
-
-            sleep(2); // mỗi 2 giây gửi 1 lần
-        }
-    }, 200, [
-        'Content-Type' => 'text/event-stream',
-        'Cache-Control' => 'no-cache',
-        'Connection' => 'keep-alive',
-    ]);
-});
 
 //Phan cua Duyen - End
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function StatusTabs({ onTabChange }) {
+function StatusTabs({ onTabChange, fetchData }) {
     const [activeIndex, setActiveIndex] = useState(0);
 
     const statuses = [
@@ -16,7 +16,8 @@ function StatusTabs({ onTabChange }) {
         setActiveIndex(index);
         if (onTabChange) {
             onTabChange(statuses[index]);
-        }
+            fetchData();
+        }       
     };
 
     return (

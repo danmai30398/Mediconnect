@@ -73,7 +73,7 @@ function PatientAppointmentManage() {
         <div className="container">
             <br /><br />
             <div className="">
-                <StatusTabs onTabChange={setSelectedStatus} />
+                <StatusTabs onTabChange={setSelectedStatus} fetchData={fetchAppointments} />
             </div>
             <div className="mt-2">
                 {selectedStatus === "Pending appointments" ?

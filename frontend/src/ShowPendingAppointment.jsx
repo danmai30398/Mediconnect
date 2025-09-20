@@ -54,7 +54,6 @@ function ShowPendingAppointment({ data, loading, fetchData }) {
         } catch (error) {
             setErrorReschedule(error.message);
         }
-        // fetchData();
     };
 
     //cancel function

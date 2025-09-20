@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
-import "./App.css";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 
@@ -122,7 +121,7 @@ function PatientBooking() {
                         <div className="col-6 text-end">{userProfile?.user?.patient?.name}</div>
                     </div>
 
-                    <div class="text-center mt-3"><button className="col-10 bookingButton" onClick={handleConfirm} >Book an appointment</button></div>
+                    <div className="text-center mt-3"><button className="col-10 bookingButton" onClick={handleConfirm} >Book an appointment</button></div>
 
                     <div className="text-center mt-3"><a className="text-decoration-none text-primary" href={`/doctorDetail/${docProfile.doctor_id}`}>Change Appointment Date/Time?</a></div>
 

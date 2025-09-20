@@ -38,6 +38,7 @@ function LoginByEmail() {
             if (data.status === "success") {
                 localStorage.removeItem("MediUser");
                 localStorage.removeItem("token");
+                localStorage.removeItem('showWelcome');
                 
                 localStorage.setItem("MediUser", JSON.stringify(data.user));
                 if (data.token) localStorage.setItem("token", data.token);

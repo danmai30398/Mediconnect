@@ -8,7 +8,7 @@ function PatientLayout () {
   // const [showWelcome, setShowWelcome] = useState();
   const [showWelcome, setShowWelcome] = useState(() => {
     const saved = localStorage.getItem('showWelcome');
-    return saved === 'false' ? false : true;
+    return saved == 'false' ? false : true;
   });
   
   const handleNavClick = () => {

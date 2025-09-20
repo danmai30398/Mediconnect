@@ -1,34 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import "./App.css";
-import useRealtimeAppointmentUpdate from "./useRealtimeAppointmentUpdate";
+
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function DoctorDetails() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [profile, setProfile] = useState([]);
-    const [timestamp, setTimestamp] = useState(null);
-
-    const timestampRef = useRef(timestamp);
-
+    
     useEffect(() => {
-        timestampRef.current = timestamp;
-    }, [timestamp]);
-
-    useRealtimeAppointmentUpdate((newTime) => {
-        console.log('Detected new update at', newTime, 'current timestamp:', timestamp);
-        setTimestamp(newTime);
-    });
-
-    useEffect(() => {
-        if (!id) return;
-
         fetch(`${API_BASE_URL}/api/doc/${id}`)
             .then(res => res.json())
             .then(data => setProfile(data))
             .catch(err => console.error("Fetch error:", err));
-    }, [id, timestamp]);
+
+    }, [id]);
 
     // console.log("data 1:", profile);
 

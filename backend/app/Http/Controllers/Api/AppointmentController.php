@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
-use App\Models\Notification;
-use App\Services\AppointmentMailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -57,9 +55,6 @@ class AppointmentController extends Controller
                 ]);
             });
 
-            // Cap nhat cache then SSE co the gui thong bao realtime
-            cache()->put('last_appointment_update', now()->timestamp);
-
             return response()->json([
                 'status'  => 'success',
                 'message' => 'Appointment booked successfully'
@@ -78,7 +73,7 @@ class AppointmentController extends Controller
      */
     public function show(string $id)
     {
-        // 
+      //
     }
 
     /**
@@ -102,23 +97,6 @@ class AppointmentController extends Controller
                     // Cancel the appointment (by the patient)
                     $appointment->status = 'cancelled_by_patient';
                     $appointment->save();
-
-                    // Tạo notification khi appointment bị cancel
-                    // $appointment = Appointment::with(['patient', 'availability.doctor'])->find($appointment->id);
-                    // if ($appointment) {
-                    //     $patientName = $appointment->patient ? $appointment->patient->name : 'Unknown Patient';
-                    //     $doctorName = $appointment->availability && $appointment->availability->doctor
-                    //         ? $appointment->availability->doctor->name
-                    //         : 'Unknown Doctor';
-
-                    //     Notification::createAppointmentNotification(
-                    //         'appointment_cancelled_by_patient',
-                    //         $appointment,
-                    //         '❌ Appointment Cancelled by Patient',
-                    //         "Appointment cancelled by patient: {$patientName}",
-                    //         ['action' => 'view_appointment', 'old_status' => 'pending']
-                    //     );
-                    // }
 
                     // Set the availability slot back to 'available'
                     DB::table('availability_schedulings')
@@ -182,7 +160,7 @@ class AppointmentController extends Controller
         try {
             DB::transaction(function () use ($id) {
                 // Find the appointment
-                $appointment = Appointment::findOrFail($id);               
+                $appointment = Appointment::findOrFail($id);
                 $slotId = $appointment->availability_id;
 
                 // If the appointment was already cancelled by the doctor

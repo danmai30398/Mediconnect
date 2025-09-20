@@ -2,22 +2,33 @@
 
 namespace App\Services;
 
-use App\Mail\AppointmentStatusChanged;
 use App\Models\Appointment;
+use App\Mail\AppointmentStatusChanged;
 use Illuminate\Support\Facades\Mail;
 
 class AppointmentMailService
 {
-    public function sendStatusChanged(Appointment $appointment)
+    public function sendStatusChanged(Appointment $appointment, bool $useQueue = false): void
     {
-        // Kiểm tra status chỉ gửi mail khi là confirmed hoặc cancelled
-        if (in_array($appointment->status, ['rescheduled'])) {
-            // Giả sử bạn gửi mail đến user liên quan (bạn sửa lại tùy model của bạn)
-            $email = $appointment->patient->email ?? null;
+        $validStatuses = ['pending', 'confirmed', 'cancelled_by_patient', 'cancelled_by_doctor', 'rescheduled'];
 
-            if ($email) {
-                Mail::to($email)->send(new AppointmentStatusChanged($appointment));
-            }
+        if (!in_array($appointment->status, $validStatuses)) {
+            return;
+        }
+
+        $email = $appointment->patient->email ?? null;
+
+        if (!$email) {
+            return;
+        }
+
+        $mailable = new AppointmentStatusChanged($appointment);
+
+        if ($useQueue) {
+            Mail::to($email)->queue($mailable);
+        } else {
+            Mail::to($email)->send($mailable);
         }
     }
 }
+

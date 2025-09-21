@@ -13,7 +13,8 @@ const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
 const DoctorAvailability = () => {
   const { user } = useAuth();
-  const doctorId = user?.doctor.doctor_id || user?.id || 1;
+  // console.log('user: ', user);
+  const doctorId = user?.doctor?.id || user?.id || 1;
   const finalDoctorId = doctorId || localStorage.getItem('doctorId') || 1;
 
   const doctorInfo = {

@@ -244,13 +244,13 @@ function HomePage() {
                                 onClick={() => navigate(`/category/${it.id}`)}
                                 style={{
                                     cursor: "pointer",
-                                    width: '300px',
+                                    width: '400px',
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center',
                                     justifyContent: 'space-between',
                                     textAlign: 'center',
-                                    height: '400px',
+                                    height: '330px',
                                     borderRadius: '8px',
                                     overflow: 'hidden',
                                     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',

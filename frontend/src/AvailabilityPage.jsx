@@ -67,7 +67,6 @@ const DoctorAvailability = () => {
   const [showEditForm, setShowEditForm] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [compactMode, setCompactMode] = useState(false);
 
   // Fetch availabilities from API
   useEffect(() => {
@@ -230,10 +229,6 @@ const DoctorAvailability = () => {
     setShowEditForm(true);
   };
 
-  const toggleCompactMode = () => {
-    setCompactMode(!compactMode);
-  };
-
   return (
     <div className="availability-container">
       <h2>Doctor's Weekly Availability</h2>
@@ -275,14 +270,6 @@ const DoctorAvailability = () => {
             ) : (
               '+ Add Slot'
             )}
-          </Button>
-        </Col>
-        <Col className="text-end">
-          <Button
-            variant="outline-secondary"
-            onClick={toggleCompactMode}
-          >
-            {compactMode ? '🔍 Normal' : '📱 Compact'}
           </Button>
         </Col>
       </Row>

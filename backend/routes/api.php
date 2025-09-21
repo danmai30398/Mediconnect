@@ -101,6 +101,8 @@ Route::get('/cities', [UserController::class, 'getCities']);
 Route::get('/available-slots', [BookingController::class, 'getAvailableSlots']);
 Route::post('/book-appointment', [BookingController::class, 'bookAppointment']);
 
+
+//Dan start
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -124,3 +126,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/doctor/availability/{id}', [DoctorAvailabilityController::class, 'update']);
     Route::delete('/doctor/availability/{id}', [DoctorAvailabilityController::class, 'destroy']);
 });
+// Dan end

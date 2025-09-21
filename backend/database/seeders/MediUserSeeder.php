@@ -12,6 +12,7 @@ class MediUserSeeder extends Seeder
         if (!MediUser::where('user_id', 1)->exists()) {
             MediUser::create([
                 'username' => 'doctor01',
+                'email' => 'dra@example.com',
                 'password' => bcrypt('doctor123'),
                 'role_id'  => 2,
             ]);
@@ -47,6 +48,15 @@ class MediUserSeeder extends Seeder
                 'email' => 'admin@mediconnect.vn',
                 'password' => bcrypt('admin123'),
                 'role_id'  => 1,
+            ]);
+        }
+
+        if (!MediUser::where('user_id', 6)->exists()) {
+            MediUser::create([
+                'username' => 'ntc@example.com',
+                'email' => 'ntc@example.com',
+                'password' => bcrypt('patient123'),
+                'role_id'  => 3,
             ]);
         }
     }

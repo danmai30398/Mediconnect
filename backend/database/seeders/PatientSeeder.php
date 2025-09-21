@@ -44,7 +44,7 @@ class PatientSeeder extends Seeder
         'dob' => '1995-03-03',
         'gender' => 'Female',
         'image' => null,
-        'user_id' => 5,
+        'user_id' => 6,
     ]
 );
 

@@ -29,7 +29,7 @@ class AvailabilitySchedulingSeeder extends Seeder
             AvailabilityScheduling::create([
                 'doctor_id'      => 2,
                 'available_date' => '2025-09-02',
-                'available_time' => '09:30:00',
+                'available_time' => '09:00:00',
             ]);
         }
     }

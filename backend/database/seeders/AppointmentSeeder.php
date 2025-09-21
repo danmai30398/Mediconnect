@@ -17,5 +17,7 @@ class AppointmentSeeder extends Seeder
         if (\App\Models\Patient::where('patient_id', 2)->exists() && \App\Models\AvailabilityScheduling::where('availability_id', 3)->exists()) {
             Appointment::updateOrCreate(['patient_id' => 2, 'availability_id' => 3], ['status' => 'confirmed']);
         }
+
+
     }
 }

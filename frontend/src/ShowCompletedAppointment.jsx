@@ -14,8 +14,6 @@ function ShowCompletedAppointment({ data, loading }) {
                     {filteredAppointments?.length > 0 ? (
                         <div className="row text-center d-flex justify-content-center">
                             {filteredAppointments.map((e, index) => {
-                                const doctor = data?.doctors?.find(apt => apt.doc_id === filteredAppointments.availability?.doctor_id);
-                                const city = data?.cities?.find(city => city.city_id === doctor?.city_id);
 
                                 return (
                                     <div key={index} className="container m-3 col-12 col-md-6 col-lg-5 border rounded p-4 bg-light shadow">
@@ -25,15 +23,15 @@ function ShowCompletedAppointment({ data, loading }) {
                                             <div className="row">
                                                 <div className="col-3">
                                                     <img
-                                                        src={doctor?.image ? `${API_BASE_URL}/storage/avatars/${doctor?.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
-                                                        alt={doctor?.name}
+                                                        src={e.availability?.doctor?.image ? `${API_BASE_URL}/storage/avatars/${e.availability?.doctor?.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
+                                                        alt={e.availability?.doctor?.name}
                                                         className="rounded-circle"
                                                         style={{ width: "70px", height: "70px" }}
                                                     />
                                                 </div>
                                                 <div className="col-8">
-                                                    <div className="text-primary fw-bold"> <h4>{doctor?.name}</h4></div>
-                                                    <div >Branch: {city?.city_name}</div>
+                                                    <div className="text-primary fw-bold"> <h4>{e.availability?.doctor?.name}</h4></div>
+                                                    <div >Branch: {e.availability?.doctor?.city?.city_name}</div>
                                                 </div>
                                             </div>
                                             <div className="row mt-3">

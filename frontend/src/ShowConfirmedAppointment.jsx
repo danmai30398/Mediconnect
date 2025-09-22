@@ -93,52 +93,50 @@ function ShowConfirmedAppointment({ data, loading, fetchData }) {
                     {filteredAppointments?.length > 0 ? (
                         <div className="row text-center d-flex justify-content-center">
                             {filteredAppointments.map((e, index) => {
-                                const doctor = data?.doctors?.find(apt => apt.doc_id === filteredAppointments.availability?.doctor_id);
-                                const city = data?.cities?.find(city => city.city_id === doctor?.city_id);
-                                // const filteredAppointmentsId = e.appointment_id;
-                                // console.log('Id: ', filteredAppointmentsId);
                                 return (
-                                    <div key={index} className="container m-3 col-12 col-md-6 col-lg-5 border rounded p-4 bg-light shadow">
-                                        <div >
-                                            <h3 className="text-center">Appointment information</h3>
-                                            <hr />
-                                            <div className="row">
-                                                <div className="col-3">
-                                                    <img
-                                                        src={doctor?.image ? `${API_BASE_URL}/storage/avatars/${doctor?.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
-                                                        alt={doctor?.name}
-                                                        className="rounded-circle"
-                                                        style={{ width: "70px", height: "70px" }}
-                                                    />
+                                    <div key={index} className="container m-3 col-12 col-md-6 col-lg-5 border rounded p-4 bg-light shadow card mb-3 position-relative">
+                                        <div className="card-body">
+                                            <div>
+                                                <h3 className="text-center">Appointment information</h3>
+                                                <hr />
+                                                <div className="row">
+                                                    <div className="col-3">
+                                                        <img
+                                                            src={e.availability?.doctor?.image ? `${API_BASE_URL}/storage/avatars/${e.availability?.doctor?.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
+                                                            alt={e.availability?.doctor?.name}
+                                                            className="rounded-circle"
+                                                            style={{ width: "70px", height: "70px" }}
+                                                        />
+                                                    </div>
+                                                    <div className="col-8">
+                                                        <div className="text-primary fw-bold"> <h4>{e.availability?.doctor?.name}</h4></div>
+                                                        <div >Branch: {e.availability?.doctor?.city?.city_name}</div>
+                                                    </div>
                                                 </div>
-                                                <div className="col-8">
-                                                    <div className="text-primary fw-bold"> <h4>{doctor?.name}</h4></div>
-                                                    <div >Branch: {city?.city_name}</div>
+                                                <div className="row mt-3">
+                                                    <div className="col-6 ps-2 pe-5 text-start">Appointment Date: </div>
+                                                    <div className="col-6 text-end">{e.availability?.available_date} </div>
+                                                </div>
+                                                <div className="row mt-3">
+                                                    <div className="col-6 ps-2 pe-5 text-start">Appointment Time:</div>
+                                                    <div className="col-6 text-end">{e.availability?.available_time}</div>
+                                                </div>
+                                                <div className="row mt-3">
+                                                    <div className="col-6 ps-2 pe-5 text-start">Patient:</div>
+                                                    <div className="col-6 text-end">{e.patient?.name}</div>
+                                                </div>
+                                                <hr />
+                                                <div className="row mt-3">
+                                                    <div className="col-5 ps-2 pe-5 text-start">Status of your appointment:</div>
+                                                    <div className="col-7 text-end">Confirmed - your appointment has been accepted by the doctor</div>
+                                                </div>
+                                                <hr />
+                                                <div class="text-center mt-3">
+                                                    <button className="col-5 m-2 btn btn-warning" onClick={() => { setRescheduleModal(e.appointment_id); setDocId(e.availability?.doctor?.doctor_id) }}>Reschedule </button>
+                                                    <button className="col-5 m-2 btn btn-danger" onClick={() => setCancelModal(e.appointment_id)}>Cancel</button>
                                                 </div>
                                             </div>
-                                            <div className="row mt-3">
-                                                <div className="col-6 ps-2 pe-5 text-start">Appointment Date: </div>
-                                                <div className="col-6 text-end">{e.availability?.available_date} </div>
-                                            </div>
-                                            <div className="row mt-3">
-                                                <div className="col-6 ps-2 pe-5 text-start">Appointment Time:</div>
-                                                <div className="col-6 text-end">{e.availability?.available_time}</div>
-                                            </div>
-                                            <div className="row mt-3">
-                                                <div className="col-6 ps-2 pe-5 text-start">Patient:</div>
-                                                <div className="col-6 text-end">{e.patient?.name}</div>
-                                            </div>
-                                            <hr />
-                                            <div className="row mt-3">
-                                                <div className="col-5 ps-2 pe-5 text-start">Status of your appointment:</div>
-                                                <div className="col-7 text-end">Confirmed - your appointment has been accepted by the doctor</div>
-                                            </div>
-                                            <hr />
-                                            <div class="text-center mt-3">
-                                                <button className="col-5 m-2 btn btn-warning" onClick={() => { setRescheduleModal(e.appointment_id); setDocId(e.availability?.doctor_id) }}>Reschedule </button>
-                                                <button className="col-5 m-2 btn btn-danger" onClick={() => setCancelModal(e.appointment_id)}>Cancel</button>
-                                            </div>
-                                            <div className="col-10 col-md-4 text-center position-absolute bottom-0" style={{ zIndex: 10 }}>
+                                            <div className="col-10 text-center position-absolute bottom-0" style={{ zIndex: 10 }}>
                                                 <br />
                                                 {cancelModal === e.appointment_id && (
                                                     <div className="text-center mt-2 d-inline-block p-4 bg-light border border-primary p-4 rounded">
@@ -149,7 +147,7 @@ function ShowConfirmedAppointment({ data, loading, fetchData }) {
                                                     </div>)}
                                             </div>
 
-                                            <div className="col-10 col-md-4 text-center position-absolute bottom-0" style={{ zIndex: 10 }}>
+                                            <div className="col-10 text-center position-absolute bottom-0" style={{ zIndex: 10 }}>
                                                 <br />
                                                 {rescheduleModal === e.appointment_id && (
                                                     <div className="text-center mt-2 d-inline-block p-4 bg-light border border-primary p-4 rounded">
@@ -159,6 +157,7 @@ function ShowConfirmedAppointment({ data, loading, fetchData }) {
                                                         <span onClick={handleNo} className="ms-3 btn btn-outline-secondary">Cancel</span >
                                                     </div>)}
                                             </div>
+
 
                                         </div>
                                     </div>

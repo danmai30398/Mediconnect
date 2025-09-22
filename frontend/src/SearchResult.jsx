@@ -39,7 +39,7 @@ function SearchResult() {
         >
           {results.map((item) => (
             <div
-              key={item.id}
+              key={item.content_id} // ✅ dùng content_id thay vì id
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -52,7 +52,7 @@ function SearchResult() {
               }}
             >
               <h3 style={{ minHeight: "48px", marginBottom: "8px" }}>
-                <Link to={`/post/${item.id}`}>{item.title}</Link>
+                <Link to={`/post/${item.content_id}`}>{item.title}</Link> {/* ✅ */}
               </h3>
               <p style={{ flexGrow: 1, minHeight: "60px", marginBottom: "10px" }}>
                 {item.description}
@@ -69,7 +69,9 @@ function SearchResult() {
                   }}
                 />
               )}
-              <small>Author: {item.author}</small>
+              <small>
+                Author: {item.author || "Unknown"}
+              </small>
             </div>
           ))}
         </div>

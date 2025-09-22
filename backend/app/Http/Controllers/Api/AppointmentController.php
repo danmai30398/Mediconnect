@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Notification;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
@@ -53,15 +54,27 @@ class AppointmentController extends Controller
                     'patient_id' => $patientId,
                     'status' => 'pending',
                 ]);
+
+                $user_id = $appointment->availability->doctor->user_id;
+
+                Notification::create([
+                    'user_id' => $user_id,
+                    'role_id' => 2,
+                    'title' => "Booking Appointment",
+                    'message' => "You have a new booking by the patient!",
+                    'type' => 'booking',
+                    'is_read' => false,
+                ]);
+
             });
 
             return response()->json([
-                'status'  => 'success',
+                'status' => 'success',
                 'message' => 'Appointment booked successfully'
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
+                'status' => 'error',
                 'message' => $e->getMessage()
             ], 400);
         }
@@ -73,18 +86,21 @@ class AppointmentController extends Controller
      */
     public function show(string $id)
     {
-      //
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
+
+    //dan -notic
     public function update(Request $request, string $id)
     {
         try {
             DB::transaction(function () use ($id) {
                 // Find the appointment
-                $appointment = Appointment::findOrFail($id);
+                $appointment = Appointment::with(['patient.user', 'availability.doctor'])
+                    ->findOrFail($id);
                 $slotId = $appointment->availability_id;
 
                 // If the appointment was already cancelled by the doctor
@@ -102,18 +118,29 @@ class AppointmentController extends Controller
                     DB::table('availability_schedulings')
                         ->where('availability_id', $slotId)
                         ->update(['status' => 'available']);
+
+                    $user_id = $appointment->availability->doctor->user_id;
+
+                    Notification::create([
+                        'user_id' => $user_id,
+                        'role_id' => 2,
+                        'title' => "Update Appointment",
+                        'message' => "Your appointment has been cancelled by the patient!",
+                        'type' => 'appointment_cancelled',
+                        'is_read' => false,
+                    ]);
                 } else {
                     throw new \Exception('This appointment cannot be cancelled in its current status.');
                 }
             });
 
             return response()->json([
-                'status'  => 'success',
+                'status' => 'success',
                 'message' => 'Appointment was successfully cancelled by the patient.',
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
+                'status' => 'error',
                 'message' => $e->getMessage(),
             ], 400);
         }
@@ -155,12 +182,16 @@ class AppointmentController extends Controller
     /**
      * Edit status of appointment to rescheduled.
      */
+
+    //dan -notic
     public function reschedule(Request $request, string $id)
     {
         try {
             DB::transaction(function () use ($id) {
                 // Find the appointment
-                $appointment = Appointment::findOrFail($id);
+                $appointment = Appointment::with(['patient.user', 'availability.doctor'])
+                    ->findOrFail($id);
+
                 $slotId = $appointment->availability_id;
 
                 // If the appointment was already cancelled by the doctor
@@ -178,18 +209,30 @@ class AppointmentController extends Controller
                     DB::table('availability_schedulings')
                         ->where('availability_id', $slotId)
                         ->update(['status' => 'available']);
+
+                    $user_id = $appointment->availability->doctor->user_id;
+
+                    Notification::create([
+                        'user_id' => $user_id,
+                        'role_id' => 2,
+                        'title' => "Update Appointment",
+                        'message' => "Your appointment has been rescheduled by the patient!",
+                        'type' => 'appointment_rescheduled',
+                        'is_read' => false,
+                    ]);
+
                 } else {
                     throw new \Exception('This appointment cannot be rescheduled in its current status.');
                 }
             });
 
             return response()->json([
-                'status'  => 'success',
+                'status' => 'success',
                 'message' => 'Appointment was successfully rescheduled by the patient.',
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
+                'status' => 'error',
                 'message' => $e->getMessage(),
             ], 400);
         }

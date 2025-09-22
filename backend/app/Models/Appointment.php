@@ -37,12 +37,20 @@ class Appointment extends Model
     {
         return $this->belongsTo(AvailabilityScheduling::class, 'availability_id', 'availability_id');
     }
-
-    //to link from appointment to doctor
+    //dan -notic
     public function doctor()
     {
-        return $this->availability?->doctor;
+        return $this->hasOneThrough(
+            Doctor::class,
+            AvailabilityScheduling::class,
+            'availability_id',
+            'doctor_id',
+            'availability_id',
+            'doctor_id'
+        );
     }
+
+
 
     //to link from appointment to city
     public function city()

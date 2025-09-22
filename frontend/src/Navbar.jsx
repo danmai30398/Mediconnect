@@ -37,6 +37,7 @@ const DashboardLayout = () => {
         // Ensure we always have an array
         const notificationsData = res.data?.data || res.data || [];
         if (Array.isArray(notificationsData)) {
+          console.log(notificationsData)
           setNotifications(notificationsData);
         } else {
           console.error('Invalid notifications data:', notificationsData);
@@ -149,18 +150,23 @@ const DashboardLayout = () => {
                         <li
                           key={note.id || index}
                           onClick={() => handleNotificationClick(note.id)}
-                          style={{ cursor: 'pointer', backgroundColor: note.is_read ? '#f8f9fa' : '#e9ecef' }}
+                          style={{
+                            cursor: 'pointer',
+                            backgroundColor: note.is_read ? '#f8f9fa' : '#e9ecef',
+                            padding: '10px',
+                            borderBottom: '1px solid #dee2e6' 
+                          }}
                         >
                           <div>
                             <span>{note.message}</span>
                             <div>
-                              <span>{note.type}</span> -
-                              <span>{new Date(note.created_at).toLocaleDateString()}</span>
+                              <span>{note.type}</span> - <span>{note.time_ago}</span>
                             </div>
                           </div>
                         </li>
                       ))}
                     </ul>
+
                   </>
                 )}
               </div>

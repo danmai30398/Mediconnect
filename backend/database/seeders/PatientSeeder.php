@@ -36,17 +36,17 @@ class PatientSeeder extends Seeder
         );
 
         Patient::updateOrCreate(
-    ['email' => 'ntc@example.com'],
-    [
-        'name' => 'Nguyen Thi C',
-        'address' => '789 Tran Phu Street, Hai Phong',
-        'phone' => '0933444555',
-        'dob' => '1995-03-03',
-        'gender' => 'Female',
-        'image' => null,
-        'user_id' => 6,
-    ]
-);
+            ['email' => 'ntc@example.com'],
+            [
+                'name' => 'Nguyen Thi C',
+                'address' => '789 Tran Phu Street, Hai Phong',
+                'phone' => '0933444555',
+                'dob' => '1995-03-03',
+                'gender' => 'Female',
+                'image' => null,
+                'user_id' => 6,
+            ]
+        );
 
     }
 }

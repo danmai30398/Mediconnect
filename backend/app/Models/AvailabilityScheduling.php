@@ -30,11 +30,12 @@ class AvailabilityScheduling extends Model
         return $this->belongsTo(Doctor::class, 'doctor_id', 'doctor_id');
     }
 
+
     /**
      * Each availability schedule can have at most one appointment.
      * Returns the appointment booked for this availability slot, if any.
      */
-    public function appointments()
+    public function appointment()
     {
         return $this->hasOne(Appointment::class, 'availability_id', 'availability_id');
     }

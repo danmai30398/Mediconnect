@@ -52,7 +52,7 @@ class DoctorAvailabilityController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'doctor_id' => 'required|exists:doctors,doctor_id',
-            'available_date' => 'required|date|after_or_equal:today',
+            'available_date' => 'required|date',
             'available_time' => 'required|date_format:H:i',
             'status' => 'nullable|in:available,booked'
         ]);

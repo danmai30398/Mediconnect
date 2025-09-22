@@ -71,12 +71,15 @@ Route::get('dashboard/recent-activities', [DashboardController::class, 'recentAc
 Route::get('dashboard/notifications', [DashboardController::class, 'notifications']);
 Route::get('availabilities', [AvailabilityController::class, 'index']);
 
+// Public - contact form (dan)
+Route::post('/contact-messages', [ContactMessageController::class, 'store']);
+
 // Admin-protected Write Endpoints
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('doctors', ViewDoctorsController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('cities', CityController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('categories', CategoryController::class)->only(['store', 'update', 'destroy']);
-    Route::apiResource('contact-messages', ContactMessageController::class)->only(['store', 'update', 'destroy']);
+    Route::apiResource('contact-messages', ContactMessageController::class)->only(['index','show','update','destroy']);
     Route::apiResource('appointments', AppointmentController::class)->only(['update', 'destroy']);
     Route::post('availabilities', [AvailabilityController::class, 'store']);
     Route::delete('availabilities/{id}', [AvailabilityController::class, 'destroy']);

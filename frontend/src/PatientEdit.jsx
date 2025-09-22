@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
@@ -7,9 +7,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function PatientEdit() {
     const navigate = useNavigate();
-
-    const user = JSON.parse(localStorage.getItem('MediUser'));
-    const id = user?.id;
+    const { id } = useParams();
 
     //fetch current profile
     const [formField, setFormField] = useState();
@@ -49,7 +47,7 @@ function PatientEdit() {
 
     const checkUsername = async () => {
         try {
-            const res = await fetch(`${API_BASE_URL}/api/check-username?username=${formField.user.username}&userId=${user.id}`);
+            const res = await fetch(`${API_BASE_URL}/api/check-username?username=${formField.user.username}&userId=${id}`);
             const data = await res.json();
             setUsernameData(data);
         }
@@ -159,17 +157,17 @@ function PatientEdit() {
         if (avatar) {
             formData.append('image', avatar);
         }
-        console.log('image: ', avatar);
+        // console.log('image: ', avatar);
 
         formData.append('_method', 'PUT');
         try {
-            const res = await fetch(`${API_BASE_URL}/api/update/patient/${id}`, {
+            await fetch(`${API_BASE_URL}/api/update/patient/${id}`, {
                 method: 'POST',
                 headers: { 'Accept': 'application/json', },
                 body: formData,
             });
-            const data = await res.json();
-            console.log('data sau khi sua: ', data);
+            // const data = await res.json();
+            // console.log('data sau khi sua: ', data);
             navigate('/patientProfile');
 
         } catch (error) {
@@ -179,7 +177,6 @@ function PatientEdit() {
 
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
-
 
     return (
         <div>

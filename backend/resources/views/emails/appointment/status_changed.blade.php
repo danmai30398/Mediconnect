@@ -1,6 +1,9 @@
 @component('mail::message')
-# Appointment Status Updated
-
+{{-- # Appointment Status Updated --}}
+<div>
+    <div>Dear {{ $appointment->patient->name }},</div> <br>
+    <div>We hope this message finds you well.</div> <br>
+</div>
 <div>
 @if($appointment->status == 'pending')
     Your appointment request has been received successfully. Our staff will review it and provide confirmation shortly.

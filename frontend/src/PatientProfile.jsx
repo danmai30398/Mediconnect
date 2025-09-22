@@ -12,7 +12,7 @@ function PatientProfile() {
 
     const user = JSON.parse(localStorage.getItem('MediUser'));
     const id = user?.id;
-    console.log("User ID:", id);
+    // console.log("User ID:", id);
 
 
     const [profile, setProfile] = useState();
@@ -28,7 +28,7 @@ function PatientProfile() {
         .then(data => setProfile(data))
         .catch(err => console.error("Fetch error:", err));
         
-    }, [token]);
+    }, [id, token]);
     console.log("Profile:", profile);
 
     return (

@@ -21,7 +21,7 @@ function DoctorDetails() {
     //
     const today = new Date().toISOString().split('T')[0];
     const [selectedDate, setSelectedDate] = useState(today);
-    console.log("selectedDate: ", today);
+    // console.log("selectedDate: ", today);
 
     const filteredAvail = profile.availability_schedulings?.filter(doc => {
         return (
@@ -65,7 +65,7 @@ function DoctorDetails() {
                 }
             });
     }
-
+     
     return (
         <div className="container mt-3">
             <br />

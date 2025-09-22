@@ -1169,29 +1169,28 @@ body {
     margin-top: 8px;
 }
 
-/* Nền thông báo chưa đọc */
+
 .notification-bell .dropdown-item.unread {
-    background-color: #f0f8ff; /* Nền sáng */
-    border-left: 3px solid #007bff; /* Viền trái màu xanh để phân biệt */
+    background-color: #f0f8ff; 
+    border-left: 3px solid #007bff; 
 }
 
-/* Nền thông báo đã đọc */
+
 .notification-bell .dropdown-item.read {
-    background-color: #f9f9f9; /* Nền nhẹ nhàng cho thông báo đã đọc */
+    background-color: #f9f9f9; 
 }
 
-/* Hiệu ứng hover */
 .notification-bell .dropdown-item:hover {
-    background-color: #e9ecef; /* Tăng độ sáng khi hover */
+    background-color: #e9ecef; 
 }
 
-/* Icon trạng thái thông báo */
+
 .notification-bell .status-icon {
     font-size: 1.2rem;
     margin-top: 2px;
 }
 
-/* Thông báo khi chưa có dữ liệu */
+
 .notification-bell .empty-notification {
     text-align: center;
     padding: 50px;
@@ -1204,52 +1203,50 @@ body {
     height: 18px;
 }
 
-/* Tăng độ tương phản cho thông báo chưa đọc */
+
 .notification-bell .unread .status-icon {
     color: #007bff;
 }
-/* Đảm bảo các liên kết trong sidebar có chữ và icon màu trắng */
+
 .nav-link {
-    color: white !important; /* Màu chữ trắng */
-    display: flex; /* Để icon và chữ căn chỉnh thẳng hàng */
-    align-items: center; /* Căn giữa icon và chữ */
+    color: white !important; 
+    display: flex; 
+    align-items: center; 
 }
 
 .nav-link .fa { 
-    margin-right: 8px; /* Khoảng cách giữa icon và chữ */
+    margin-right: 8px; 
 }
 
-/* Khi item không được chọn (inactive link), vẫn giữ màu trắng */
 .nav-link.inactive {
-    opacity: 0.7; /* Giảm độ sáng của liên kết không được chọn */
+    opacity: 0.7; 
 }
 
-/* Khi item được chọn (active link), chữ và icon vẫn trắng nhưng có nền khác */
 .nav-link.active {
-    background-color: #0069D9; /* Nền xanh cho link đang được chọn */
-    color: white !important; /* Đảm bảo chữ vẫn trắng */
+    background-color: #0069D9; 
+    color: white !important; 
 }
 
 .nav-link:hover {
-    color: white !important; /* Đảm bảo chữ và icon vẫn trắng khi hover */
-    background-color: #0051D9; /* Nền xanh khi hover */
+    color: white !important; 
+    background-color: #0051D9; 
 }
 
 .features {
   display: flex;
-  justify-content: center;  /* Căn giữa các phần tử theo chiều ngang */
-  align-items: center;      /* Căn giữa các phần tử theo chiều dọc */
-  flex-wrap: wrap;          /* Cho phép các phần tử xuống dòng khi không đủ không gian */
-  gap: 20px;                /* Khoảng cách giữa các phần tử */
-  padding: 50px 0;          /* Thêm padding để tạo khoảng cách từ trên xuống dưới */
+  justify-content: center;  
+  align-items: center;      
+  flex-wrap: wrap;          
+  gap: 20px;                
+  padding: 50px 0;          
 }
 
 .outstanding {
-  text-align: center;       /* Căn giữa văn bản trong mỗi phần tử */
-  font-size: 1.1rem;        /* Tăng kích thước chữ */
+  text-align: center;       
+  font-size: 1.1rem;       
   font-weight: bold;
   color: #22c4b8;
-  max-width: 250px;         /* Giới hạn chiều rộng để các phần tử không bị quá rộng */
+  max-width: 250px;         
 }
 
 .outstanding span {
@@ -1413,11 +1410,11 @@ body {
 .btn-getappointment {
   padding: 12px 28px;
   border: none;
-  background: linear-gradient(135deg, #3b82f6, #19ceb6); /* xanh -> hồng */
+  background: linear-gradient(135deg, #3b82f6, #19ceb6); 
   color: #fff;
   font-size: 16px;
   font-weight: 600;
-  border-radius: 999px; /* pill button */
+  border-radius: 999px; 
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
@@ -1428,17 +1425,12 @@ body {
   transform: translateY(-2px);
 }
 
-.btn-getappointment:active {
-  transform: scale(0.97);
-  background: linear-gradient(135deg, #1d4ed8, #9f1239);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-}
 
 
 .btn-getappointment2 {
   padding: 12px 28px;
   border: none;
-  background-color: #306ff7; /* xanh dương chủ đạo */
+  background-color: #306ff7; 
   color: #fff;
   font-size: 16px;
   font-weight: 600;
@@ -1448,11 +1440,53 @@ body {
 }
 
 .btn-getappointment2:hover {
-  background-color: #1d4ed8; /* xanh đậm hơn */
+  background-color: #1d4ed8; 
   transform: translateY(-1px);
 }
 
 .btn-getappointment2:active {
-  background-color: #1e40af; /* xanh đậm nhất khi click */
+  background-color: #1e40af; 
   transform: scale(0.98);
+}
+
+/*  */
+.newsletter {
+  display: flex;
+  gap: 8px;
+}
+
+.newsletter input {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff !important;  
+  color: #000;
+  outline: none;
+  transition: all 0.3s ease;
+  -webkit-appearance: none;   
+  -moz-appearance: none;      
+  appearance: none;
+}
+
+
+.newsletter input::placeholder {
+  color: #777; 
+}
+
+
+.newsletter .go {
+  padding: 10px 14px;
+  background: #fff;            
+  color: #000;                 
+  border: 1px solid #ccc;      
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.newsletter .go:hover {
+  background: #f5f5f5;        
 }

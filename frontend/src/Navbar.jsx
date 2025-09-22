@@ -1,48 +1,44 @@
 import React, { useState, useEffect } from "react";
-import { FaHome, FaBell } from "react-icons/fa";
+import { FaHome, FaBell, FaCamera } from "react-icons/fa";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
-import { Container, Row, Col, Button, Dropdown, DropdownButton, Spinner } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  DropdownButton,
+  Spinner
+} from "react-bootstrap";
 
 const DashboardLayout = () => {
   const { user, updateUserAvatar } = useAuth();
   const [doctorName, setDoctorName] = useState("Doctor");
-  const [avatar, setAvatar] = useState("/default-avatar.jpg");
+  const [avatarUrl, setAvatarUrl] = useState("/default-avatar.jpg");
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Lấy thông tin user
   useEffect(() => {
     if (user) {
       setDoctorName(user.username);
-      setAvatar(user.image ? `http://localhost:8000${user.doctor.image}` : "/default-avatar.jpg");
+      const url = user.doctor?.image
+        ? `http://localhost:8000${user.doctor.image}`
+        : "/default-avatar.jpg";
+      setAvatarUrl(url);
     }
   }, [user]);
 
-  // Update avatar when doctor context changes
-  useEffect(() => {
-    if (user?.doctor.image) {
-      setAvatar(`http://localhost:8000${user.image}`);
-    }
-  }, [user?.doctor.image]);
-
+  // Fetch notifications
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
         setLoading(true);
         const res = await axios.get("http://localhost:8000/api/notifications");
-        console.log('Navbar Notifications API Response:', res.data); // Debug log
-
-        // Ensure we always have an array
         const notificationsData = res.data?.data || res.data || [];
-        if (Array.isArray(notificationsData)) {
-          console.log(notificationsData)
-          setNotifications(notificationsData);
-        } else {
-          console.error('Invalid notifications data:', notificationsData);
-          setNotifications([]);
-        }
+        setNotifications(Array.isArray(notificationsData) ? notificationsData : []);
       } catch (err) {
         console.error("Failed to fetch notifications", err);
         setNotifications([]);
@@ -50,10 +46,10 @@ const DashboardLayout = () => {
         setLoading(false);
       }
     };
-
     fetchNotifications();
   }, []);
 
+  // Upload avatar
   const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -68,10 +64,8 @@ const DashboardLayout = () => {
       });
 
       const newAvatar = res.data.avatar || "/default-avatar.jpg";
-      setAvatar(`http://localhost:8000${newAvatar}`);
-      console.log("Avatar updated successfully:", newAvatar);
-
-      // Update user context with new avatar
+      const url = `http://localhost:8000${newAvatar}`;
+      setAvatarUrl(url);
       updateUserAvatar(newAvatar);
     } catch (err) {
       console.error("Error uploading avatar:", err.response?.data || err.message);
@@ -80,15 +74,13 @@ const DashboardLayout = () => {
     }
   };
 
+  // Đánh dấu thông báo đã đọc
   const handleNotificationClick = async (notificationId) => {
     try {
       await axios.post(`http://localhost:8000/api/notifications/${notificationId}/read`);
-      // Update local state to mark as read
-      setNotifications(prev =>
-        prev.map(notif =>
-          notif.id === notificationId
-            ? { ...notif, is_read: true }
-            : notif
+      setNotifications((prev) =>
+        prev.map((notif) =>
+          notif.id === notificationId ? { ...notif, is_read: true } : notif
         )
       );
     } catch (err) {
@@ -96,13 +88,11 @@ const DashboardLayout = () => {
     }
   };
 
+  // Đánh dấu tất cả đã đọc
   const handleMarkAllAsRead = async () => {
     try {
       await axios.post("http://localhost:8000/api/notifications/read-all");
-      // Update local state to mark all as read
-      setNotifications(prev =>
-        prev.map(notif => ({ ...notif, is_read: true }))
-      );
+      setNotifications((prev) => prev.map((notif) => ({ ...notif, is_read: true })));
     } catch (err) {
       console.error("Failed to mark all notifications as read", err);
     }
@@ -118,30 +108,28 @@ const DashboardLayout = () => {
         </Col>
 
         <Col className="text-end">
+          {/* Notifications */}
           <DropdownButton
             variant="link"
             id="notifications-dropdown"
-            title={<FaBell size={24} style={{ color: 'white' }} />}
+            title={<FaBell size={24} style={{ color: "white" }} />}
             onClick={() => setShowNotifications(!showNotifications)}
-            style={{ backgroundColor: 'transparent', border: 'none' }}
+            style={{ backgroundColor: "transparent", border: "none" }}
           >
             {showNotifications && (
-              <div style={{ width: '300px' }}>
+              <div style={{ width: "300px" }}>
                 {loading ? (
                   <div className="d-flex justify-content-center">
                     <Spinner animation="border" />
                     <p>Loading notifications...</p>
                   </div>
-                ) : !Array.isArray(notifications) || notifications.length === 0 ? (
+                ) : notifications.length === 0 ? (
                   <p>No new notifications</p>
                 ) : (
                   <>
                     <div className="d-flex justify-content-between">
                       <span>Notifications</span>
-                      <Button
-                        variant="link"
-                        onClick={handleMarkAllAsRead}
-                      >
+                      <Button variant="link" onClick={handleMarkAllAsRead}>
                         Mark all as read
                       </Button>
                     </div>
@@ -151,10 +139,10 @@ const DashboardLayout = () => {
                           key={note.id || index}
                           onClick={() => handleNotificationClick(note.id)}
                           style={{
-                            cursor: 'pointer',
-                            backgroundColor: note.is_read ? '#f8f9fa' : '#e9ecef',
-                            padding: '10px',
-                            borderBottom: '1px solid #dee2e6' 
+                            cursor: "pointer",
+                            backgroundColor: note.is_read ? "#f8f9fa" : "#e9ecef",
+                            padding: "10px",
+                            borderBottom: "1px solid #dee2e6",
                           }}
                         >
                           <div>
@@ -166,34 +154,55 @@ const DashboardLayout = () => {
                         </li>
                       ))}
                     </ul>
-
                   </>
                 )}
               </div>
             )}
           </DropdownButton>
 
-
-          <label>
+          {/* Avatar */}
+          <label style={{ position: "relative", display: "inline-block", marginLeft: "15px" }}>
             <input
               type="file"
               accept="image/*"
               onChange={handleAvatarChange}
               disabled={uploading}
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
             />
             <div
               style={{
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                overflow: 'hidden',
-                backgroundImage: `url(${avatar})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                cursor: 'pointer',
+                width: "42px",
+                height: "42px",
+                borderRadius: "50%",
+                overflow: "hidden",
+                border: "2px solid #f3f3f6ff",
+                cursor: "pointer",
+                position: "relative",
+                boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
               }}
-            />
+            >
+              <img
+                src={avatarUrl}
+                alt="avatar"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                onError={() => setAvatarUrl("/default-avatar.jpg")}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: "rgba(0,0,0,0.4)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  opacity: 0,
+                  transition: "opacity 0.3s ease",
+                }}
+                className="avatar-overlay"
+              >
+                <FaCamera color="#fff" size={16} />
+              </div>
+            </div>
           </label>
         </Col>
       </Row>

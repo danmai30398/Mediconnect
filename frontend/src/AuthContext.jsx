@@ -50,8 +50,7 @@ export const AuthProvider = ({ children }) => {
 
       return { success: true };
     } catch (error) {
-      // Log lỗi chi tiết hơn
-      console.error("Login Error: ", error);  // Log toàn bộ lỗi
+      console.error("Login Error: ", error);  
 
       return {
         success: false,

@@ -135,6 +135,7 @@ function App() {
           </Route>
           {/* ===== PHẦN MỚI THÊM TỪ THUAN - END ===== */}
 
+          {/* Dan - start */}
           <Route
             element={
               <AuthProvider>
@@ -221,6 +222,7 @@ function App() {
               </ErrorBoundary>
             } />
           </Route>
+          {/* Dan - end */}
         </Routes>
       </main>
     </div>

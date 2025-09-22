@@ -53,7 +53,7 @@ function HomePage() {
                         <h1>Your Health Care <span className="text-accent">Center</span></h1>
                         <p>MediConnect proudly delivers fast, trusted, and accessible healthcare — anytime, anywhere.</p>
                         <div style={{ marginTop: 18 }}>
-                            <button className="btn btn-outline" onClick={goToBookingFlow}>GET APPOINTMENT</button>
+                            <button className="btn-getappointment" onClick={goToBookingFlow}>GET APPOINTMENT</button>
                         </div>
                     </div>
 
@@ -96,8 +96,6 @@ function HomePage() {
                             <FaHeartbeat color="#e11d48" />
                             From appointment to assurance — MediConnect Group puts healthcare in your hands.
                         </p>
-
-                        <button className="btn btn-primary">Read More</button>
                     </div>
                     <div className="about-img"><img src={about1} alt="About MediConnect Group" /></div>
                 </div>
@@ -127,7 +125,7 @@ function HomePage() {
             <section className="cta" id="appointment">
                 <div className="container">
                     <div className="title">We Provide Trusted, Comprehensive Healthcare Services for Everyone.</div>
-                    <button className="btn btn-primary" onClick={goToBookingFlow}>GET APPOINTMENT</button>
+                    <button className="btn-getappointment2" onClick={goToBookingFlow}>GET APPOINTMENT</button>
                 </div>
             </section>
 

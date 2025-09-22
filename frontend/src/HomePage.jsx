@@ -59,7 +59,7 @@ function HomePage() {
 
                     <div className="booking-card">
                         <h3>📅👨‍⚕️ Find Your Doctor</h3>
-                        <button className="btn btn-primary" onClick={goBooking}>Booking Now</button>
+                        <button className="btn-booking" onClick={goBooking}>Booking Now</button>
                     </div>
                 </div>
             </section>

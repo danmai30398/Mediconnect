@@ -227,6 +227,32 @@ class ContentController extends Controller
         }
     }
 
+    // 
+     // Search API
+    public function search(Request $request)
+    {
+        $query = $request->input('q'); // lấy param ?q=...
+
+        if (!$query) {
+            return response()->json([
+                'message' => 'Missing search query'
+            ], 400);
+        }
+
+        $contents = Content::with(['category', 'creator.doctor', 'creator.patient'])
+            ->where('title', 'LIKE', "%{$query}%")
+            ->orWhere('description', 'LIKE', "%{$query}%")
+            ->orderByDesc('content_id')
+            ->get();
+
+        if ($contents->isEmpty()) {
+            return response()->json([
+                'message' => 'No content found'
+            ], 404);
+        }
+
+        return response()->json($contents);
+    }
 }
 
 

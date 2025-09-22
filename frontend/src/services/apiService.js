@@ -63,21 +63,21 @@ export const apiService = {
 
     // ===== DASHBOARD =====
     getDashboardStats: async () => {
-        const response = await fetch(`${API_BASE_URL}/api/dashboard/stats`, { 
-            cache: "no-store" 
+        const response = await fetch(`${API_BASE_URL}/api/dashboard/stats`, {
+            cache: "no-store"
         });
         return response.json();
     },
 
     getRecentActivities: async () => {
-        const response = await fetch(`${API_BASE_URL}/api/dashboard/recent-activities`, { 
-            cache: "no-store" 
+        const response = await fetch(`${API_BASE_URL}/api/dashboard/recent-activities`, {
+            cache: "no-store"
         });
         return response.json();
     },
 
     getNotifications: async () => {
-        const response = await fetch(`${API_BASE_URL}/api/notifications`, { 
+        const response = await fetch(`${API_BASE_URL}/api/notifications`, {
             cache: "no-store",
             headers: { "Authorization": `Bearer ${localStorage.getItem('token') || ''}` }
         });
@@ -133,7 +133,7 @@ export const apiService = {
         if (userData.source) {
             url += `?source=${userData.source}`;
         }
-        
+
         const response = await fetch(url, {
             method: 'PUT',
             headers: getAuthHeaders(),
@@ -181,12 +181,12 @@ export const apiService = {
     createDoctor: async (doctorData) => {
         const token = localStorage.getItem('token') || '';
         const headers = { 'Authorization': `Bearer ${token}` };
-        
+
         // Không set Content-Type cho FormData, browser sẽ tự set
         if (!(doctorData instanceof FormData)) {
             headers['Content-Type'] = 'application/json';
         }
-        
+
         const response = await fetch(`${API_BASE_URL}/api/doctors`, {
             method: 'POST',
             headers: headers,
@@ -198,12 +198,12 @@ export const apiService = {
     updateDoctor: async (doctorId, doctorData) => {
         const token = localStorage.getItem('token') || '';
         const headers = { 'Authorization': `Bearer ${token}` };
-        
+
         // Không set Content-Type cho FormData, browser sẽ tự set
         if (!(doctorData instanceof FormData)) {
             headers['Content-Type'] = 'application/json';
         }
-        
+
         const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/profile`, {
             method: 'PUT',
             headers: headers,
@@ -250,12 +250,12 @@ export const apiService = {
     createPatient: async (patientData) => {
         const token = localStorage.getItem('token') || '';
         const headers = { 'Authorization': `Bearer ${token}` };
-        
+
         // Không set Content-Type cho FormData, browser sẽ tự set
         if (!(patientData instanceof FormData)) {
             headers['Content-Type'] = 'application/json';
         }
-        
+
         const response = await fetch(`${API_BASE_URL}/api/patients`, {
             method: 'POST',
             headers: headers,
@@ -267,12 +267,12 @@ export const apiService = {
     updatePatient: async (patientId, patientData) => {
         const token = localStorage.getItem('token') || '';
         const headers = { 'Authorization': `Bearer ${token}` };
-        
+
         // Không set Content-Type cho FormData, browser sẽ tự set
         if (!(patientData instanceof FormData)) {
             headers['Content-Type'] = 'application/json';
         }
-        
+
         const response = await fetch(`${API_BASE_URL}/api/patients/${patientId}`, {
             method: 'POST',
             headers: headers,
@@ -303,7 +303,7 @@ export const apiService = {
         const token = localStorage.getItem('token') || '';
         const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/upload-image`, {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
             },
@@ -491,7 +491,9 @@ export const apiService = {
 
     // ===== CONTACT MESSAGES =====
     getContactMessages: async () => {
-        const response = await fetch(`${API_BASE_URL}/api/contact-messages`);
+        const response = await fetch(`${API_BASE_URL}/api/contact-messages`, {
+            headers: getAuthHeaders()
+        });
         return response.json();
     },
 
@@ -524,7 +526,7 @@ export const apiService = {
         if (doctorId) params.append('doctor_id', doctorId);
         if (date) params.append('date', date);
         if (params.toString()) url += `?${params.toString()}`;
-        
+
         const response = await fetch(url);
         return response.json();
     },

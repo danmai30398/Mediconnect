@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-Route::get('me', [UserController::class, 'me']);
+    Route::get('me', [UserController::class, 'me']);
 
     Route::post('logout', [UserController::class, 'logout']);
     Route::post('change-password', [UserController::class, 'changePassword']);
@@ -80,7 +80,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('doctors', ViewDoctorsController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('cities', CityController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('categories', CategoryController::class)->only(['store', 'update', 'destroy']);
-    Route::apiResource('contact-messages', ContactMessageController::class)->only(['index','show','update','destroy']);
+    Route::apiResource('contact-messages', ContactMessageController::class)->only(['index', 'show', 'update', 'destroy']);
     Route::apiResource('appointments', AppointmentController::class)->only(['update', 'destroy']);
     Route::post('availabilities', [AvailabilityController::class, 'store']);
     Route::delete('availabilities/{id}', [AvailabilityController::class, 'destroy']);

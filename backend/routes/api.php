@@ -117,7 +117,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
-    Route::post('/doctor/update', [App\Http\Controllers\DoctorProfileController::class, 'update']);
+    Route::post('/doctor/update', [DoctorProfileController::class, 'update']);
 
     // Booking routes
     Route::get('/appointments', [BookingController::class, 'getDoctorAppointments']);

@@ -27,7 +27,16 @@ function LoginByEmail() {
                 try {
                     const err = await res.json();
                     console.log(res);
-                    setError(err?.message || (res.status === 423 ? "Your account has been deactivated." : "Incorrect Email or password!"));
+                    let errorMessage = err?.message || "Incorrect Email or password!";
+                    
+                    // Kiểm tra nếu tài khoản bị khóa
+                    if (res.status === 423 && err?.message?.includes('locked')) {
+                        errorMessage = "Your account has been locked. Please wait or contact admin for support.";
+                    } else if (res.status === 423) {
+                        errorMessage = "Your account has been deactivated.";
+                    }
+                    
+                    setError(errorMessage);
                 } catch {
                     setError(res.status === 423 ? "Your account has been deactivated." : "Incorrect Email or password!");
                 }
@@ -71,7 +80,9 @@ function LoginByEmail() {
                         <div className="email_lg email_lg1 col-6"><a href="/login" className="text-center email_edit" >Email</a></div>
                         <div className="phone_lg col-6"><a href="/login_phone" className="text-center phone_edit">Phone</a></div>
                     </div>
-                    <div className="col-12 text-center"><span className="text-danger opacity-50">{error}</span></div>
+        <div className="col-12 text-center">
+            <span className="text-danger opacity-50">{error}</span>
+        </div>
                     <div className="col-12 mb-3">
                         <input
                             className="form-control"
@@ -105,7 +116,7 @@ function LoginByEmail() {
                     <br />
                     <div className="row">
                         <a className="col-6 text-primary opacity-50" href="/register">Sign up</a>
-                        <a className="col-6 text-end text-primary opacity-50" href="/forgotPass">Forgot password?</a>
+                        <a className="col-6 text-end text-primary opacity-50" href="/forgot-password">Forgot password?</a>
                     </div >
                 </div >
             </form>

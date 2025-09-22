@@ -7,7 +7,6 @@ import Register from './Register';
 import PatientProfile from './PatientProfile';
 import PatientLayout from './PatientLayout';
 import LoginByPhone from './LoginByPhone';
-import ForgotPass from './ForgotPass';
 import AdminLayout from './AdminLayout';
 import AdminDashboard from './AdminDashboard';
 import AdminContents from './AdminContents';
@@ -36,6 +35,7 @@ import ErrorBoundary from "./ErrorBoundary.jsx";
 import React from "react";
 import HomePage from "./HomePage";
 import ForgotPassword from "./ForgotPassword";
+import ResetPassword from "./ResetPassword";
 import Category from "./Category";
 import Post from "./Post";
 import SearchResult from "./SearchResult";
@@ -90,6 +90,7 @@ function App() {
           <Route element={<HomePageLayout />}>
             <Route path="/home" element={<HomePage />} />
             <Route path="/login" element={<LoginByEmail />} />
+            <Route path="/login_phone" element={<LoginByPhone />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/category/:id" element={<Category />} />
@@ -97,6 +98,12 @@ function App() {
             <Route path="/search-doctor" element={<DocQuickViews />} />
             <Route path="/search" element={<SearchResult />} />
           </Route>
+          
+          {/* Reset Password Route - Independent */}
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          
+          {/* Backward compatibility for old forgot password route */}
+          <Route path="/forgotPass" element={<ForgotPassword />} />
           {/* Toan homepage - end */}
 
           {/* Phan route cua Duyen - start */}

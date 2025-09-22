@@ -342,11 +342,6 @@ input[type="password"]::-webkit-textfield-decoration-container {
 }
 
 /* Start login form */
-.email_lg,
-.phone_lg {
-  border: solid lightskyblue;
-  width: 40%;
-}
 /* Cards common */
 .cards {
   display: grid;
@@ -698,11 +693,20 @@ body {
   text-align: center;
   background-color: white;
   border-width: 1px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
 }
 
 .email_lg1, .phone_lg1{
   border: solid rgb(227, 239, 247);
   background-color: rgb(227, 239, 247);
+}
+
+.email_lg:hover, .phone_lg:hover {
+  background-color: #f0f8ff;
+  border-color: #0ea5e9;
+  transform: translateY(-1px);
 }
 
 .admin-card {
@@ -1540,4 +1544,43 @@ body {
   transform: scale(0.97);
   box-shadow: 0 3px 8px rgba(13, 71, 161, 0.4);
 }
+
+/* ===== ADMIN USERS TABLE - ACTIONS COLUMN ===== */
+.admin-table th:nth-child(8),
+.admin-table td:nth-child(8) {
+  text-align: center !important;
+  vertical-align: middle !important;
+  width: 200px;
+  min-width: 200px;
+}
+
+.admin-table td:nth-child(8) .btn-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.admin-table td:nth-child(8) .btn {
+  margin: 0 3px;
+  min-width: 70px;
+  font-size: 12px;
+  padding: 4px 8px;
+  flex-shrink: 0;
+}
+
+/* Màu xám cho nút Unlocked */
+.admin-table td:nth-child(8) .btn[disabled] {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+  color: white !important;
+  opacity: 1 !important;
+}
+
+
+
+
+
+
 

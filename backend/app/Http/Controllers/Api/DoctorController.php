@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Validator;
 
 class DoctorController extends Controller
 {
+    public function index()
+    {
+        $doctors = Doctor::with('city')->get();
+        return response()->json($doctors);
+    }
+
     public function appointments(Request $request)
     {
         try {
@@ -93,17 +99,16 @@ class DoctorController extends Controller
                 return response()->json(['error' => 'Doctor not found'], 404);
             }
 
-            // Delete old image if exists
+            // Xóa ảnh cũ nếu tồn tại
             if ($doctor->image && Storage::disk('public')->exists('doctor-images/' . $doctor->image)) {
                 Storage::disk('public')->delete('doctor-images/' . $doctor->image);
             }
 
-            // Store new image
+            // Lưu ảnh mới
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
             $imagePath = $image->storeAs('doctor-images', $imageName, 'public');
 
-            // Update doctor record
             $doctor->image = $imageName;
             $doctor->save();
 
@@ -112,7 +117,6 @@ class DoctorController extends Controller
                 'image' => $imageName,
                 'image_url' => asset('storage/' . $imagePath)
             ]);
-
         } catch (\Exception $e) {
             Log::error('Error uploading doctor image: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to upload image'], 500);

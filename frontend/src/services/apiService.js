@@ -158,6 +158,7 @@ export const apiService = {
         return response;
     },
 
+    // ===== UNLOCK ACCOUNT (Admin only) =====
     unlockUser: async (userId) => {
         const response = await fetch(`${API_BASE_URL}/api/users/${userId}/unlock`, {
             method: 'POST',
@@ -557,10 +558,19 @@ export const apiService = {
 
     // ===== FORGOT PASSWORD =====
     forgotPassword: async (emailData) => {
-        const response = await fetch(`${API_BASE_URL}/api/user_profiles`, {
+        const response = await fetch(`${API_BASE_URL}/api/forgot-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(emailData)
+        });
+        return response;
+    },
+
+    resetPassword: async (resetData) => {
+        const response = await fetch(`${API_BASE_URL}/api/reset-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(resetData)
         });
         return response;
     }

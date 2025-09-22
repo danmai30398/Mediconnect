@@ -8,7 +8,7 @@ import { apiService } from "./services/apiService";
 /**
  * Component AdminUsers - Quản lý tài khoản người dùng trong hệ thống y tế
  * Xử lý cả bảng MediUsers và Laravel Users
- * Tính năng: Tạo, xem, sửa, xóa tài khoản bác sĩ và bệnh nhân
+ * Tính năng: Tạo, xem, sửa tài khoản bác sĩ và bệnh nhân
  */
 function AdminUsers() {
     // Quản lý state cho dữ liệu component
@@ -242,7 +242,18 @@ function AdminUsers() {
             </Modal>
             <div className="table-responsive">
                 <table className="table table-bordered">
-                    <thead><tr><th>Source</th><th>ID</th><th>Username</th><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         {Array.isArray(items) && items.map((u, idx) => (
                             <tr key={(u.user_id || u.id || idx) + (u.source || '')}>
@@ -253,32 +264,61 @@ function AdminUsers() {
                                 <td>{u.email}</td>
                                 <td>{u.role_label || u.role_id || '-'}</td>
                                 <td>{u.is_active ? 'Enable' : 'Disable'}</td>
-                                <td className="d-flex gap-2">
-                                    {u.source === 'medi_users' && (
-                                        <>
-                                            <Button size="sm" onClick={() => { setShow(true); setForm({ id: u.user_id, source: 'medi_users', username: u.username, password: '', role_id: u.role_id, name: u.name || '', email: u.email || '', phone: u.phone || '', address: u.address || '', is_active: u.is_active !== undefined ? u.is_active : true }); setSaving(false); }}>Edit</Button>
-                                            {!u.name && (
-                                                <Button size="sm" variant="success" onClick={() => createProfile(u.user_id, u.role_id)}>Create Profile</Button>
-                                            )}
-                                        </>
-                                    )}
-                                    {u.source === 'users' && (
-                                        <Button size="sm" variant="secondary" onClick={() => { setShow(true); setForm({ id: u.id, source: 'users', username: u.username, password: '', role_id: u.role_id || '', name: u.name || '', email: u.email || '', phone: '', address: '', is_active: u.is_active !== undefined ? u.is_active : true }); setSaving(false); }}>Edit</Button>
-                                    )}
-                                    {u.source === 'medi_users' && u.locked_until && (
-                                        <Button size="sm" variant="warning" onClick={async () => {
-                                            try {
-                                                const res = await apiService.unlockUser(u.user_id);
-                                                if (res.ok) { 
-                                                    setNotice('Unlock successful'); 
-                                                    setShowToast(true); 
-                                                    load(); 
-                                                }
-                                            } catch (error) {
-                                                console.error('Error unlocking user:', error);
-                                            }
-                                        }}>Unlock</Button>
-                                    )}
+                                <td>
+                                    <div className="btn-group">
+                                        {u.source === 'medi_users' && (
+                                            <>
+                                                <Button 
+                                                    size="sm" 
+                                                    variant="primary"
+                                                    onClick={() => { setShow(true); setForm({ id: u.user_id, source: 'medi_users', username: u.username, password: '', role_id: u.role_id, name: u.name || '', email: u.email || '', phone: u.phone || '', address: u.address || '', is_active: u.is_active !== undefined ? u.is_active : true }); setSaving(false); }}
+                                                >
+                                                    Edit
+                                                </Button>
+                                                {!u.name && (
+                                                    <Button 
+                                                        size="sm" 
+                                                        variant="success" 
+                                                        onClick={() => createProfile(u.user_id, u.role_id)}
+                                                    >
+                                                        Create Profile
+                                                    </Button>
+                                                )}
+                                                <Button 
+                                                    size="sm" 
+                                                    variant={u.locked_until ? "danger" : "secondary"}
+                                                    disabled={!u.locked_until}
+                                                    onClick={async () => {
+                                                        if (u.locked_until) {
+                                                            try {
+                                                                const res = await apiService.unlockUser(u.user_id);
+                                                                if (res.ok) { 
+                                                                    setNotice('Unlock successful'); 
+                                                                    setShowToast(true); 
+                                                                    load(); 
+                                                                }
+                                                            } catch (error) {
+                                                                console.error('Error unlocking user:', error);
+                                                                setNotice('Error unlocking user');
+                                                                setShowToast(true);
+                                                            }
+                                                        }
+                                                    }}
+                                                >
+                                                    {u.locked_until ? 'Unlock' : 'Unlocked'}
+                                                </Button>
+                                            </>
+                                        )}
+                                        {u.source === 'users' && (
+                                            <Button 
+                                                size="sm" 
+                                                variant="secondary" 
+                                                onClick={() => { setShow(true); setForm({ id: u.id, source: 'users', username: u.username, password: '', role_id: u.role_id || '', name: u.name || '', email: u.email || '', phone: '', address: '', is_active: u.is_active !== undefined ? u.is_active : true }); setSaving(false); }}
+                                            >
+                                                Edit
+                                            </Button>
+                                        )}
+                                    </div>
                                 </td>
                             </tr>
                         ))}

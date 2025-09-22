@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use App\Models\User as LaravelUser;
 
 class UserController extends Controller
@@ -311,8 +312,23 @@ class UserController extends Controller
                 return response()->json(['message' => 'Your account has been deactivated.'], 423);
             }
             // Kiểm tra tài khoản có đang bị khoá không
-            if ($user->locked_until && now()->lt($user->locked_until)) {
-                return response()->json(['message' => 'Your account has been locked. Please try again later..'], 423);
+            if ($user->locked_until) {
+                // Tự động unlock nếu đã hết thời gian khóa
+                if (now()->gte($user->locked_until)) {
+                    $user->login_attempts = 0;
+                    $user->locked_until = null;
+                    $user->save();
+                    Log::info('Account automatically unlocked', [
+                        'user_id' => $user->user_id,
+                        'username' => $user->username
+                    ]);
+                } else {
+                    // Vẫn còn thời gian khóa
+                    $remainingMinutes = now()->diffInMinutes($user->locked_until);
+                    return response()->json([
+                        'message' => "Your account has been locked. Please wait {$remainingMinutes} minutes or contact admin for support."
+                    ], 423);
+                }
             }
 
             if (!Hash::check($request->password, $user->password)) {
@@ -320,8 +336,8 @@ class UserController extends Controller
                 $user->login_attempts = ($user->login_attempts ?? 0) + 1;
 
                 if ($user->login_attempts >= 5) {
-                    // Khoá tài khoản 15 phút
-                    $user->locked_until = now()->addMinutes(15);
+                    // Khoá tài khoản 5 phút
+                    $user->locked_until = now()->addMinutes(5);
                 }
 
                 $user->save();
@@ -330,7 +346,7 @@ class UserController extends Controller
             }
 
             // Đăng nhập thành công, reset login_attempts
-            $user->login_attempts = 0;+
+            $user->login_attempts = 0;
             $user->locked_until = null;
             $user->save();
 
@@ -349,6 +365,44 @@ class UserController extends Controller
         }
 
         return response()->json(['message' => 'Invalid credentials'], 401);
+    }
+
+    /**
+     * Unlock user account (Admin only)
+     */
+    public function unlock(Request $request, $id)
+    {
+        try {
+            $user = MediUser::find($id);
+            
+            if (!$user) {
+                return response()->json(['message' => 'User not found'], 404);
+            }
+
+            // Reset lock status
+            $user->login_attempts = 0;
+            $user->locked_until = null;
+            $user->save();
+
+            Log::info('User account unlocked by admin', [
+                'user_id' => $id,
+                'username' => $user->username
+            ]);
+
+            return response()->json([
+                'message' => 'Account unlocked successfully',
+                'user' => [
+                    'id' => $user->user_id,
+                    'username' => $user->username,
+                    'locked_until' => null,
+                    'login_attempts' => 0
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Unlock user error: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to unlock account'], 500);
+        }
     }
 
     public function checkUsername(Request $request)
@@ -481,6 +535,126 @@ class UserController extends Controller
         $user->load('patient');
 
         return response()->json($user);
+    }
+
+    /**
+     * Gửi email reset password
+     */
+    public function forgotPassword(Request $request)
+    {
+        try {
+            $request->validate([
+                'email' => 'required|email|max:255'
+            ]);
+
+            $email = $request->email;
+            
+            // Tìm user trong bảng users (admin)
+            $user = \App\Models\User::where('email', $email)->first();
+            
+            // Nếu không tìm thấy, tìm trong MediUser
+            if (!$user) {
+                $mediUser = MediUser::whereHas('patient', function ($query) use ($email) {
+                    $query->where('email', $email);
+                })->orWhereHas('doctor', function ($query) use ($email) {
+                    $query->where('email', $email);
+                })->first();
+                
+                if ($mediUser) {
+                    $user = $mediUser;
+                }
+            }
+
+            if (!$user) {
+                return response()->json([
+                    'message' => 'Email không tồn tại trong hệ thống'
+                ], 404);
+            }
+
+            // Tạo reset token
+            $resetToken = Str::random(60);
+            $expiresAt = now()->addMinutes(10); // Token hết hạn sau 10 phút
+
+            // Lưu token vào cache hoặc database
+            cache()->put("password_reset_{$resetToken}", [
+                'user_id' => $user->id ?? $user->user_id,
+                'email' => $email,
+                'type' => $user instanceof \App\Models\User ? 'admin' : 'medi_user'
+            ], $expiresAt);
+
+            // Gửi email (trong môi trường thực tế, sử dụng Mail facade)
+            // Mail::to($email)->send(new ResetPasswordMail($resetToken));
+            
+            // Tạm thời log token để test
+            Log::info("Reset password token for {$email}: {$resetToken}");
+
+            return response()->json([
+                'message' => 'Mã reset password đã được gửi đến email của bạn',
+                'token' => $resetToken, // Chỉ để test, trong thực tế không trả về
+                'expires_at' => $expiresAt->toISOString()
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Forgot password error: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Có lỗi xảy ra, vui lòng thử lại sau'
+            ], 500);
+        }
+    }
+
+    /**
+     * Reset password với token
+     */
+    public function resetPassword(Request $request)
+    {
+        try {
+            $request->validate([
+                'token' => 'required|string',
+                'password' => 'required|string|min:6|confirmed'
+            ]);
+
+            $token = $request->token;
+            $password = $request->password;
+
+            // Lấy thông tin từ cache
+            $resetData = cache()->get("password_reset_{$token}");
+            
+            if (!$resetData) {
+                return response()->json([
+                    'message' => 'Token không hợp lệ hoặc đã hết hạn'
+                ], 400);
+            }
+
+            // Tìm user
+            if ($resetData['type'] === 'admin') {
+                $user = \App\Models\User::find($resetData['user_id']);
+            } else {
+                $user = MediUser::find($resetData['user_id']);
+            }
+
+            if (!$user) {
+                return response()->json([
+                    'message' => 'Người dùng không tồn tại'
+                ], 404);
+            }
+
+            // Cập nhật password
+            $user->password = Hash::make($password);
+            $user->save();
+
+            // Xóa token khỏi cache
+            cache()->forget("password_reset_{$token}");
+
+            return response()->json([
+                'message' => 'Mật khẩu đã được đặt lại thành công'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Reset password error: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Có lỗi xảy ra, vui lòng thử lại sau'
+            ], 500);
+        }
     }
 
 }

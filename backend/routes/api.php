@@ -70,6 +70,7 @@ Route::get('dashboard/stats', [DashboardController::class, 'stats']);
 Route::get('dashboard/recent-activities', [DashboardController::class, 'recentActivities']);
 Route::get('dashboard/notifications', [DashboardController::class, 'notifications']);
 Route::get('availabilities', [AvailabilityController::class, 'index']);
+Route::get('/doctors', [DoctorController::class, 'index']);
 
 // Public - contact form (dan)
 Route::post('/contact-messages', [ContactMessageController::class, 'store']);
@@ -105,10 +106,13 @@ Route::get('/available-slots', [BookingController::class, 'getAvailableSlots']);
 Route::post('/book-appointment', [BookingController::class, 'bookAppointment']);
 
 
+// ===== FORGOT PASSWORD ROUTES =====
+Route::post('/forgot-password', [UserController::class, 'forgotPassword']);
+Route::post('/reset-password', [UserController::class, 'resetPassword']);
+
 //Dan start
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
-
     Route::get('/doctor/me', [App\Http\Controllers\DoctorController::class, 'me']);
     Route::get('/doctor/dashboard', [App\Http\Controllers\DoctorController::class, 'dashboard']);
     Route::get('/doctor/patients', [App\Http\Controllers\DoctorController::class, 'getPatients']);

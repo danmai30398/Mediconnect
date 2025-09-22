@@ -42,11 +42,12 @@ export const AuthProvider = ({ children }) => {
         password
       });
 
-      const { access_token, doctor } = response.data;
+      const { token, user } = response.data;
 
-      setToken(access_token);
-      setUser(doctor);
-      localStorage.setItem('token', access_token);
+      setToken(token);
+      setUser(user);
+      localStorage.setItem('MediUser', JSON.stringify(user));
+      localStorage.setItem('token', token);
 
       return { success: true };
     } catch (error) {
@@ -64,11 +65,12 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post('http://localhost:8000/api/register', formData);
 
-      const { access_token, doctor } = response.data;
+      const { token, user } = response.data;
 
-      setToken(access_token);
-      setUser(doctor);
-      localStorage.setItem('token', access_token);
+      setToken(token);
+      setUser(user);
+      localStorage.setItem('MediUser', JSON.stringify(user));
+      localStorage.setItem('token', token);
 
       return { success: true };
     } catch (error) {
@@ -83,6 +85,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setToken(null);
     setUser(null);
+    localStorage.removeItem('MediUser');
     localStorage.removeItem('token');
     delete axios.defaults.headers.common['Authorization'];
   };

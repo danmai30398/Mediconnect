@@ -112,16 +112,16 @@ class DoctorAvailabilityController extends Controller
         }
 
         // Nếu slot đã có appointment pending/confirmed → không cho update
-        $hasActiveAppointment = $availability->appointments()
-            ->whereIn('status', ['pending', 'confirmed'])
-            ->exists();
+$hasActiveAppointment = $availability->appointment()
+    ->whereIn('status', ['pending', 'confirmed'])
+    ->exists();
 
-        if ($hasActiveAppointment) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Cannot edit slot with existing appointment requests.'
-            ], 400);
-        }
+if ($hasActiveAppointment) {
+    return response()->json([
+        'success' => false,
+        'message' => 'Cannot edit slot with existing appointment requests.'
+    ], 400);
+}
 
         // Nếu slot trống → cho update
         if ($request->has('status')) {
@@ -169,17 +169,18 @@ class DoctorAvailabilityController extends Controller
             ], 400);
         }
 
-        // Only block deletion if there are active appointments (pending, confirmed)
-        $hasActiveAppointment = $availability->appointments()
-            ->whereIn('status', ['pending', 'confirmed'])
-            ->exists();
+       // Only block deletion if there are active appointments (pending, confirmed)
+$hasActiveAppointment = $availability->appointment()
+    ->whereIn('status', ['pending', 'confirmed'])
+    ->exists();
 
-        if ($hasActiveAppointment) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Cannot delete slot with active appointments.'
-            ], 400);
-        }
+if ($hasActiveAppointment) {
+    return response()->json([
+        'success' => false,
+        'message' => 'Cannot delete slot with active appointments.'
+    ], 400);
+}
+
 
         // If we reach here, slot is safe to delete
         $availability->delete();

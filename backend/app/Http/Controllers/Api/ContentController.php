@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
+
 class ContentController extends Controller
 {
     public function index()
@@ -219,7 +220,7 @@ class ContentController extends Controller
                 'contents' => $contents
             ]);
         } catch (\Exception $e) {
-            \Log::error('Error fetching category and contents:', [
+            Log::error('Error fetching category and contents:', [
                 'category_id' => $id,
                 'error' => $e->getMessage()
             ]);
@@ -227,8 +228,8 @@ class ContentController extends Controller
         }
     }
 
-    // 
-     // Search API
+    
+     // Dan - Search Global
     public function search(Request $request)
     {
         $query = $request->input('q'); // lấy param ?q=...

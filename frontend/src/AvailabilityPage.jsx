@@ -17,6 +17,7 @@ const DoctorAvailability = () => {
   const doctorId = user?.doctor?.id || user?.id || 1;
   const finalDoctorId = doctorId || localStorage.getItem('doctorId') || 1;
 
+
   const doctorInfo = {
     name: user?.doctor.name || "Dr. John Smith",
     id: finalDoctorId,
@@ -241,7 +242,7 @@ const DoctorAvailability = () => {
               <p><strong>👤 Name:</strong> {doctorInfo.name}</p>
               <p><strong>🆔 ID:</strong> {doctorInfo.id}</p>
               <p><strong>🏥 Specialty:</strong> {doctorInfo.specialty}</p>
-              <p><strong>🗺️ Clinic:</strong> {doctorInfo.clinic}</p>
+              <p><strong>🗺️ Organization:</strong> {doctorInfo.clinic}</p>
               <p><strong>📅 Week of:</strong> {weekRange}</p>
             </Col>
             <Col md={6} className="text-end">

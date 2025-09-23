@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Footer() {
     const navigate = useNavigate();
@@ -32,12 +32,21 @@ function Footer() {
                     </div>
 
                     <div>
+                        <h4>OUR <span className="text-accent">BRANCHES</span></h4>
+                        <ul style={{ listStyle: "none", padding: 0, color: "#bfefff" }}>
+                            <li>📍 Ha Noi – 123 Nguyen Trai, Thanh Xuan District</li>
+                            <li>📍 Ho Chi Minh – 456 Le Loi, District 1</li>
+                            <li>📍 Da Nang – 789 Tran Phu, Hai Chau District</li>
+                            <li>📍 Can Tho – 321 Xuan Khanh, Ninh Kieu District</li>
+                        </ul>
+                    </div>
+
+                    <div>
                         <h4>NEWS <span className="text-accent">LETTER</span></h4>
                         <div className="newsletter" style={{ display: "flex", gap: 8 }}>
                             <input placeholder="Your email" />
                             <button className="go">➤</button>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -46,16 +55,14 @@ function Footer() {
                 className="bottom"
                 style={{
                     display: "flex",
-                    justifyContent: "center", 
-                    alignItems: "center",     
-                    height: "50px",          
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "50px",
                     padding: "10px",
                 }}
             >
                 Copyright© MediConnect Group. All right reserved.
             </div>
-
-
         </footer>
     );
 }

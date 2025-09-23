@@ -31,10 +31,10 @@ function ForgotPassword() {
           }, 2000); // Chờ 2 giây để user đọc thông báo
         }
       } else {
-        setError(data.message || "Có lỗi xảy ra");
+        setError(data.message || "An error occurred");
       }
     } catch (err) {
-      setError("Không thể kết nối đến server");
+      setError("Can't connect to server");
     } finally {
       setLoading(false);
     }
@@ -43,15 +43,15 @@ function ForgotPassword() {
   return (
     <div className="auth-wrap">
       <form className="auth-card" onSubmit={onSubmit}>
-        <h2>Quên mật khẩu?</h2>
-        <p className="desc">Nhập email của bạn, chúng tôi sẽ gửi mã reset mật khẩu.</p>
+        <h2>Forgot your password?</h2>
+        <p className="desc">Enter your email, and we will send you a code to reset the password.</p>
         <div className="line" />
         
         {message && (
           <div className="alert alert-success" style={{ marginBottom: '15px', padding: '10px', backgroundColor: '#d4edda', color: '#155724', border: '1px solid #c3e6cb', borderRadius: '4px' }}>
             <div>{message}</div>
             <div style={{ marginTop: '10px', fontSize: '14px', fontStyle: 'italic' }}>
-              Đang chuyển hướng đến trang đặt lại mật khẩu...
+              Redirecting to reset password page...
             </div>
             {resetToken && (
               <div style={{ marginTop: '10px' }}>
@@ -68,7 +68,7 @@ function ForgotPassword() {
                     fontSize: '14px'
                   }}
                 >
-                  Chuyển ngay đến trang đặt lại mật khẩu
+                  Redirect to reset password page
                 </button>
               </div>
             )}
@@ -96,7 +96,7 @@ function ForgotPassword() {
             type="submit" 
             disabled={loading}
           >
-            {loading ? "Đang gửi..." : "Gửi mã reset"}
+            {loading ? "Sending..." : "Send a code"}
           </button>
         </div>
       </form>

@@ -27,7 +27,7 @@ function ResetPassword() {
     setMessage("");
 
     if (formData.password !== formData.password_confirmation) {
-      setError("Mật khẩu xác nhận không khớp");
+      setError("Confirm password does not match");
       setLoading(false);
       return;
     }
@@ -46,10 +46,10 @@ function ResetPassword() {
           navigate("/login");
         }, 2000);
       } else {
-        setError(data.message || "Có lỗi xảy ra");
+        setError(data.message || "An error occurred");
       }
     } catch (err) {
-      setError("Không thể kết nối đến server");
+      setError("Can't connect to server");
     } finally {
       setLoading(false);
     }
@@ -58,8 +58,8 @@ function ResetPassword() {
   return (
     <div className="auth-wrap">
       <form className="auth-card" onSubmit={onSubmit}>
-        <h2>Đặt lại mật khẩu</h2>
-        <p className="desc">Nhập mật khẩu mới của bạn.</p>
+        <h2>Reset password</h2>
+        <p className="desc">Enter your new password.</p>
         <div className="line" />
         
         {message && (
@@ -77,7 +77,7 @@ function ResetPassword() {
         <input 
           type="password" 
           name="password"
-          placeholder="Mật khẩu mới" 
+          placeholder="New password" 
           required 
           value={formData.password} 
           onChange={handleChange}
@@ -88,7 +88,7 @@ function ResetPassword() {
         <input 
           type="password" 
           name="password_confirmation"
-          placeholder="Xác nhận mật khẩu mới" 
+          placeholder="Confirm new password" 
           required 
           value={formData.password_confirmation} 
           onChange={handleChange}
@@ -97,13 +97,13 @@ function ResetPassword() {
         />
         
         <div className="auth-actions">
-          <Link className="btn-ghost" to="/login">Hủy</Link>
+          <Link className="btn-ghost" to="/login">Cancel</Link>
           <button 
             className="btn-primary-wide" 
             type="submit" 
             disabled={loading}
           >
-            {loading ? "Đang xử lý..." : "Đặt lại mật khẩu"}
+            {loading ? "Processing..." : "Reset password"}
           </button>
         </div>
       </form>

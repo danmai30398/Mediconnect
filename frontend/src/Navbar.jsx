@@ -36,6 +36,18 @@ const DashboardLayout = () => {
     const fetchNotifications = async () => {
       try {
         setLoading(true);
+        // Đảm bảo token được gửi bằng cách kiểm tra trước
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error("No token found for notifications request");
+          setNotifications([]);
+          return;
+        }
+        
+        // Thêm delay nhỏ để đảm bảo interceptor đã được setup
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        console.log("Fetching notifications with token:", token.substring(0, 20) + '...');
         const res = await axios.get("http://localhost:8000/api/notifications");
         const notificationsData = res.data?.data || res.data || [];
         setNotifications(Array.isArray(notificationsData) ? notificationsData : []);
@@ -77,6 +89,13 @@ const DashboardLayout = () => {
   // Đánh dấu thông báo đã đọc
   const handleNotificationClick = async (notificationId) => {
     try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error("No token found for mark as read request");
+        return;
+      }
+      
+      console.log("Marking notification as read with token:", token.substring(0, 20) + '...');
       await axios.post(`http://localhost:8000/api/notifications/${notificationId}/read`);
       setNotifications((prev) =>
         prev.map((notif) =>
@@ -91,6 +110,13 @@ const DashboardLayout = () => {
   // Đánh dấu tất cả đã đọc
   const handleMarkAllAsRead = async () => {
     try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error("No token found for mark all as read request");
+        return;
+      }
+      
+      console.log("Marking all notifications as read with token:", token.substring(0, 20) + '...');
       await axios.post("http://localhost:8000/api/notifications/read-all");
       setNotifications((prev) => prev.map((notif) => ({ ...notif, is_read: true })));
     } catch (err) {

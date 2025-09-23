@@ -79,8 +79,8 @@ class DoctorController extends Controller
         ->with(['patient', 'availability'])
         ->get();
 
-        // Get unread notifications count
-        $unreadNotificationsCount = Notification::where('doctor_id', $doctor->doctor_id)
+        // Get unread notifications count - sử dụng user_id thay vì doctor_id
+        $unreadNotificationsCount = Notification::where('user_id', $mediUser->user_id)
             ->where('is_read', false)
             ->count();
 

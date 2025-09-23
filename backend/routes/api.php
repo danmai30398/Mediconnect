@@ -60,7 +60,7 @@ Route::apiResource('cities', CityController::class)->only(['index', 'show']);
 Route::apiResource('categories', CategoryController::class)->only(['index', 'show']);
 Route::apiResource('contents', ContentController::class)->only(['index', 'show']);
 Route::apiResource('contact-messages', ContactMessageController::class)->only(['index', 'show']);
-Route::apiResource('appointments', AppointmentController::class)->only(['index', 'show', 'store']);
+// Appointments routes đã được định nghĩa ở trên với middleware auth
 
 // Thêm route patients từ Thuan - CRUD operations cho patients
 Route::apiResource('patients', PatientController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
@@ -95,9 +95,12 @@ Route::apiResource('user', UserController::class);
 Route::put('update/patient/{id}', [UserController::class, 'updatePatient']);
 Route::get('/check-username', [UserController::class, 'checkUsername']);
 Route::apiResource('doc', ViewDoctorsController::class);
-Route::apiResource('appointments', AppointmentController::class);
-Route::get('/appointments/patient/{patient_id}', [AppointmentController::class, 'getByPatient']);
-Route::patch('/appointments/reschedule/{id}', [AppointmentController::class, 'reschedule']);
+// Appointments routes - cần authentication
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('appointments', AppointmentController::class);
+    Route::get('/appointments/patient/{patient_id}', [AppointmentController::class, 'getByPatient']);
+    Route::patch('/appointments/reschedule/{id}', [AppointmentController::class, 'reschedule']);
+});
 
 //Phan cua Duyen - End
 
@@ -118,9 +121,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/doctor/patients', [App\Http\Controllers\DoctorController::class, 'getPatients']);
     Route::get('/doctor/stats', [App\Http\Controllers\DoctorController::class, 'getStats']);
     Route::post('/doctor/avatar', [App\Http\Controllers\DoctorController::class, 'uploadAvatar']);
-    Route::get('/notifications', [NotificationController::class, 'index']);
-    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
-    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
+    // Notification routes đã được định nghĩa ở trên (dòng 44-47)
     Route::post('/doctor/update', [DoctorProfileController::class, 'update']);
 
     // Booking routes

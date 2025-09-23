@@ -15,7 +15,7 @@ function AdminDoctorDetail() {
                 // Sử dụng apiService để lấy thông tin bác sĩ
                 const doc = await apiService.getDoctor(id);
                 setDoc(doc);
-            } catch (e) { setError("Không thể tải chi tiết bác sĩ"); }
+            } catch (e) { setError("Can't load doctor details"); }
         };
         load();
     }, [id]);

@@ -50,26 +50,26 @@ function AdminUsers() {
         
         // Validate phía client trước khi gọi API
         if (!form.username || !form.username.trim()) {
-            setNotice('Tên đăng nhập là bắt buộc');
+            setNotice('Username is required');
             setShowToast(true);
             setTimeout(() => setShowToast(false), 3000);
             return;
         }
         if (!form.email || !form.email.trim()) {
-            setNotice('Email là bắt buộc');
+            setNotice('Email is required');
             setShowToast(true);
             setTimeout(() => setShowToast(false), 3000);
             return;
         }
         if (!form.name || !form.name.trim()) {
-            setNotice('Họ tên là bắt buộc');
+            setNotice('Full name is required');
             setShowToast(true);
             setTimeout(() => setShowToast(false), 3000);
             return;
         }
         // Mật khẩu chỉ bắt buộc cho user mới (không có ID nghĩa là user mới)
         if (!form.id && (!form.password || typeof form.password !== 'string' || !form.password.trim())) {
-            setNotice('Mật khẩu là bắt buộc cho user mới');
+            setNotice('Password is required for new user');
             setShowToast(true);
             setTimeout(() => setShowToast(false), 3000);
             return;

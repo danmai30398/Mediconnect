@@ -132,7 +132,7 @@ const DoctorProfile = () => {
       <Row className="mb-4">
         <div className="doctor_profile_left-panel">
           <img
-            src={preview || (doctor?.image ? `http://localhost:8000${doctor.image}` : "/default-avatar.jpg")}
+            src={preview || (doctor?.image ? `http://localhost:8000${doctor?.image}` : "/default-avatar.jpg")}
             alt="Avatar"
             className="doctor_profile_profile-avatar"
             onClick={isEditing ? () => document.getElementById('avatar-upload').click() : null}

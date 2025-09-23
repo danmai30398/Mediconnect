@@ -36,12 +36,10 @@ function HomePage() {
     const navigate = useNavigate();
 
     const goBooking = () => {
-        const token = localStorage.getItem("token");
-        navigate(token ? "/search-doctor" : "/login");
+        navigate("/search-doctor" );
     };
     const goToBookingFlow = () => {
-        const token = localStorage.getItem("token");
-        navigate(token ? "/search-doctor" : "/login");
+        navigate( "/search-doctor");
     };
 
     return (

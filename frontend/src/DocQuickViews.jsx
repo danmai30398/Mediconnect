@@ -96,7 +96,7 @@ function DocQuickViews() {
                                     <div className="col-12 col-md-3 col-xl-3 m-1 docqkview text-center shadow" key={profile.id}>
                                         <div>
                                             <img
-                                                src={profile.image ? `${API_BASE_URL}/storage/avatars/${profile.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
+                                                src={profile.image ? `${API_BASE_URL}${profile.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
                                                 alt={profile.name}
                                                 className="rounded-circle"
                                                 style={{ width: "70px", height: "70px" }}

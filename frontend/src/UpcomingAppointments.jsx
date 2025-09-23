@@ -115,7 +115,7 @@ const UpcomingAppointments = () => {
             <Card key={appt.appointment_id || index} className="mb-3">
               <Card.Body className="d-flex">
                 <img 
-                  src={appt.patient?.image || "/default-avatar.jpg"} 
+                  src={`http://localhost:8000/storage/${appt.patient?.image}` || "/default-avatar.jpg"} 
                   alt="avatar" 
                   className="appt-avatar rounded-circle" 
                   style={{ width: "50px", height: "50px", objectFit: "cover" }}

@@ -75,7 +75,7 @@ function DoctorDetails() {
             <div className="row align-items-center mb-3 p-3 borderCustom" key={profile.id}>
                 <div className="col-md-2 text-center">
                     <img
-                        src={profile.image ? `${API_BASE_URL}/storage/avatars/${profile.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
+                        src={profile.image ? `${API_BASE_URL}${profile.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
                         alt={profile.name}
                         className="rounded"
                         style={{ width: "150px", height: "auto" }}

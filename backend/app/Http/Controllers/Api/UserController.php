@@ -94,7 +94,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'username' => 'required|string|unique:medi_users,username',
             'password' => 'required|string|min:6',
-            'role' => 'required|int',
+            'role_id' => 'required|int',
         ]);
 
         DB::transaction(function () use ($validated) {
@@ -102,7 +102,7 @@ class UserController extends Controller
             $user = MediUser::create([
                 'username' => $validated['username'],
                 'password' => Hash::make($validated['password']),
-                'role_id' => $validated['role'],
+                'role_id' => $validated['role_id'],
             ]);
 
         });

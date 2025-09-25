@@ -14,7 +14,7 @@ function AdminDoctors() {
     // State quản lý dữ liệu component
     const [items, setItems] = useState([]); // Danh sách bác sĩ từ API
     const [cities, setCities] = useState([]); // Danh sách thành phố để chọn
-    const [form, setForm] = useState({ 
+    const [form, setForm] = useState({
         name: "", // Tên bác sĩ
         phone: "", // Số điện thoại
         email: "", // Email liên hệ
@@ -46,7 +46,7 @@ function AdminDoctors() {
                 apiService.getDoctors(), // Lấy danh sách bác sĩ
                 apiService.getCities() // Lấy danh sách thành phố
             ]);
-            
+
             setItems(doctors); // Cập nhật danh sách bác sĩ
             setCities(citiesData); // Cập nhật danh sách thành phố
         } catch (error) {
@@ -89,53 +89,52 @@ function AdminDoctors() {
      */
     const submit = async (e) => {
         e.preventDefault();
-        
+
         // Tạo FormData để gửi dữ liệu và file ảnh
         const fd = new FormData();
         Object.entries(form).forEach(([k, v]) => {
-            if (k === 'image') { 
+            if (k === 'image') {
                 // Xử lý upload ảnh đại diện
-                if (v instanceof File) fd.append('image', v); 
-                return; 
+                if (v instanceof File) fd.append('image', v);
+                return;
             }
             // Chỉ gửi các field có giá trị
             if (v !== undefined && v !== null && v !== '') fd.append(k, v);
         });
-        
+
         // Thêm _method=PUT cho update request
         if (editId) fd.append('_method', 'PUT');
-        
+
         setSaving(true); // Bật loading state
         try {
             let response;
             if (editId) {
-                // Cập nhật bác sĩ hiện có
                 response = await apiService.updateDoctor(editId, fd);
             } else {
                 // Tạo bác sĩ mới
                 response = await apiService.createDoctor(fd);
             }
-            
+
             if (response.ok) {
-                setMessage('Saved successfully'); 
-                setShowToast(true); 
+                setMessage('Saved successfully');
+                setShowToast(true);
                 // Reset form sau khi lưu thành công
-                setForm({ name: "", phone: "", email: "", specialization: "", experience: "", qualification: "", gender: "", dob: "", image: "", description: "", city_id: "" }); 
-                setEditId(null); 
-                setShow(false); 
+                setForm({ name: "", phone: "", email: "", specialization: "", experience: "", qualification: "", gender: "", dob: "", image: "", description: "", city_id: "" });
+                setEditId(null);
+                setShow(false);
                 load(); // Reload danh sách
                 // Auto hide toast after 3 seconds
                 setTimeout(() => setShowToast(false), 3000);
             } else {
                 // Xử lý lỗi từ API
                 const errorData = await response.json();
-                setMessage(errorData.message || "Save failed"); 
+                setMessage(errorData.message || "Save failed");
                 setShowToast(true);
                 setTimeout(() => setShowToast(false), 3000);
             }
         } catch (error) {
             console.error('Error saving doctor:', error);
-            setMessage("Save failed"); 
+            setMessage("Save failed");
             setShowToast(true);
             // Auto hide toast after 3 seconds
             setTimeout(() => setShowToast(false), 3000);
@@ -159,16 +158,16 @@ function AdminDoctors() {
      */
     const remove = async () => {
         if (!deleteItem) return;
-        
+
         try {
             await apiService.deleteDoctor(deleteItem.doctor_id); // Gọi API xóa
         } catch (error) {
             console.error('Error deleting doctor:', error);
         }
-        
+
         setShowDeleteConfirm(false); // Đóng modal xác nhận
         setDeleteItem(null); // Reset item cần xóa
-        
+
         setMessage('Deleted successfully'); // Hiển thị thông báo thành công
         setShowToast(true);
         setTimeout(() => setShowToast(false), 3000);
@@ -191,48 +190,48 @@ function AdminDoctors() {
         <div className="container-fluid py-4 px-4" style={{ marginTop: '80px' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2 className="m-0 text-primary">Doctor Management</h2>
-                <Button variant="primary" onClick={() => { 
-                    setEditId(null); 
-                    setForm({ name: "", phone: "", email: "", specialization: "", experience: "", qualification: "", gender: "", dob: "", image: "", description: "", city_id: "" }); 
-                    setShow(true); 
+                <Button variant="primary" onClick={() => {
+                    setEditId(null);
+                    setForm({ name: "", phone: "", email: "", specialization: "", experience: "", qualification: "", gender: "", dob: "", image: "", description: "", city_id: "" });
+                    setShow(true);
                 }}>+ Add Doctor</Button>
             </div>
             <Modal show={show} onHide={() => setShow(false)} size="lg">
                 <Modal.Header closeButton><Modal.Title>{editId ? 'Update Doctor' : 'Add Doctor'}</Modal.Title></Modal.Header>
                 <form onSubmit={submit}>
-                <Modal.Body>
-                    <div className="row g-2">
-                        <div className="col-12 col-md-6"><input className="form-control" placeholder="Full Name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required /></div>
-                        <div className="col-12 col-md-6"><input className="form-control" placeholder="Email" type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required /></div>
-                        <div className="col-12 col-md-6"><input className="form-control" placeholder="Phone Number" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} required /></div>
-                        <div className="col-12 col-md-6"><input className="form-control" placeholder="Specialization" value={form.specialization} onChange={e => setForm({ ...form, specialization: e.target.value })} required /></div>
-                        <div className="col-12 col-md-6"><input className="form-control" placeholder="Experience (years)" type="number" value={form.experience} onChange={e => setForm({ ...form, experience: e.target.value })} required /></div>
-                        <div className="col-12 col-md-6"><input className="form-control" placeholder="Qualification" value={form.qualification} onChange={e => setForm({ ...form, qualification: e.target.value })} required /></div>
-                        <div className="col-12 col-md-4">
-                            <select className="form-select" value={form.gender} onChange={e => setForm({ ...form, gender: e.target.value })}>
-                                <option value="">-- Select Gender --</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
+                    <Modal.Body>
+                        <div className="row g-2">
+                            <div className="col-12 col-md-6"><input className="form-control" placeholder="Full Name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required /></div>
+                            <div className="col-12 col-md-6"><input className="form-control" placeholder="Email" type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required /></div>
+                            <div className="col-12 col-md-6"><input className="form-control" placeholder="Phone Number" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} required /></div>
+                            <div className="col-12 col-md-6"><input className="form-control" placeholder="Specialization" value={form.specialization} onChange={e => setForm({ ...form, specialization: e.target.value })} required /></div>
+                            <div className="col-12 col-md-6"><input className="form-control" placeholder="Experience (years)" type="number" value={form.experience} onChange={e => setForm({ ...form, experience: e.target.value })} required /></div>
+                            <div className="col-12 col-md-6"><input className="form-control" placeholder="Qualification" value={form.qualification} onChange={e => setForm({ ...form, qualification: e.target.value })} required /></div>
+                            <div className="col-12 col-md-4">
+                                <select className="form-select" value={form.gender} onChange={e => setForm({ ...form, gender: e.target.value })}>
+                                    <option value="">-- Select Gender --</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div className="col-12 col-md-4"><input className="form-control" type="date" value={form.dob} onChange={e => setForm({ ...form, dob: e.target.value })} /></div>
+                            <div className="col-12 col-md-4">
+                                <select className="form-select" value={form.city_id} onChange={e => setForm({ ...form, city_id: e.target.value })}>
+                                    <option value="">-- Select City --</option>
+                                    {cities.map(city => (
+                                        <option key={city.city_id} value={city.city_id}>{city.city_name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="col-12"><textarea className="form-control" placeholder="Description" rows="3" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} /></div>
+                            <div className="col-12"><input className="form-control" type="file" accept="image/*" onChange={e => setForm({ ...form, image: e.target.files[0] })} /></div>
                         </div>
-                        <div className="col-12 col-md-4"><input className="form-control" type="date" value={form.dob} onChange={e => setForm({ ...form, dob: e.target.value })} /></div>
-                        <div className="col-12 col-md-4">
-                            <select className="form-select" value={form.city_id} onChange={e => setForm({ ...form, city_id: e.target.value })}>
-                                <option value="">-- Select City --</option>
-                                {cities.map(city => (
-                                    <option key={city.city_id} value={city.city_id}>{city.city_name}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="col-12"><textarea className="form-control" placeholder="Description" rows="3" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} /></div>
-                        <div className="col-12"><input className="form-control" type="file" accept="image/*" onChange={e => setForm({ ...form, image: e.target.files[0] })} /></div>
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShow(false)}>Close</Button>
-                    <Button variant="primary" type="submit" disabled={saving}>{saving ? 'Saving...' : 'Save'}</Button>
-                </Modal.Footer>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => setShow(false)}>Close</Button>
+                        <Button variant="primary" type="submit" disabled={saving}>{saving ? 'Saving...' : 'Save'}</Button>
+                    </Modal.Footer>
                 </form>
             </Modal>
             <ToastContainer position="bottom-end" className="p-3">
@@ -257,9 +256,9 @@ function AdminDoctors() {
                         {items.map(i => (
                             <tr key={i.doctor_id}>
                                 <td className="text-center">
-                                    <img 
-                                        src={i.image_url || `${process.env.PUBLIC_URL}/Images/Doctors/Unknown_person.jpg`} 
-                                        alt={i.name} 
+                                    <img
+                                        src={i.image_url || `${process.env.PUBLIC_URL}/Images/Doctors/Unknown_person.jpg`}
+                                        alt={i.name}
                                         style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }}
                                     />
                                 </td>

@@ -24,6 +24,8 @@ Route::get('/categories/{id}/contents', [ContentController::class, 'getByCategor
 Route::get('/contents/{id}', [ContentController::class, 'show']);
 Route::get('/search', [ContentController::class, 'search']);
 
+Route::post('/add/doctors', [ViewDoctorsController::class, 'store']);
+Route::put('/update/doctors/{id}', [ViewDoctorsController::class, 'update']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
@@ -72,13 +74,15 @@ Route::get('dashboard/notifications', [DashboardController::class, 'notification
 Route::get('availabilities', [AvailabilityController::class, 'index']);
 Route::get('/doctors', [DoctorController::class, 'index']);
 
+
+
 // Public - contact form (dan)
 Route::post('/contact-messages', [ContactMessageController::class, 'store']);
+Route::apiResource('cities', CityController::class)->only(['store', 'update', 'destroy']);
 
 // Admin-protected Write Endpoints
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('doctors', ViewDoctorsController::class)->only(['store', 'update', 'destroy']);
-    Route::apiResource('cities', CityController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('categories', CategoryController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('contact-messages', ContactMessageController::class)->only(['index', 'show', 'update', 'destroy']);
     Route::apiResource('appointments', AppointmentController::class)->only(['update', 'destroy']);

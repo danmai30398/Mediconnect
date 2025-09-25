@@ -84,7 +84,7 @@ class Doctor extends Model
         // Khi doctor được tạo mới
         static::created(function ($doctor) {
             // Nếu có email, đồng bộ sang medi_users
-            if ($doctor->email) {
+            if ($doctor->email && $doctor->user) {
                 $doctor->user->update(['email' => $doctor->email]);
             }
         });

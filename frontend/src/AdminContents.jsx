@@ -138,7 +138,6 @@ function AdminContents() {
                     doctor_id: form.doctor_id || null,
                 });
             } else {
-                // Create: gửi FormData
                 const formData = new FormData();
                 formData.append('title', form.title);
                 formData.append('name', form.name || '');
@@ -146,10 +145,11 @@ function AdminContents() {
                 formData.append('category_id', form.category_id);
                 formData.append('doctor_id', form.doctor_id || '');
                 
-                // Chỉ gửi ảnh nếu có file mới được chọn
                 if (imageFile) {
                     formData.append('image', imageFile);
                 }
+
+                console.log(formData)
                 
                 res = await apiService.createContent(formData);
             }

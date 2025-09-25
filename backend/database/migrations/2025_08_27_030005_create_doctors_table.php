@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->longText('description');
             $table->unsignedBigInteger('city_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('city_id')->references('city_id')->on('cities');
             $table->foreign('user_id')->references('user_id')->on('medi_users')->onDelete('cascade');
         });

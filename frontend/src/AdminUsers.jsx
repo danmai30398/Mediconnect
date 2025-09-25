@@ -116,7 +116,7 @@ function AdminUsers() {
             if (isEdit) {
                 response = await apiService.updateUser(form.id, payload);
             } else {
-                response = await apiService.createUser(payload);
+                response = await apiService.insertUser(payload);
             }
             
             if (response.ok) { 

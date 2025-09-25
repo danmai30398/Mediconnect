@@ -127,6 +127,24 @@ export const apiService = {
         return response;
     },
 
+    insertUser: async (userData) => {
+        const response = await fetch(`${API_BASE_URL}/api/users/insert`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(userData)
+        });
+        return response;
+    },
+
+    User: async (userData) => {
+        const response = await fetch(`${API_BASE_URL}/api/users/insert`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(userData)
+        });
+        return response;
+    },
+
     updateUser: async (userId, userData) => {
         // Thêm source parameter vào URL nếu có
         let url = `${API_BASE_URL}/api/users/${userId}`;
@@ -179,38 +197,37 @@ export const apiService = {
     },
 
     createDoctor: async (doctorData) => {
-        const token = localStorage.getItem('token') || '';
-        const headers = { 'Authorization': `Bearer ${token}` };
+        let options = {
+            method: 'POST',
+            body: null
+        };
 
-        // Không set Content-Type cho FormData, browser sẽ tự set
-        if (!(doctorData instanceof FormData)) {
-            headers['Content-Type'] = 'application/json';
+        if (doctorData instanceof FormData) {
+            options.body = doctorData;
+        } else {
+            options.headers = { 'Content-Type': 'application/json' };
+            options.body = JSON.stringify(doctorData);
         }
 
-        const response = await fetch(`${API_BASE_URL}/api/doctors`, {
-            method: 'POST',
-            headers: headers,
-            body: doctorData instanceof FormData ? doctorData : JSON.stringify(doctorData)
-        });
+        const response = await fetch(`${API_BASE_URL}/api/add/doctors`, options);
         return response;
     },
+
 
     updateDoctor: async (doctorId, doctorData) => {
-        const token = localStorage.getItem('token') || '';
-        const headers = { 'Authorization': `Bearer ${token}` };
+        let options = {
+            method: 'POST', // 👈 đổi từ PUT sang POST
+            body: doctorData
+        };
 
-        // Không set Content-Type cho FormData, browser sẽ tự set
-        if (!(doctorData instanceof FormData)) {
-            headers['Content-Type'] = 'application/json';
+        if (doctorData instanceof FormData && !doctorData.has('_method')) {
+            doctorData.append('_method', 'PUT');
         }
 
-        const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}/profile`, {
-            method: 'PUT',
-            headers: headers,
-            body: doctorData instanceof FormData ? doctorData : JSON.stringify(doctorData)
-        });
+        const response = await fetch(`${API_BASE_URL}/api/update/doctors/${doctorId}`, options);
         return response;
     },
+
 
     deleteDoctor: async (doctorId) => {
         const response = await fetch(`${API_BASE_URL}/api/doctors/${doctorId}`, {
@@ -340,13 +357,27 @@ export const apiService = {
     },
 
     createContent: async (contentData) => {
-        const response = await fetch(`${API_BASE_URL}/api/contents`, {
+        let options = {
             method: 'POST',
-            headers: getAuthHeaders(),
-            body: JSON.stringify(contentData)
-        });
+            headers: {
+                ...getAuthHeaders()
+            },
+            body: null
+        };
+
+        if (contentData instanceof FormData) {
+            options.body = contentData;
+
+            delete options.headers['Content-Type'];
+        } else {
+            options.headers['Content-Type'] = 'application/json';
+            options.body = JSON.stringify(contentData);
+        }
+
+        const response = await fetch(`${API_BASE_URL}/api/contents`, options);
         return response;
     },
+
 
     updateContent: async (contentId, contentData) => {
         const response = await fetch(`${API_BASE_URL}/api/contents/${contentId}`, {

@@ -10,9 +10,9 @@ class PatientSeeder extends Seeder
     public function run(): void
     {
         Patient::updateOrCreate(
-            ['email' => 'nva@example.com'],
+            ['email' => 'john.doe@example.com'],
             [
-                'name' => 'Nguyen Van A',
+                'name' => 'John Doe',
                 'address' => '123 Hai Ba Trung Street, Hanoi',
                 'phone' => '0987654321',
                 'dob' => '1995-01-01',
@@ -23,11 +23,11 @@ class PatientSeeder extends Seeder
         );
 
         Patient::updateOrCreate(
-            ['email' => 'ttb@example.com'],
+            ['email' => 'jane.smith@example.com'],
             [
-                'name' => 'Tran Thi B',
+                'name' => 'Jane Smith',
                 'address' => '456 Le Loi Street, Da Nang',
-                'phone' => '0911222333',
+                'phone' => '0911222334',
                 'dob' => '1997-02-02',
                 'gender' => 'Female',
                 'image' => null,
@@ -36,11 +36,11 @@ class PatientSeeder extends Seeder
         );
 
         Patient::updateOrCreate(
-            ['email' => 'ntc@example.com'],
+            ['email' => 'mary.johnson@example.com'],
             [
-                'name' => 'Nguyen Thi C',
-                'address' => '789 Tran Phu Street, Hai Phong',
-                'phone' => '0933444555',
+                'name' => 'Mary Johnson',
+                'address' => '789 Tran Phu Street, Can Tho',
+                'phone' => '0933444556',
                 'dob' => '1995-03-03',
                 'gender' => 'Female',
                 'image' => null,

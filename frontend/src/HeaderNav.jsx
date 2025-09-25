@@ -61,7 +61,7 @@ function HeaderNav({ defaultTab }) {
             <div className="dropdown category-dropdown">
               <button className="dropbtn">CATEGORY</button>
               <div className="dropdown-content">
-                <Link to="/category/1">Desease</Link>
+                <Link to="/category/1">Diseases</Link>
                 <Link to="/category/2">Preventions</Link>
                 <Link to="/category/3">Cures</Link>
               </div>

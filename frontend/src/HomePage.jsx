@@ -230,7 +230,7 @@ function HomePage() {
                     </h2>
                     <div className="cards" style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
                         {[
-                            { img: disease, title: "Disease", id: 1, des: "Explore articles on symptoms, treatments, and common diseases." },
+                            { img: disease, title: "Diseases", id: 1, des: "Explore articles on symptoms, treatments, and common diseases." },
                             { img: prevention, title: "Preventions", id: 2, des: "Learn how to protect yourself and your loved ones with expert prevention tips." },
                             { img: cure, title: "Cures", id: 3, des: "Discover the latest cures and treatment options for various health conditions." },
                         ].map((it, i) => (

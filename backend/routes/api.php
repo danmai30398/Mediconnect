@@ -38,8 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('patients/{id}/upload-image', [PatientController::class, 'uploadImage']);
     Route::put('patients/{id}/profile', [PatientController::class, 'updateProfile']);
     Route::post('doctors/{id}/upload-image', [DoctorController::class, 'uploadImage']);
-    Route::put('doctors/{id}/profile', [DoctorController::class, 'update']);
-
+    Route::put('doctors/{id}/profile', [ViewDoctorsController::class, 'update']);
     // Notification Routes
     Route::get('notifications', [NotificationController::class, 'index']);
     Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead']);
@@ -54,6 +53,7 @@ Route::post('login', [UserController::class, 'login']);
 Route::post('users/{id}/create-profile', [UserController::class, 'createProfile']);
 Route::post('users/insert', [UserController::class, 'insert']);
 Route::post('users/{id}/unlock', [UserController::class, 'unlock']);
+Route::get('cities', [UserController::class, 'getCities']);
 Route::post('contact-messages/{id}/status', [ContactMessageController::class, 'updateStatus']);
 // Public read endpoints
 Route::apiResource('cities', CityController::class)->only(['index', 'show']);
@@ -75,12 +75,15 @@ Route::get('/doctors', [DoctorController::class, 'index']);
 // Public - contact form (dan)
 Route::post('/contact-messages', [ContactMessageController::class, 'store']);
 
+// Public Write Endpoints (for testing)
+Route::apiResource('doctors', ViewDoctorsController::class)->only(['store', 'update', 'destroy']);
+Route::put('doctors/{id}/profile', [ViewDoctorsController::class, 'update']);
+Route::apiResource('cities', CityController::class)->only(['store', 'update', 'destroy']);
+Route::apiResource('categories', CategoryController::class)->only(['store', 'update', 'destroy']);
+Route::apiResource('contact-messages', ContactMessageController::class)->only(['index', 'show', 'update', 'destroy']);
+
 // Admin-protected Write Endpoints
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('doctors', ViewDoctorsController::class)->only(['store', 'update', 'destroy']);
-    Route::apiResource('cities', CityController::class)->only(['store', 'update', 'destroy']);
-    Route::apiResource('categories', CategoryController::class)->only(['store', 'update', 'destroy']);
-    Route::apiResource('contact-messages', ContactMessageController::class)->only(['index', 'show', 'update', 'destroy']);
     Route::apiResource('appointments', AppointmentController::class)->only(['update', 'destroy']);
     Route::post('availabilities', [AvailabilityController::class, 'store']);
     Route::delete('availabilities/{id}', [AvailabilityController::class, 'destroy']);
@@ -95,12 +98,15 @@ Route::apiResource('user', UserController::class);
 Route::put('update/patient/{id}', [UserController::class, 'updatePatient']);
 Route::get('/check-username', [UserController::class, 'checkUsername']);
 Route::apiResource('doc', ViewDoctorsController::class);
+Route::apiResource('appointments', AppointmentController::class);
+Route::get('/appointments/patient/{patient_id}', [AppointmentController::class, 'getByPatient']);
+Route::patch('/appointments/reschedule/{id}', [AppointmentController::class, 'reschedule']);
 // Appointments routes - cần authentication
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('appointments', AppointmentController::class);
-    Route::get('/appointments/patient/{patient_id}', [AppointmentController::class, 'getByPatient']);
-    Route::patch('/appointments/reschedule/{id}', [AppointmentController::class, 'reschedule']);
-});
+// Route::middleware('auth:sanctum')->group(function () {
+//     Route::apiResource('appointments', AppointmentController::class);
+//     Route::get('/appointments/patient/{patient_id}', [AppointmentController::class, 'getByPatient']);
+//     Route::patch('/appointments/reschedule/{id}', [AppointmentController::class, 'reschedule']);
+// });
 
 //Phan cua Duyen - End
 

@@ -18,8 +18,7 @@ function AdminPatients() {
         email: "", // Email liên hệ
         address: "", // Địa chỉ
         gender: "", // Giới tính
-        dob: "", // Ngày sinh
-        image: "" // Ảnh đại diện
+        dob: "" // Ngày sinh
     });
     const [editId, setEditId] = useState(null); // ID bệnh nhân đang chỉnh sửa
     const [show, setShow] = useState(false); // Trạng thái hiển thị modal
@@ -58,7 +57,6 @@ function AdminPatients() {
             address: item.address || "", // Địa chỉ
             gender: item.gender || "", // Giới tính
             dob: item.dob || "", // Ngày sinh
-            image: "" // Reset ảnh để upload mới
         });
         setEditId(item.id); // Lưu ID bệnh nhân đang chỉnh sửa
         setShow(true); // Hiển thị modal
@@ -70,7 +68,7 @@ function AdminPatients() {
         const method = editId ? "POST" : "POST"; // use POST with _method override for PUT
         const fd = new FormData();
         Object.entries(form).forEach(([k, v]) => {
-            if (k === 'image') { if (v instanceof File) fd.append('image', v); return; }
+            if (k === 'image') return; // Bỏ qua image
             if (v !== undefined && v !== null && v !== '') fd.append(k, v);
         });
         if (editId) fd.append('_method', 'PUT');
@@ -86,7 +84,7 @@ function AdminPatients() {
             if (response.ok) {
                 setMessage('Saved successfully'); 
                 setShowToast(true); 
-                setForm({ name: "", phone: "", email: "", address: "", gender: "", dob: "", image: "" }); 
+                setForm({ name: "", phone: "", email: "", address: "", gender: "", dob: "" }); 
                 setEditId(null); 
                 setShow(false); 
                 // Force reload để cập nhật hình ảnh
@@ -126,7 +124,7 @@ function AdminPatients() {
         setShowDeleteConfirm(false);
         setDeleteItem(null);
         
-        setMessage('Deleted successfully');
+        setMessage('Patient and user deleted successfully');
         setShowToast(true);
         setTimeout(() => setShowToast(false), 3000);
         load();
@@ -136,7 +134,7 @@ function AdminPatients() {
         <div className="container-fluid py-4 px-4" style={{ marginTop: '80px' }}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2 className="m-0 text-primary">Patient Management</h2>
-                <Button variant="primary" onClick={() => { setEditId(null); setForm({ name: "", phone: "", email: "", address: "", gender: "", dob: "", image: "" }); setShow(true); }}>+ Add Patient</Button>
+                <Button variant="primary" onClick={() => { setEditId(null); setForm({ name: "", phone: "", email: "", address: "", gender: "", dob: "" }); setShow(true); }}>+ Add Patient</Button>
             </div>
             <Modal show={show} onHide={() => setShow(false)} size="lg">
                 <Modal.Header closeButton><Modal.Title>{editId ? 'Update Patient' : 'Add Patient'}</Modal.Title></Modal.Header>
@@ -156,7 +154,6 @@ function AdminPatients() {
                             </select>
                         </div>
                         <div className="col-12 col-md-4"><input className="form-control" type="date" value={form.dob} onChange={e => setForm({ ...form, dob: e.target.value })} /></div>
-                        <div className="col-12 col-md-4"><input className="form-control" type="file" accept="image/*" onChange={e => setForm({ ...form, image: e.target.files[0] })} /></div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -208,7 +205,6 @@ function AdminPatients() {
                 <table className="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Avatar</th>
                             <th>Full Name</th>
                             <th>Email</th>
                             <th>Phone</th>
@@ -219,14 +215,6 @@ function AdminPatients() {
                     <tbody>
                         {items.map(i => (
                             <tr key={i.id}>
-                                <td className="text-center">
-                                    <img 
-                                        src={(i.image_url && i.image_url.startsWith('http') ? i.image_url : (i.image ? `http://127.0.0.1:8000/storage/patient-images/${i.image}` : `${process.env.PUBLIC_URL}/Images/Patients/${i.image || 'Unknown_person.jpg'}`))} 
-                                        alt={i.name} 
-                                        style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }}
-                                        key={`${i.id}-${i.image}-${Date.now()}`}
-                                    />
-                                </td>
                                 <td>{i.name}</td>
                                 <td>{i.email}</td>
                                 <td>{i.phone}</td>

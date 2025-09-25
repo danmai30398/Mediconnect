@@ -110,12 +110,15 @@ export const apiService = {
     // ===== USERS =====
     getUsers: async () => {
         const response = await fetch(getCacheBustingUrl('/api/users'), {
-            headers: getAuthHeaders()
+            headers: { 'Accept': 'application/json' }
         });
         if (!response.ok) {
+            const errorText = await response.text();
+            console.error('getUsers error response:', errorText);
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return response.json();
+        const data = await response.json();
+        return data;
     },
 
     createUser: async (userData) => {
@@ -209,6 +212,7 @@ export const apiService = {
             headers: headers,
             body: doctorData instanceof FormData ? doctorData : JSON.stringify(doctorData)
         });
+        
         return response;
     },
 
@@ -340,19 +344,35 @@ export const apiService = {
     },
 
     createContent: async (contentData) => {
+        const token = localStorage.getItem('token') || '';
+        const headers = { 'Authorization': `Bearer ${token}` };
+
+        // Không set Content-Type cho FormData, browser sẽ tự set
+        if (!(contentData instanceof FormData)) {
+            headers['Content-Type'] = 'application/json';
+        }
+
         const response = await fetch(`${API_BASE_URL}/api/contents`, {
             method: 'POST',
-            headers: getAuthHeaders(),
-            body: JSON.stringify(contentData)
+            headers: headers,
+            body: contentData instanceof FormData ? contentData : JSON.stringify(contentData)
         });
         return response;
     },
 
     updateContent: async (contentId, contentData) => {
+        const token = localStorage.getItem('token') || '';
+        const headers = { 'Authorization': `Bearer ${token}` };
+
+        // Không set Content-Type cho FormData, browser sẽ tự set
+        if (!(contentData instanceof FormData)) {
+            headers['Content-Type'] = 'application/json';
+        }
+
         const response = await fetch(`${API_BASE_URL}/api/contents/${contentId}`, {
             method: 'PUT',
-            headers: getAuthHeaders(),
-            body: JSON.stringify(contentData)
+            headers: headers,
+            body: contentData instanceof FormData ? contentData : JSON.stringify(contentData)
         });
         return response;
     },
@@ -575,7 +595,25 @@ export const apiService = {
             body: JSON.stringify(resetData)
         });
         return response;
-    }
+    },
+
+    // ===== CITIES =====
+    getCities: async () => {
+        const response = await fetch(`${API_BASE_URL}/api/cities`, {
+            headers: { 'Accept': 'application/json' }
+        });
+        return response.json();
+    },
+
+    // ===== USER MANAGEMENT =====
+    unlockUser: async (userId) => {
+        const response = await fetch(`${API_BASE_URL}/api/users/${userId}/unlock`, {
+            method: 'POST',
+            headers: getAuthHeaders()
+        });
+        return response;
+    },
+
 };
 
 export default apiService;

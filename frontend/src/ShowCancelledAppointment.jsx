@@ -23,7 +23,7 @@ function ShowCancelledAppointment({ data, loading }) {
                                             <div className="row">
                                                 <div className="col-3">
                                                     <img
-                                                        src={e.availability?.doctor?.image ? `${API_BASE_URL}/storage/avatars/${e.availability?.doctor?.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
+                                                        src={e.availability?.doctor?.image ? `${API_BASE_URL}${e.availability?.doctor?.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
                                                         alt={e.availability?.doctor?.name}
                                                         className="rounded-circle"
                                                         style={{ width: "70px", height: "70px" }}

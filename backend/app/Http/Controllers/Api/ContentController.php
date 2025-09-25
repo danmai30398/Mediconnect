@@ -30,7 +30,7 @@ class ContentController extends Controller
             $validated = $request->validate([
                 'category_id' => 'required|integer|exists:categories,category_id',
                 'title' => 'required|string|max:255',
-                'description' => 'nullable|string',
+                'description' => 'required|string',
                 'image' => 'nullable|file|image|max:10240', // Tăng lên 10MB
                 'name' => 'nullable|string|max:255',
                 'doctor_id' => 'nullable|integer|exists:doctors,doctor_id',
@@ -111,7 +111,7 @@ class ContentController extends Controller
         $validated = $request->validate([
             'category_id' => 'sometimes|integer|exists:categories,category_id',
             'title' => 'sometimes|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'sometimes|string',
             'name' => 'nullable|string|max:255',
             'doctor_id' => 'nullable|integer|exists:doctors,doctor_id',
         ]);

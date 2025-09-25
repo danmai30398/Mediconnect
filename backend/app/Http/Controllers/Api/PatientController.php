@@ -355,6 +355,7 @@ class PatientController extends Controller
             Log::info('Deleting patient', ['patient_id' => $id]);
 
             $patient = Patient::findOrFail($id);
+            $userId = $patient->user_id;
             
             // Delete associated image if exists
             if ($patient->image && Storage::disk('public')->exists('patient-images/' . $patient->image)) {
@@ -365,9 +366,18 @@ class PatientController extends Controller
             // Delete patient record
             $patient->delete();
             
-            Log::info('Patient deleted successfully', ['patient_id' => $id]);
+            // Xóa user tương ứng
+            if ($userId) {
+                $user = \App\Models\MediUser::find($userId);
+                if ($user) {
+                    $user->delete();
+                    Log::info('User deleted with patient', ['user_id' => $userId, 'patient_id' => $id]);
+                }
+            }
+            
+            Log::info('Patient and user deleted successfully', ['patient_id' => $id]);
 
-            return response()->json(['message' => 'Patient deleted successfully']);
+            return response()->json(['message' => 'Patient and user deleted successfully']);
 
         } catch (\Exception $e) {
             Log::error('Error deleting patient: ' . $e->getMessage());

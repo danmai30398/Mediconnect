@@ -108,6 +108,28 @@ function AdminContents() {
         try {
             e.preventDefault();
             
+            // Validation cơ bản
+            if (!form.title.trim()) {
+                setToastVariant("danger");
+                setToastText("Title is required");
+                setShowToast(true);
+                return;
+            }
+            
+            if (!form.description.trim()) {
+                setToastVariant("danger");
+                setToastText("Content is required");
+                setShowToast(true);
+                return;
+            }
+            
+            if (!form.category_id) {
+                setToastVariant("danger");
+                setToastText("Category is required");
+                setShowToast(true);
+                return;
+            }
+            
             // Nếu có ảnh mới và đang edit, upload ảnh riêng trước
             if (imageFile && editingId) {
                 const imageFormData = new FormData();
@@ -144,7 +166,9 @@ function AdminContents() {
                 formData.append('name', form.name || '');
                 formData.append('description', form.description);
                 formData.append('category_id', form.category_id);
-                formData.append('doctor_id', form.doctor_id || '');
+                if (form.doctor_id && form.doctor_id !== '') {
+                    formData.append('doctor_id', form.doctor_id);
+                }
                 
                 // Chỉ gửi ảnh nếu có file mới được chọn
                 if (imageFile) {

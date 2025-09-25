@@ -97,7 +97,7 @@ function PatientBooking() {
                     <div className="row">
                         <div className="col-3">
                             <img
-                                src={docProfile?.image ? `${API_BASE_URL}/storage/avatars/${docProfile.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
+                                src={docProfile?.image ? `${API_BASE_URL}${docProfile.image}` : `${process.env.PUBLIC_URL}/Images/Unknown_person.jpg`}
                                 alt={docProfile.name}
                                 className="rounded-circle"
                                 style={{ width: "70px", height: "70px" }}

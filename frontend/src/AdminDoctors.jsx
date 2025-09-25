@@ -23,7 +23,6 @@ function AdminDoctors() {
         qualification: "", // Bằng cấp
         gender: "", // Giới tính
         dob: "", // Ngày sinh
-        image: "", // Ảnh đại diện
         description: "", // Mô tả chi tiết
         city_id: "" // ID thành phố
     });
@@ -59,7 +58,9 @@ function AdminDoctors() {
     };
 
     // Tải dữ liệu khi component mount
-    useEffect(() => { load(); }, []);
+    useEffect(() => { 
+        load(); 
+    }, []);
 
     /**
      * Chỉnh sửa thông tin bác sĩ
@@ -75,7 +76,6 @@ function AdminDoctors() {
             qualification: item.qualification || "", // Bằng cấp
             gender: item.gender || "", // Giới tính
             dob: item.dob || "", // Ngày sinh
-            image: "", // Reset ảnh để upload mới
             description: item.description || "", // Mô tả
             city_id: item.city_id || "" // ID thành phố
         });
@@ -93,24 +93,26 @@ function AdminDoctors() {
         // Tạo FormData để gửi dữ liệu và file ảnh
         const fd = new FormData();
         Object.entries(form).forEach(([k, v]) => {
-            if (k === 'image') { 
-                // Xử lý upload ảnh đại diện
-                if (v instanceof File) fd.append('image', v); 
-                return; 
+            // Chỉ gửi các field có giá trị (bỏ qua image)
+            if (k !== 'image' && v !== undefined && v !== null && v !== '') {
+                fd.append(k, v);
             }
-            // Chỉ gửi các field có giá trị
-            if (v !== undefined && v !== null && v !== '') fd.append(k, v);
         });
         
-        // Thêm _method=PUT cho update request
-        if (editId) fd.append('_method', 'PUT');
+        // Không cần _method=PUT vì đã sử dụng method PUT trực tiếp
         
         setSaving(true); // Bật loading state
         try {
             let response;
             if (editId) {
-                // Cập nhật bác sĩ hiện có
-                response = await apiService.updateDoctor(editId, fd);
+                // Cập nhật bác sĩ hiện có - gửi JSON thay vì FormData
+                const jsonData = {};
+                Object.entries(form).forEach(([k, v]) => {
+                    if (k !== 'image' && v !== undefined && v !== null && v !== '') {
+                        jsonData[k] = v;
+                    }
+                });
+                response = await apiService.updateDoctor(editId, jsonData);
             } else {
                 // Tạo bác sĩ mới
                 response = await apiService.createDoctor(fd);
@@ -120,10 +122,10 @@ function AdminDoctors() {
                 setMessage('Saved successfully'); 
                 setShowToast(true); 
                 // Reset form sau khi lưu thành công
-                setForm({ name: "", phone: "", email: "", specialization: "", experience: "", qualification: "", gender: "", dob: "", image: "", description: "", city_id: "" }); 
+                setForm({ name: "", phone: "", email: "", specialization: "", experience: "", qualification: "", gender: "", dob: "",  description: "", city_id: "" }); 
                 setEditId(null); 
                 setShow(false); 
-                load(); // Reload danh sách
+                await load(); // Reload danh sách
                 // Auto hide toast after 3 seconds
                 setTimeout(() => setShowToast(false), 3000);
             } else {
@@ -169,7 +171,7 @@ function AdminDoctors() {
         setShowDeleteConfirm(false); // Đóng modal xác nhận
         setDeleteItem(null); // Reset item cần xóa
         
-        setMessage('Deleted successfully'); // Hiển thị thông báo thành công
+        setMessage('Doctor and user deleted successfully'); // Hiển thị thông báo thành công
         setShowToast(true);
         setTimeout(() => setShowToast(false), 3000);
         load(); // Reload danh sách
@@ -193,7 +195,7 @@ function AdminDoctors() {
                 <h2 className="m-0 text-primary">Doctor Management</h2>
                 <Button variant="primary" onClick={() => { 
                     setEditId(null); 
-                    setForm({ name: "", phone: "", email: "", specialization: "", experience: "", qualification: "", gender: "", dob: "", image: "", description: "", city_id: "" }); 
+                    setForm({ name: "", phone: "", email: "", specialization: "", experience: "", qualification: "", gender: "", dob: "",  description: "", city_id: "" }); 
                     setShow(true); 
                 }}>+ Add Doctor</Button>
             </div>
@@ -226,7 +228,6 @@ function AdminDoctors() {
                             </select>
                         </div>
                         <div className="col-12"><textarea className="form-control" placeholder="Description" rows="3" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} /></div>
-                        <div className="col-12"><input className="form-control" type="file" accept="image/*" onChange={e => setForm({ ...form, image: e.target.files[0] })} /></div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -244,7 +245,6 @@ function AdminDoctors() {
                 <table className="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Avatar</th>
                             <th>Full Name</th>
                             <th>Gender</th>
                             <th>DOB</th>
@@ -256,13 +256,6 @@ function AdminDoctors() {
                     <tbody>
                         {items.map(i => (
                             <tr key={i.doctor_id}>
-                                <td className="text-center">
-                                    <img 
-                                        src={i.image_url || `${process.env.PUBLIC_URL}/Images/Doctors/Unknown_person.jpg`} 
-                                        alt={i.name} 
-                                        style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }}
-                                    />
-                                </td>
                                 <td><Link to={`/admin/doctors/${i.doctor_id}`}>{i.name}</Link></td>
                                 <td>{i.gender}</td>
                                 <td>{i.dob}</td>

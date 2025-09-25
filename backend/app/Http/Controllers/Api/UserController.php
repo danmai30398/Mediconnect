@@ -22,8 +22,11 @@ class UserController extends Controller
      */
     public function index()
     {
+        // Tự động unlock các tài khoản đã hết thời gian khóa
+        $this->autoUnlockExpiredAccounts();
+        
         $roleMap = [1 => 'Admin', 2 => 'Doctor', 3 => 'Patient'];
-        $mediUsers = MediUser::with(['doctor', 'patient'])->get()->map(function ($u) {
+        $mediUsers = MediUser::with(['doctor.city', 'patient'])->get()->map(function ($u) {
             return [
                 'source' => 'medi_users',
                 'user_id' => $u->user_id,
@@ -33,7 +36,11 @@ class UserController extends Controller
                 'email' => $u->doctor?->email ?? $u->patient?->email ?? $u->email ?? null,
                 'name' => $u->doctor?->name ?? $u->patient?->name ?? null,
                 'phone' => $u->doctor?->phone ?? $u->patient?->phone ?? null,
-                'address' => $u->patient?->address ?? null,
+                'address' => $u->patient?->address ?? $u->doctor?->city?->city_name ?? null,
+                'gender' => $u->doctor?->gender ?? $u->patient?->gender ?? null,
+                'dob' => $u->doctor?->dob ?? $u->patient?->dob ?? null,
+                'city_id' => $u->doctor?->city_id ?? null,
+                'city_name' => $u->doctor?->city?->city_name ?? null,
                 'is_active' => $u->is_active ?? true,
                 'locked_until' => $u->locked_until,
             ];
@@ -94,20 +101,54 @@ class UserController extends Controller
         $validated = $request->validate([
             'username' => 'required|string|unique:medi_users,username',
             'password' => 'required|string|min:6',
-            'role' => 'required|int',
+            'role_id' => 'required|integer|in:1,2,3',
+            'email' => 'required|email|max:255',
+            'name' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'gender' => 'nullable|string|in:Male,Female,Other',
+            'dob' => 'nullable|date',
+            'city_id' => 'nullable|integer|exists:cities,city_id',
+            'address' => 'nullable|string',
+            'is_active' => 'nullable|boolean',
         ]);
 
-        DB::transaction(function () use ($validated) {
-            //  Create user
+        $user = null;
+        DB::transaction(function () use ($validated, &$user) {
+            // 1. Create user
             $user = MediUser::create([
                 'username' => $validated['username'],
                 'password' => Hash::make($validated['password']),
-                'role_id' => $validated['role'],
+                'role_id' => $validated['role_id'],
+                'email' => $validated['email'],
+                'is_active' => $validated['is_active'] ?? true,
             ]);
 
+            // 2. Create profile based on role
+            if ($validated['role_id'] == 2) { // Doctor
+                $user->doctor()->create([
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                    'phone' => $validated['phone'],
+                    'gender' => $validated['gender'],
+                    'dob' => $validated['dob'],
+                    'city_id' => $validated['city_id'],
+                ]);
+            } elseif ($validated['role_id'] == 3) { // Patient
+                $user->patient()->create([
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                    'phone' => $validated['phone'],
+                    'gender' => $validated['gender'],
+                    'dob' => $validated['dob'],
+                    'address' => $validated['address'],
+                ]);
+            }
         });
 
-        return response()->json(['message' => 'Create a user successfully']);
+        return response()->json([
+            'message' => 'Create a user successfully',
+            'user_id' => $user ? $user->user_id : null
+        ]);
     }
 
     /**
@@ -654,6 +695,27 @@ class UserController extends Controller
             return response()->json([
                 'message' => 'Có lỗi xảy ra, vui lòng thử lại sau'
             ], 500);
+        }
+    }
+
+    /**
+     * Tự động unlock các tài khoản đã hết thời gian khóa
+     */
+    private function autoUnlockExpiredAccounts()
+    {
+        try {
+            $unlockedCount = MediUser::where('locked_until', '<=', now())
+                ->whereNotNull('locked_until')
+                ->update([
+                    'login_attempts' => 0,
+                    'locked_until' => null
+                ]);
+
+            if ($unlockedCount > 0) {
+                Log::info("Auto-unlocked {$unlockedCount} expired accounts");
+            }
+        } catch (\Exception $e) {
+            Log::error('Error auto-unlocking expired accounts: ' . $e->getMessage());
         }
     }
 

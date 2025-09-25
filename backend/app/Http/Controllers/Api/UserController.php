@@ -73,10 +73,20 @@ class UserController extends Controller
         $validated = $request->validate([
             'username' => 'required|string|unique:medi_users,username',
             'password' => 'required|string|min:6',
-            'profile.name' => 'required|string|max:255',
-            'profile.phone' => 'nullable|string|max:20|unique:patients,name',
-            'profile.email' => 'nullable|email|max:255|unique:patients,email',
-            'profile.address' => 'nullable|string',
+            'email' => 'nullable|email|max:255',
+            'role_id' => 'required|integer|in:1,2,3',
+            'is_active' => 'nullable|boolean',
+            // Profile fields
+            'name' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
+            'gender' => 'nullable|string|in:Male,Female,Other',
+            'dob' => 'nullable|date',
+            'city_id' => 'nullable|integer|exists:cities,city_id',
+            'specialization' => 'nullable|string|max:255',
+            'experience' => 'nullable|integer|min:0',
+            'qualification' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
         ]);
 
         DB::transaction(function () use ($validated) {
@@ -84,11 +94,36 @@ class UserController extends Controller
             $user = MediUser::create([
                 'username' => $validated['username'],
                 'password' => Hash::make($validated['password']),
-                'role_id' => 3,
+                'role_id' => $validated['role_id'],
+                'email' => $validated['email'] ?? null,
+                'is_active' => $validated['is_active'] ?? true,
             ]);
 
-            //2. Create profile
-            $user->patient()->create($validated['profile']);
+            // 2. Create profile based on role
+            if ($validated['role_id'] == 2) { // Doctor
+                $user->doctor()->create([
+                    'name' => $validated['name'] ?? null,
+                    'phone' => $validated['phone'] ?? null,
+                    'email' => $validated['email'] ?? null,
+                    'gender' => $validated['gender'] ?? null,
+                    'dob' => $validated['dob'] ?? null,
+                    'city_id' => $validated['city_id'] ?? null,
+                    'specialization' => $validated['specialization'] ?? null,
+                    'experience' => $validated['experience'] ?? null,
+                    'qualification' => $validated['qualification'] ?? null,
+                    'description' => $validated['description'] ?? null,
+                ]);
+            } elseif ($validated['role_id'] == 3) { // Patient
+                $user->patient()->create([
+                    'name' => $validated['name'] ?? null,
+                    'phone' => $validated['phone'] ?? null,
+                    'email' => $validated['email'] ?? null,
+                    'gender' => $validated['gender'] ?? null,
+                    'dob' => $validated['dob'] ?? null,
+                    'address' => $validated['address'] ?? null,
+                ]);
+            }
+            // Admin (role_id == 1) không cần profile
         });
 
         return response()->json(['message' => 'Create a user successfully']);
@@ -227,6 +262,16 @@ class UserController extends Controller
                 'name' => 'sometimes|string|max:255',
                 'email' => 'sometimes|email|max:255',
                 'is_active' => 'nullable|boolean',
+                // Profile fields
+                'phone' => 'nullable|string|max:20',
+                'address' => 'nullable|string',
+                'gender' => 'nullable|string|in:Male,Female,Other',
+                'dob' => 'nullable|date',
+                'city_id' => 'nullable|integer|exists:cities,city_id',
+                'specialization' => 'nullable|string|max:255',
+                'experience' => 'nullable|integer|min:0',
+                'qualification' => 'nullable|string|max:255',
+                'description' => 'nullable|string',
             ]);
 
             if ($validator->fails()) {
@@ -266,17 +311,27 @@ class UserController extends Controller
 
                 // Handle profile updates
                 if ($user->doctor) {
-                    if (isset($validated['name']))
-                        $user->doctor->name = $validated['name'];
-                    if (isset($validated['email']))
-                        $user->doctor->email = $validated['email'];
-                    $user->doctor->save();
+                    $doctor = $user->doctor;
+                    if (isset($validated['name'])) $doctor->name = $validated['name'];
+                    if (isset($validated['email'])) $doctor->email = $validated['email'];
+                    if (isset($validated['phone'])) $doctor->phone = $validated['phone'];
+                    if (isset($validated['gender'])) $doctor->gender = $validated['gender'];
+                    if (isset($validated['dob'])) $doctor->dob = $validated['dob'];
+                    if (isset($validated['city_id'])) $doctor->city_id = $validated['city_id'];
+                    if (isset($validated['specialization'])) $doctor->specialization = $validated['specialization'];
+                    if (isset($validated['experience'])) $doctor->experience = $validated['experience'];
+                    if (isset($validated['qualification'])) $doctor->qualification = $validated['qualification'];
+                    if (isset($validated['description'])) $doctor->description = $validated['description'];
+                    $doctor->save();
                 } else if ($user->patient) {
-                    if (isset($validated['name']))
-                        $user->patient->name = $validated['name'];
-                    if (isset($validated['email']))
-                        $user->patient->email = $validated['email'];
-                    $user->patient->save();
+                    $patient = $user->patient;
+                    if (isset($validated['name'])) $patient->name = $validated['name'];
+                    if (isset($validated['email'])) $patient->email = $validated['email'];
+                    if (isset($validated['phone'])) $patient->phone = $validated['phone'];
+                    if (isset($validated['gender'])) $patient->gender = $validated['gender'];
+                    if (isset($validated['dob'])) $patient->dob = $validated['dob'];
+                    if (isset($validated['address'])) $patient->address = $validated['address'];
+                    $patient->save();
                 }
 
                 return response()->json(['message' => 'Cập nhật user thành công']);

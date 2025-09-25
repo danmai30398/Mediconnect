@@ -168,42 +168,7 @@ function AdminUsers() {
         }
     };
 
-    const createProfile = async (userId, roleId) => {
-        const profileData = {
-            name: prompt('Enter full name:'),
-            phone: prompt('Enter phone number (optional):') || '',
-            address: prompt('Enter address (optional):') || '',
-            gender: prompt('Enter gender (Male/Female/Other, optional):') || 'Other',
-            dob: prompt('Enter date of birth (YYYY-MM-DD, optional):') || new Date().toISOString().split('T')[0],
-        };
-
-        if (!profileData.name) {
-            setNotice('Name is required');
-            setShowToast(true);
-            setTimeout(() => setShowToast(false), 3000);
-            return;
-        }
-
-        try {
-            const response = await apiService.createUserProfile(userId, profileData);
-
-            if (response.ok) {
-                setNotice('Profile created successfully');
-                setShowToast(true);
-                setTimeout(() => setShowToast(false), 3000);
-                load();
-            } else {
-                setNotice('Profile creation failed');
-                setShowToast(true);
-                setTimeout(() => setShowToast(false), 3000);
-            }
-        } catch (error) {
-            console.error('Create profile error:', error);
-            setNotice('Profile creation failed');
-            setShowToast(true);
-            setTimeout(() => setShowToast(false), 3000);
-        }
-    };
+    // createProfile function removed - profiles are created automatically when creating users
 
     return (
         <div className="container-fluid py-4 px-4" style={{ marginTop: '80px' }}>
@@ -379,15 +344,7 @@ function AdminUsers() {
                                                 >
                                                     Edit
                                                 </Button>
-                                                {!u.name && (
-                                                    <Button 
-                                                        size="sm" 
-                                                        variant="success" 
-                                                        onClick={() => createProfile(u.user_id, u.role_id)}
-                                                    >
-                                                        Create Profile
-                                                    </Button>
-                                                )}
+                                                {/* Create Profile button removed - profiles are created automatically */}
                                                 <Button 
                                                     size="sm" 
                                                     variant={u.locked_until ? "danger" : "secondary"}

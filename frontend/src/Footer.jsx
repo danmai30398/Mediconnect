@@ -16,9 +16,11 @@ function Footer() {
 
                     <div style={{ marginTop: 14 }}>
                         <h4>HEALTH <span className="text-accent">TOPICS</span></h4>
-                        <div style={{ cursor: "pointer", color: "#bfefff" }} onClick={() => navigate("/categories/disease")}>DISEASE</div>
-                        <div style={{ cursor: "pointer", color: "#bfefff" }} onClick={() => navigate("/categories/preventions")}>PREVENTIONS</div>
-                        <div style={{ cursor: "pointer", color: "#bfefff" }} onClick={() => navigate("/categories/cure")}>CURE</div>
+                        <div style={{ cursor: "pointer", color: "#bfefff" }} onClick={() => navigate("/category/1")}>DISEASE</div>
+                        <div style={{ cursor: "pointer", color: "#bfefff" }} onClick={() => navigate("/category/2")}>PREVENTIONS</div>
+                        <div style={{ cursor: "pointer", color: "#bfefff" }} onClick={() => navigate("/category/3")}>CURE</div>
+                        <div style={{ cursor: "pointer", color: "#bfefff" }} onClick={() => navigate("/category/4")}>HEALTH NEWS & DISCOVERIES</div>
+
                     </div>
 
                     <div>

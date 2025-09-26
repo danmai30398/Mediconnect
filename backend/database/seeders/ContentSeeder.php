@@ -59,7 +59,7 @@ class ContentSeeder extends Seeder
             'name'        => 'admin',
         ]);
 
-        // ✅ Article 5
+        // ✅ Article 6
         Content::create([
             'category_id' => 4,
             'created_by'  => 1,

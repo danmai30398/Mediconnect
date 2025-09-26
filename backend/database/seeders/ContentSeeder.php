@@ -58,5 +58,15 @@ class ContentSeeder extends Seeder
             'image'       => 'mental_disorders.png',
             'name'        => 'admin',
         ]);
+
+        // ✅ Article 5
+        Content::create([
+            'category_id' => 4,
+            'created_by'  => 1,
+            'title'       => 'New Advances in Vaccine Development',
+            'description' => 'Breakthroughs in vaccine technology, including mRNA updates and global immunization efforts.',
+            'image'       => 'vaccine_updates.png',
+            'name'        => 'admin',
+        ]);
     }
 }

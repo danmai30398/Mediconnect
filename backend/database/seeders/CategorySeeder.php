@@ -13,6 +13,8 @@ class CategorySeeder extends Seeder
             ['category_name' => 'Disease'],
             ['category_name' => 'Preventions'],
             ['category_name' => 'Cures'],
+            ['category_name' => 'Latest Health News & Discoveries'],
+
         ]);
     }
 }

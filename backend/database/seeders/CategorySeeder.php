@@ -10,7 +10,7 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         Category::insert([
-            ['category_name' => 'Disease'],
+            ['category_name' => 'Diseases'],
             ['category_name' => 'Preventions'],
             ['category_name' => 'Cures'],
             ['category_name' => 'Latest Health News & Discoveries'],

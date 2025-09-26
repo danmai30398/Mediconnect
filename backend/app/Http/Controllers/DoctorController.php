@@ -20,11 +20,11 @@ class DoctorController extends Controller
             return response()->json(['error' => 'Doctor not found'], 404);
         }
 
-        return response()->json($doctor); 
+        return response()->json($doctor);
     }
 
 
-  
+
     public function uploadAvatar(Request $request)
     {
         if ($request->hasFile('avatar')) {
@@ -33,11 +33,11 @@ class DoctorController extends Controller
 
             $mediUser = $request->user();
             $doctor = Doctor::where('user_id', $mediUser->user_id)->first();
-            
+
             if (!$doctor) {
                 return response()->json(['error' => 'Doctor not found'], 404);
             }
-            
+
             $doctor->image = "/storage/$path";
             $doctor->save();
 
@@ -59,25 +59,25 @@ class DoctorController extends Controller
         }
 
         // Get today's appointments
-        $todayAppointments = Appointment::whereHas('availability', function($query) use ($doctor) {
+        $todayAppointments = Appointment::whereHas('availability', function ($query) use ($doctor) {
             $query->where('doctor_id', $doctor->doctor_id);
         })
-        ->whereHas('availability', function($query) {
-            $query->where('available_date', now()->format('Y-m-d'));
-        })
-        ->with(['patient', 'availability'])
-        ->get();
+            ->whereHas('availability', function ($query) {
+                $query->where('available_date', now()->format('Y-m-d'));
+            })
+            ->with(['patient', 'availability'])
+            ->get();
 
         // Get upcoming appointments (next 7 days)
-        $upcomingAppointments = Appointment::whereHas('availability', function($query) use ($doctor) {
+        $upcomingAppointments = Appointment::whereHas('availability', function ($query) use ($doctor) {
             $query->where('doctor_id', $doctor->doctor_id);
         })
-        ->whereHas('availability', function($query) {
-            $query->where('available_date', '>=', now()->format('Y-m-d'))
-                  ->where('available_date', '<=', now()->addDays(7)->format('Y-m-d'));
-        })
-        ->with(['patient', 'availability'])
-        ->get();
+            ->whereHas('availability', function ($query) {
+                $query->where('available_date', '>=', now()->format('Y-m-d'))
+                    ->where('available_date', '<=', now()->addDays(7)->format('Y-m-d'));
+            })
+            ->with(['patient', 'availability'])
+            ->get();
 
         // Get unread notifications count - sử dụng user_id thay vì doctor_id
         $unreadNotificationsCount = Notification::where('user_id', $mediUser->user_id)
@@ -85,9 +85,10 @@ class DoctorController extends Controller
             ->count();
 
         // Get total appointments count
-        $totalAppointments = Appointment::whereHas('availability', function($query) use ($doctor) {
-            $query->where('doctor_id', $doctor->doctor_id);
-        })->count();
+        $totalAppointments = AvailabilityScheduling::where('doctor_id', $doctor->doctor_id)
+            ->where('doctor_id', $doctor->doctor_id)
+            ->where('status', 'booked')
+            ->count();
 
         // Get available slots count
         $availableSlotsCount = AvailabilityScheduling::where('doctor_id', $doctor->doctor_id)
@@ -95,9 +96,10 @@ class DoctorController extends Controller
             ->count();
 
         // Get booked slots count
-        $bookedSlotsCount = AvailabilityScheduling::where('doctor_id', $doctor->doctor_id)
-            ->where('status', 'booked')
-            ->count();
+        $bookedSlotsCount = Appointment::whereHas('availability', function ($query) use ($doctor) {
+            $query->where('doctor_id', $doctor->doctor_id)
+            ->where('status', 'booked');
+        })->select('patient_id')->distinct()->get()->count();
 
         return response()->json([
             'success' => true,
@@ -125,15 +127,15 @@ class DoctorController extends Controller
         }
 
         // Get patients who have appointments with this doctor
-        $patients = Patient::whereHas('appointments.availability', function($query) use ($doctor) {
+        $patients = Patient::whereHas('appointments.availability', function ($query) use ($doctor) {
             $query->where('doctor_id', $doctor->doctor_id);
         })
-        ->with(['appointments' => function($query) use ($doctor) {
-            $query->whereHas('availability', function($q) use ($doctor) {
-                $q->where('doctor_id', $doctor->doctor_id);
-            });
-        }])
-        ->get();
+            ->with(['appointments' => function ($query) use ($doctor) {
+                $query->whereHas('availability', function ($q) use ($doctor) {
+                    $q->where('doctor_id', $doctor->doctor_id);
+                });
+            }])
+            ->get();
 
         return response()->json([
             'success' => true,
@@ -151,22 +153,22 @@ class DoctorController extends Controller
         }
 
         // Get appointments by status
-        $appointmentsByStatus = Appointment::whereHas('availability', function($query) use ($doctor) {
+        $appointmentsByStatus = Appointment::whereHas('availability', function ($query) use ($doctor) {
             $query->where('doctor_id', $doctor->doctor_id);
         })
-        ->selectRaw('status, COUNT(*) as count')
-        ->groupBy('status')
-        ->pluck('count', 'status');
+            ->selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')
+            ->pluck('count', 'status');
 
         // Get appointments by month (last 6 months)
-        $appointmentsByMonth = Appointment::whereHas('availability', function($query) use ($doctor) {
+        $appointmentsByMonth = Appointment::whereHas('availability', function ($query) use ($doctor) {
             $query->where('doctor_id', $doctor->doctor_id);
         })
-        ->where('created_at', '>=', now()->subMonths(6))
-        ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')
-        ->groupBy('month')
-        ->orderBy('month')
-        ->get();
+            ->where('created_at', '>=', now()->subMonths(6))
+            ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
 
         // Get availability slots by status
         $slotsByStatus = AvailabilityScheduling::where('doctor_id', $doctor->doctor_id)

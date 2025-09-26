@@ -24,6 +24,8 @@ import s4 from "./assets/pic/services/s4.png";
 import disease from "./assets/pic/topic/disease.jpg";
 import prevention from "./assets/pic/topic/prevention.jpg";
 import cure from "./assets/pic/topic/cure.jpg";
+import news from "./assets/pic/topic/news.jpg";
+
 
 import about1 from "./assets/pic/about/about1.png";
 import ContactSection from "./ContactForm";
@@ -228,11 +230,12 @@ function HomePage() {
                     <h2 className="section-title">
                         HEALTH <span className="text-accent">TOPICS</span>
                     </h2>
-                    <div className="cards" style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
+                    <div className="cards" style={{ display: 'flex', justifyContent: 'left', gap: '20px'}}>
                         {[
                             { img: disease, title: "Diseases", id: 1, des: "Explore articles on symptoms, treatments, and common diseases." },
                             { img: prevention, title: "Preventions", id: 2, des: "Learn how to protect yourself and your loved ones with expert prevention tips." },
                             { img: cure, title: "Cures", id: 3, des: "Discover the latest cures and treatment options for various health conditions." },
+                            { img: news,  title: "Health News & Discoveries", id: 4, des: "Explore the newest health updates and discoveries." }, 
                         ].map((it, i) => (
                             <article
                                 className="card"
@@ -246,7 +249,7 @@ function HomePage() {
                                     alignItems: 'center',
                                     justifyContent: 'space-between',
                                     textAlign: 'center',
-                                    height: '330px',
+                                    height: '340px',
                                     borderRadius: '8px',
                                     overflow: 'hidden',
                                     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',

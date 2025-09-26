@@ -64,6 +64,7 @@ function HeaderNav({ defaultTab }) {
                 <Link to="/category/1">Diseases</Link>
                 <Link to="/category/2">Preventions</Link>
                 <Link to="/category/3">Cures</Link>
+                 <Link to="/category/4">Health News & Discoveries</Link>
               </div>
             </div>
 

@@ -382,6 +382,21 @@ input[type="password"]::-webkit-textfield-decoration-container {
   padding: 16px;
 }
 
+@media (max-width: 992px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr); /* tablet */
+  }
+}
+
+@media (max-width: 600px) {
+  .cards {
+    grid-template-columns: 1fr; /* mobile */
+  }
+}
+
+
+
+
 .email_lg1,
 .phone_lg1 {
   border: solid rgb(227, 239, 247);
